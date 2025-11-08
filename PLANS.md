@@ -29,3 +29,121 @@
     - Use touch targets with sufficient space for mobile devices
     - Avoid horizontal scrolling
     - Target mobile and tablet screen-sizes mainly
+
+# Flow
+
+`Create progress bar for entire form`
+https://ui.shadcn.com/docs/components/pagination
+https://ui.shadcn.com/docs/components/progress
+
+### Section 1: Student Info
+
+`field`
+- Group: 
+    `Check only for 3`
+- Have u given group 2 exam ?
+    `Conditional`
+
+`field`
+- Name: https://ui.shadcn.com/docs/components/input-group
+- DOB: https://ui.shadcn.com/docs/components/calendar
+- Gender: https://ui.shadcn.com/docs/components/button-group
+- District: https://ui.shadcn.com/docs/components/select 
+- Samithi: https://ui.shadcn.com/docs/components/input-group
+
+`field`
+- Year of Joining Balvikas (mandatory): https://ui.shadcn.com/docs/components/select
+- Date of Joining Balvikas (option): https://ui.shadcn.com/docs/components/calendar
+- Food Allergies: https://ui.shadcn.com/docs/components/input-group
+
+### Section 2: Contestant Info
+
+`cut events based on gender`
+`cut events based on date of joining`
+`cut events based on age`
+
+- Group 1:
+    - Devotional Singing : https://ui.shadcn.com/docs/components/radio-group
+        `YES | NO` | `render horizontally`
+    - Individual Event Choice 1: https://ui.shadcn.com/docs/components/radio-group
+        `To view all events at once` | `render vertically`
+    - Individual Event Choice 2: https://ui.shadcn.com/docs/components/radio-group
+        `To view all events at once` | `show if NO if devo.singing` | `render vertically`
+
+    > Throw sonner to highlight only one choice in individual events
+    https://ui.shadcn.com/docs/components/sonner
+
+- Group 2 and 3:
+    - Have you passed group 2 exam ?: https://ui.shadcn.com/docs/components/radio-group
+        `YES | NO`
+    - Show the Note (rules): https://ui.shadcn.com/docs/components/item 
+        `Get acknowledgement` | `Use drawer to revisit` | https://ui.shadcn.com/docs/components/drawer
+    - Do you want to participate in quiz ?: https://ui.shadcn.com/docs/components/radio-group
+        `YES | NO` | `render horizontally`
+    - If no Quiz :
+        - Do you want to participate in Group Event ?: https://ui.shadcn.com/docs/components/radio-group
+            `MCQ + I don't wanna participate`
+        - If no Group:
+            - Individual Event Choice 1: https://ui.shadcn.com/docs/components/radio-group
+                `To view all events at once` | `if !bhajan <=> !tamizh-chants` | `render vertically`
+            - Individual Event Choice 2: https://ui.shadcn.com/docs/components/radio-group
+                `To view all events at once` | `if !bhajan <=> !tamizh-chants` | `render vertically`
+        - If Group:
+            - Individual Event Choice 1: https://ui.shadcn.com/docs/components/radio-group
+                `To view all events at once` | `render vertically`
+    - If yes Quiz :
+        - Individual Event Choice 1: https://ui.shadcn.com/docs/components/radio-group
+            `To view all events at once` | `no drawing` | `render vertically`
+
+- Group 4:
+    - Do you want to participate in quiz ?: https://ui.shadcn.com/docs/components/radio-group
+        `YES | NO` | `render horizontally`
+
+### Section 3: Logistics
+
+- Date and time of Arrival: https://ui.shadcn.com/docs/components/date-picker
+- Do you need pickup facility: https://ui.shadcn.com/docs/components/radio-group
+- Mode of Travel: https://ui.shadcn.com/docs/components/input-group
+- Pickup Point: https://ui.shadcn.com/docs/components/input-group
+
+- Date and time of Departure: https://ui.shadcn.com/docs/components/date-picker
+- Do you need drop facility: https://ui.shadcn.com/docs/components/radio-group
+- Mode of Travel: https://ui.shadcn.com/docs/components/input-group
+- Drop Point: https://ui.shadcn.com/docs/components/input-group
+
+### Section 4: Accompanying (might require deduplication)
+
+- Are Adults Accompanying ?
+    `YES | NO` | `render horizontally`
+- If No:
+    `Go to next section`
+- If Yes:
+    - Number of Male Members ?: https://ui.shadcn.com/docs/components/slider
+        `Get all names`
+    - Number of Female Members ?: https://ui.shadcn.com/docs/components/slider
+        `Get all names`
+    - Point of Contact: https://ui.shadcn.com/docs/components/card
+        - Name: https://ui.shadcn.com/docs/components/input 
+        - Gender: https://ui.shadcn.com/docs/components/radio-group
+        - Relation: https://ui.shadcn.com/docs/components/radio-group 
+            `(Guru, Mother, Father, Legal Guardian)`
+        - Phone Number: https://ui.shadcn.com/docs/components/radio-group
+        - Age: https://ui.shadcn.com/docs/components/radio-group 
+            `18 - 65` | `65+`
+
+### Section 5: Accomodation
+
+- Do you want accomodation (student) ?: https://ui.shadcn.com/docs/components/radio-group
+    `YES | NO` | `render horizontally`
+- If No to Accomodation:
+   `Preview And Confirm` 
+- If Yes to Accomodation:
+    `Don't ask if section-4 has NO for accompanying`
+    - Number of Male Members ?: https://ui.shadcn.com/docs/components/slider
+        `Limit by previously suggested slider`
+    - Number of Female Members ?: https://ui.shadcn.com/docs/components/slider
+        `Limit by previously suggested slider`
+
+    `If logistics Arrival + Departure exists, then we use same data`
+    - Check-In Date and Time: https://ui.shadcn.com/docs/components/date-picker
+    - Check-Out Date and Time: https://ui.shadcn.com/docs/components/date-picker
