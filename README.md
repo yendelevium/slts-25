@@ -14,7 +14,7 @@ bun dev
 To build this application for production:
 
 ```bash
-bun build
+bun run build
 ```
 
 ## Testing
