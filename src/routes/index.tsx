@@ -10,6 +10,8 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination"
 
+import StudentInfo from '@/components/form/StudentInfo'
+
 export const Route = createFileRoute('/')({
   component: App,
 })
@@ -20,7 +22,13 @@ export const Route = createFileRoute('/')({
 // Have a Section identifier to know what section it is rn
 // Using the section identifier, we implement navigation next or prev
 
+function navigatePrevPage(){
+  // Conditional logic to navigate to the prev page needed
+}
 
+function navigateNextPage(){
+  // Conditional logic to navigate to the next page needed
+}
 
 function App() {
   return (
@@ -34,7 +42,7 @@ function App() {
         </div>
 
         {/* Progress bar  */}
-
+        {/* Will store section, percentage complete, title in tanstack global store for dynamic renderring */}
         <div className="mb-5 bg-white rounded-lg shadow-sm p-6">
           <div className="flex justify-between items-center mb-3">
             <span className="text-slate-700">Section x of y</span>
@@ -46,15 +54,24 @@ function App() {
 
 
         {/* Form content  */}
+        {/* This will be rendered dynamically based on form progress */}
+        <StudentInfo />
 
 
         {/* Navigation */}
         {/* I'm thinking only 1 page to be shown in pagination, the current page... */}
         {/* Can be debated upon later */}
+        {/* The logic for navigation will also be extracted out to a diff component */}
         <Pagination>
           <PaginationContent>
             <PaginationItem>
-              <PaginationPrevious href="#" />
+              <PaginationPrevious 
+                href="#" 
+                onClick={e => {
+                  e.preventDefault()
+                  navigatePrevPage()
+                }}
+              />
             </PaginationItem>
             <PaginationItem>
               <PaginationLink href="#" isActive>1</PaginationLink>
@@ -71,7 +88,13 @@ function App() {
               <PaginationEllipsis />
             </PaginationItem>
             <PaginationItem>
-              <PaginationNext href="#" />
+              <PaginationNext 
+                href="#" 
+                onClick={e => {
+                  e.preventDefault()
+                  navigateNextPage()
+                }}
+              />
             </PaginationItem>
           </PaginationContent>
         </Pagination>
