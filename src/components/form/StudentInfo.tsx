@@ -221,15 +221,16 @@ export default function StudentInfo() {
                     </Popover>
                 </Field>
 
-
-                {/* TODO: DO THE STATE SETTING FOR ALL OF THESE GUYS... */}
+                {/* Name */}
+                {/* MAKE SURE UR defaultValue IS EQUAL TO THE STORE FOR INPUT FIELDS, NOT DIRECTLY `value` AS THAT WILL CAUSE LOT OF LAG */}
                 <Field>
                     <FieldLabel htmlFor="name">
                         Name *
                     </FieldLabel>
-                    <Input type="text" placeholder="Yash" id="name" onChange={(e)=> debouncedFormUpdate("name", e.target.value)}/>
+                    <Input type="text" placeholder="Yash" id="name" defaultValue={formData.name} onChange={(e)=> debouncedFormUpdate("name", e.target.value)}/>
                 </Field>
                 
+                {/* Gender */}
                 <Field>
                     <FieldLabel htmlFor="gender">
                         Gender *
@@ -239,6 +240,7 @@ export default function StudentInfo() {
                         </div>
                 </Field>
 
+                {/* District */}
                 <Field>
                     <FieldLabel htmlFor="district">
                         District *
@@ -256,11 +258,12 @@ export default function StudentInfo() {
                     </Select>
                 </Field>
 
+                {/* Samithi */}
                 <Field>
                     <FieldLabel htmlFor="samithi">
                         Samithi *
                     </FieldLabel>
-                    <Input type="text" placeholder="idk" id="samithi" onChange={(e)=> debouncedFormUpdate("samithi", e.target.value)} />
+                    <Input type="text" placeholder="idk" id="samithi" defaultValue={formData.samithi} onChange={(e)=> debouncedFormUpdate("samithi", e.target.value)} />
                 </Field>
 
                 {/* Couldn't find a year only dropdown in SHADCN, might just make it a select button later? */}
@@ -268,9 +271,10 @@ export default function StudentInfo() {
                     <FieldLabel htmlFor="year-bv">
                         Student's Year of Joining Balvikas*
                     </FieldLabel>
-                    <Input type="number" placeholder="2019" id="year-bv" min={2000} max={2025} onChange={(e)=> debouncedFormUpdate("yearOfJoining", e.target.value)} />
+                    <Input type="number" placeholder="2019" id="year-bv" defaultValue={formData.yearOfJoining} min={2000} max={2025} onChange={(e)=> debouncedFormUpdate("yearOfJoining", e.target.value)} />
                 </Field>
 
+                {/* Date of Joining Balvikas */}
                 <Field>
                     <FieldLabel htmlFor="date-bv">
                         Date of Joining Balvikas (Optional)
@@ -301,12 +305,13 @@ export default function StudentInfo() {
                         </PopoverContent>
                     </Popover>
                 </Field>
-
+                
+                {/* Food Allergies */}
                 <Field>
                     <FieldLabel htmlFor="allergy">
                         Food Allergies (Optional)
                     </FieldLabel>
-                    <Input type="text" placeholder="peanuts, gluten"  onChange={(e)=> debouncedFormUpdate("foodAllergies", e.target.value)} id="allergy"/>
+                    <Input type="text" placeholder="peanuts, gluten" defaultValue={formData.foodAllergies} onChange={(e)=> debouncedFormUpdate("foodAllergies", e.target.value)} id="allergy"/>
                 </Field>
 
                 </FieldGroup>

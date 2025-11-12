@@ -34,7 +34,7 @@ function App() {
   return (
     // Progress Bar
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
-      <div className="container mx-auto px-4 py-8">
+      <div className="container w-full md:w-1/2 mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-5">
           <h1 className="text-indigo-900">Balvikas Registration Form</h1>
@@ -89,7 +89,7 @@ function App() {
             </PaginationItem>
             <PaginationItem>
               <PaginationNext 
-                href="#" 
+                href="/test_route" 
                 onClick={e => {
                   e.preventDefault()
                   navigateNextPage()
