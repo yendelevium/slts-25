@@ -7,29 +7,32 @@ import {
   FieldGroup,
   FieldLabel,
   FieldLegend,
-  FieldSeparator,
   FieldSet,
 } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import {
   RadioGroup,
   RadioGroupItem,
 } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { useState } from "react"
+import { ChevronDownIcon } from "lucide-react"
+import { Calendar } from "@/components/ui/calendar"
+
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 
 export default function StudentInfo() {
     // TODO: Replace these states with the TanStack store later when I actually write the store lol
     // The states for which group the student is in, and whether he has passed the group 2 exam or not (only if grp 3 is selected)
     const [activeGroup, setActiveGroup] = useState<string | null>(null)
     const [passed, setPassed] = useState<string | null>(null)
+
+    // DOB state
+    const [open, setOpen] = useState(false)
+    const [date, setDate] = useState<Date | undefined>(undefined)
 
     const groupElementsJSX = ["1", "2", "3", "4"].map(group => {
         return(
@@ -110,7 +113,34 @@ export default function StudentInfo() {
 
                 {/* DOB */}
                 <Field>
-                    FieldLabel
+                    <FieldLabel htmlFor="dob">
+                        Date of Birth *
+                    </FieldLabel>
+                    <Popover open={open} onOpenChange={setOpen}>
+                        <PopoverTrigger asChild>
+                        <Button
+                            variant="outline"
+                            id="date"
+                            className="w-[var(--radix-popover-trigger-width)] justify-between font-normal"
+                        >
+                            {date ? date.toLocaleDateString() : "Select date"}
+                            <ChevronDownIcon />
+                        </Button>
+                        </PopoverTrigger>
+                        
+                        {/* TODO: Make the pop-over calendart the same length as the button and center it */}
+                        <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+                            <Calendar
+                                mode="single"
+                                selected={date}
+                                captionLayout="dropdown"
+                                onSelect={(date) => {
+                                setDate(date)
+                                setOpen(false)
+                                }}
+                            />
+                        </PopoverContent>
+                    </Popover>
                 </Field>
                 </FieldGroup>
             </FieldSet>
