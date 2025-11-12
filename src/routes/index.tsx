@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/pagination"
 
 import StudentInfo from '@/components/form/StudentInfo'
+import EventParticipationInfo from '@/components/form/EventParticipationInfo'
 
 export const Route = createFileRoute('/')({
   component: App,
@@ -55,7 +56,8 @@ function App() {
 
         {/* Form content  */}
         {/* This will be rendered dynamically based on form progress */}
-        <StudentInfo />
+        {/* <StudentInfo /> */}
+        <EventParticipationInfo />
 
 
         {/* Navigation */}
