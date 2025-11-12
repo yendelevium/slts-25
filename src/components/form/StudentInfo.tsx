@@ -16,7 +16,6 @@ import { Label } from "@/components/ui/label"
 import { useState } from "react"
 import { ChevronDownIcon } from "lucide-react"
 import { Calendar } from "@/components/ui/calendar"
-
 import {
   Popover,
   PopoverContent,
@@ -33,28 +32,72 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
+import { useFormStore } from "@/store/formStore"
+import debouncedUpdate from "@/utils/debounce"
+
+const districts = [
+    "Coimbatore",
+    "Dharmapuri / Krishnagiri",
+    "Dindigul",
+    "Erode",
+    "Kanchipuram North",
+    "Kanchipuram South",
+    "Kanyakumari",
+    "Karur",
+    "Madurai",
+    "Namakkal",
+    "Nilgiris",
+    "Salem",
+    "Sivaganga&Ramnad",
+    "Thanjavur",
+    "Theni",
+    "Trichy",
+    "Tirunelveli",
+    "Tirupur",
+    "Tiruvannamalai",
+    "Tuticorin",
+    "Vellore",
+    "Villupuram",
+    "Virudhunagar",
+    "Chennai East Coast",
+    "Chennai North",
+    "Chennai North West",
+    "Chennai South",
+    "Chennai South East",
+    "Chennai West",
+    "Cuddalore",
+    "Nagapattinam",
+    "Puducherry",
+    "Tiruvallur East",
+    "Tiruvallur West",
+    "Mayiladuthurai",
+];
+
+// Form starts
 export default function StudentInfo() {
-    // TODO: Replace these states with the TanStack store later when I actually write the store lol
-    // The states for which group the student is in, and whether he has passed the group 2 exam or not (only if grp 3 is selected)
-    const [activeGroup, setActiveGroup] = useState<string | null>(null)
-    const [activeGender, setActiveGender] = useState<string | null>(null)
-    const [passed, setPassed] = useState<string | null>(null)
+    const { formData, updateForm } = useFormStore()
+
+    // Defining it ONCE as a debounced function to update the form
+    // But will need to repeat for all components as store is only accessible in functional components
+    const debouncedFormUpdate = debouncedUpdate((key: string, value: string) => {
+        updateForm({ [key]: value })
+    })
 
     // DOB state
     const [open, setOpen] = useState(false)
-    const [date, setDate] = useState<Date | undefined>(undefined)
-
+    const [openJoin, setOpenJoin] = useState(false)
+    
     const groupElementsJSX = ["1", "2", "3", "4"].map(group => {
         return(
             <Button
             key={group}
             onClick={()=>{
-                // TODO: Update store to set the chosen group...
-                setActiveGroup(group)
-
-                // Setting `passed` to null if the group isn't group 3
+                updateForm({ group: group })
+                console.log(formData)
+                // Setting `passed` to null if the group isn't group 3??
+                // Or should I keep it as the previous value?                
                 if(group!="3"){
-                    setPassed(null)
+                    updateForm({ hasGivenGroup2Exam: "" })
                 }
 
             }}
@@ -64,7 +107,7 @@ export default function StudentInfo() {
             // Maybe it won't be an issue in phone, but it sure is in a PC
             className={
                 `flex items-center gap-2 cursor-pointer font-normal 
-                ${activeGroup === group ? "!bg-indigo-500 !text-white !border-indigo-500" : ""}`
+                ${formData.group === group ? "!bg-indigo-500 !text-white !border-indigo-500" : ""}`
             }
             >
             Group {group}
@@ -78,57 +121,19 @@ export default function StudentInfo() {
             key={gender}
             onClick={()=>{
                 // TODO: Update store to set the chosen gender...
-                setActiveGender(gender)
+                updateForm({ gender: gender })
             }}
             variant="outline"
             // size="lg"
             className={
                 `flex items-center gap-2 cursor-pointer font-normal 
-                ${activeGender === gender ? "!bg-indigo-500 !text-white !border-indigo-500" : ""}`
+                ${formData.gender === gender ? "!bg-indigo-500 !text-white !border-indigo-500" : ""}`
             }
             >
             {gender}
             </Button>
         )
     });
-
-    const districts = [
-      "Coimbatore",
-      "Dharmapuri / Krishnagiri",
-      "Dindigul",
-      "Erode",
-      "Kanchipuram North",
-      "Kanchipuram South",
-      "Kanyakumari",
-      "Karur",
-      "Madurai",
-      "Namakkal",
-      "Nilgiris",
-      "Salem",
-      "Sivaganga&Ramnad",
-      "Thanjavur",
-      "Theni",
-      "Trichy",
-      "Tirunelveli",
-      "Tirupur",
-      "Tiruvannamalai",
-      "Tuticorin",
-      "Vellore",
-      "Villupuram",
-      "Virudhunagar",
-      "Chennai East Coast",
-      "Chennai North",
-      "Chennai North West",
-      "Chennai South",
-      "Chennai South East",
-      "Chennai West",
-      "Cuddalore",
-      "Nagapattinam",
-      "Puducherry",
-      "Tiruvallur East",
-      "Tiruvallur West",
-      "Mayiladuthurai",
-    ];
 
     const districtElementsJSX = districts.map((district) => (
     <SelectItem key={district} value={district}>
@@ -159,19 +164,17 @@ export default function StudentInfo() {
                 </Field>
 
                 {/* Pop-up for grp 2 pass or not if the selected group is 3 */}
-                {activeGroup  == "3" && (
+                {formData.group  == "3" && (
                     <Field>
                         <FieldLabel htmlFor="passed-grp2-exam">
                         Passed Group 2 Exam? *
                         </FieldLabel>
 
-                        {/* TODO: update pass-state of radio button to Tanstack Store */}
                         <RadioGroup 
-                            value={passed}
+                            value={formData.hasGivenGroup2Exam}
                             onValueChange={(val) => {
                                 console.log(val)
-                                setPassed(val)
-                                // UPDATE STATE 
+                                updateForm({ hasGivenGroup2Exam: val })
                             }}
                         >
                             <div className="flex items-center gap-3">
@@ -198,7 +201,7 @@ export default function StudentInfo() {
                             id="date"
                             className="w-[var(--radix-popover-trigger-width)] justify-between font-normal"
                         >
-                            {date ? date.toLocaleDateString() : "Select date"}
+                            {formData.dob ? formData.dob.toLocaleDateString() : "Select date"}
                             <ChevronDownIcon />
                         </Button>
                         </PopoverTrigger>
@@ -207,10 +210,10 @@ export default function StudentInfo() {
                         <PopoverContent className="w-auto overflow-hidden p-0" align="start">
                             <Calendar
                                 mode="single"
-                                selected={date}
+                                selected={formData.dob}
                                 captionLayout="dropdown"
                                 onSelect={(date) => {
-                                setDate(date)
+                                updateForm({ dob: date })
                                 setOpen(false)
                                 }}
                             />
@@ -224,7 +227,7 @@ export default function StudentInfo() {
                     <FieldLabel htmlFor="name">
                         Name *
                     </FieldLabel>
-                    <Input type="text" placeholder="Yash" id="name"/>
+                    <Input type="text" placeholder="Yash" id="name" onChange={(e)=> debouncedFormUpdate("name", e.target.value)}/>
                 </Field>
                 
                 <Field>
@@ -240,7 +243,7 @@ export default function StudentInfo() {
                     <FieldLabel htmlFor="district">
                         District *
                     </FieldLabel>
-                    <Select>
+                    <Select value={formData.district} onValueChange={(val) => updateForm({ district: val })}>
                         <SelectTrigger className="font-normal">
                             <SelectValue placeholder="Select your district" />
                         </SelectTrigger>
@@ -257,41 +260,43 @@ export default function StudentInfo() {
                     <FieldLabel htmlFor="samithi">
                         Samithi *
                     </FieldLabel>
-                    <Input type="text" placeholder="idk" id="samithi"/>
+                    <Input type="text" placeholder="idk" id="samithi" onChange={(e)=> debouncedFormUpdate("samithi", e.target.value)} />
                 </Field>
-                
 
                 {/* Couldn't find a year only dropdown in SHADCN, might just make it a select button later? */}
                 <Field>
                     <FieldLabel htmlFor="year-bv">
                         Student's Year of Joining Balvikas*
                     </FieldLabel>
-                    <Input type="number" placeholder="2019" id="year-bv" min={2000} max={2025}/>
+                    <Input type="number" placeholder="2019" id="year-bv" min={2000} max={2025} onChange={(e)=> debouncedFormUpdate("yearOfJoining", e.target.value)} />
                 </Field>
 
-                {/* Change this to be customized for balvikas date, not the same as DOB */}
                 <Field>
                     <FieldLabel htmlFor="date-bv">
                         Date of Joining Balvikas (Optional)
                     </FieldLabel>
-                    <Popover>
+                    <Popover open={openJoin} onOpenChange={setOpenJoin}>
                         <PopoverTrigger asChild>
                         <Button
                             variant="outline"
                             id="date"
                             className="w-[var(--radix-popover-trigger-width)] justify-between font-normal"
                         >
-                            {date ? date.toLocaleDateString() : "Select date"}
+                            {formData.dateOfJoining ? formData.dateOfJoining.toLocaleDateString() : "Select date"}
                             <ChevronDownIcon />
                         </Button>
                         </PopoverTrigger>
                         
                         {/* TODO: Make the pop-over calendart the same length as the button and center it */}
-                        <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+                        <PopoverContent className="w-auto overflow-hidden p-0" align="start" >
                             <Calendar
                                 mode="single"
-                                selected={date}
+                                selected={formData.dateOfJoining}
                                 captionLayout="dropdown"
+                                onSelect={(date) => {
+                                updateForm({ dateOfJoining: date })
+                                setOpenJoin(false)
+                                }}
                             />
                         </PopoverContent>
                     </Popover>
@@ -301,9 +306,8 @@ export default function StudentInfo() {
                     <FieldLabel htmlFor="allergy">
                         Food Allergies (Optional)
                     </FieldLabel>
-                    <Input type="text" placeholder="peanuts, gluten" id="allergy"/>
+                    <Input type="text" placeholder="peanuts, gluten"  onChange={(e)=> debouncedFormUpdate("foodAllergies", e.target.value)} id="allergy"/>
                 </Field>
-
 
                 </FieldGroup>
             </FieldSet>

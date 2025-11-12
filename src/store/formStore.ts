@@ -1,4 +1,4 @@
-import { Store } from "@tanstack/store"
+import { create } from "zustand"
 
 export interface FormData {
   // Student Info
@@ -99,7 +99,25 @@ const initialFormData: FormData = {
   checkOutDateTime: undefined,
 }
 
-// Tanstack Store to manage form state -> single source of truth
-const formStore = new Store<FormData>(initialFormData)
+// Switch to zustand store
+interface FormStore {
+  formData: FormData
+  updateForm: (partial: Partial<FormData>) => void
+  resetForm: () => void
+}
 
-export { formStore }
+const useFormStore = create<FormStore>((set) => ({
+  formData: initialFormData,
+
+  updateForm: (partial) =>
+    set((state) => ({
+      formData: { ...state.formData, ...partial },
+    })),
+
+  resetForm: () =>
+    set({
+      formData: initialFormData,
+    }),
+}))
+
+export { useFormStore }
