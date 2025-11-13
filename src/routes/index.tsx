@@ -29,7 +29,7 @@ function App() {
     <LogisticsInfo />,
     <Accompany />,
     <Accomodate />,
-	<Preview />
+    <Preview />,
   ];
 
   let progress = (Math.min(formData.sectionNumber, 5) / 5) * 100;
@@ -78,28 +78,30 @@ function App() {
             Previous
           </Button>
 
-          { formData.sectionNumber != 5 && <Button
-            onClick={() =>
-              updateForm({ sectionNumber: formData.sectionNumber + 1 })
-            }
-            disabled={!formData.nextSectionEnable?.[formData.sectionNumber]}
-            className="cursor-pointer"
-          >
-            Next
-            <ArrowRight />
-          </Button>
-		  }
-		  { formData.sectionNumber == 5 && <Button
-            onClick={() =>
-            	// submit sm shi
-				// idk
-				console.log("Submitted!")
-            }
-            className="cursor-pointer"
-          >
-            SUBMIT FORM
-          </Button>
-		  }
+          {formData.sectionNumber != 5 && (
+            <Button
+              onClick={() =>
+                updateForm({ sectionNumber: formData.sectionNumber + 1 })
+              }
+              disabled={!formData.nextSectionEnable?.[formData.sectionNumber]}
+              className="cursor-pointer"
+            >
+              Next
+              <ArrowRight />
+            </Button>
+          )}
+          {formData.sectionNumber == 5 && (
+            <Button
+              onClick={() =>
+                // submit sm shi
+                // idk
+                console.log("Submitted!")
+              }
+              className="cursor-pointer"
+            >
+              SUBMIT FORM
+            </Button>
+          )}
         </div>
       </div>
     </div>

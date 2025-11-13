@@ -121,9 +121,9 @@ const useFormStore = create<FormStore>()(
         accomMaleMembers: 0,
         accomFemaleMembers: 0,
         checkInDate: undefined,
-		checkInTime: "",
+        checkInTime: "",
         checkOutDate: undefined,
-		checkOutTime: ""
+        checkOutTime: "",
       },
 
       updateForm: (partial) =>
@@ -180,10 +180,10 @@ const useFormStore = create<FormStore>()(
             needAccommodation: "",
             accomMaleMembers: 0,
             accomFemaleMembers: 0,
-			checkInDate: undefined,
-			checkInTime: "",
-			checkOutDate: undefined,
-			checkOutTime: ""
+            checkInDate: undefined,
+            checkInTime: "",
+            checkOutDate: undefined,
+            checkOutTime: "",
           },
         }),
     }),

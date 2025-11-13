@@ -41,16 +41,18 @@ const BaseAccommodationSchema = z.object({
       z.object({
         name: z.string().optional(),
         phone: z.string().optional(),
-      })
-    ).optional(),
+      }),
+    )
+    .optional(),
 
   femaleDetails: z
     .array(
       z.object({
         name: z.string().optional(),
         phone: z.string().optional(),
-      })
-    ).optional(),
+      }),
+    )
+    .optional(),
 });
 
 const NoAccommodationSchema = BaseAccommodationSchema.extend({
@@ -59,51 +61,71 @@ const NoAccommodationSchema = BaseAccommodationSchema.extend({
 
 const YesAccommodationSchema = BaseAccommodationSchema.extend({
   needAccommodation: z.literal("yes"),
-})
-  .superRefine((data, ctx) => {
-    if (!data.checkInDate) {
-      ctx.addIssue({ code: "custom", path: ["checkInDate"], message: "Check-in date is required" });
-    }
-    if (!data.checkInTime || data.checkInTime.trim() === "") {
-      ctx.addIssue({ code: "custom", path: ["checkInTime"], message: "Check-in time is required" });
-    }
+}).superRefine((data, ctx) => {
+  if (!data.checkInDate) {
+    ctx.addIssue({
+      code: "custom",
+      path: ["checkInDate"],
+      message: "Check-in date is required",
+    });
+  }
+  if (!data.checkInTime || data.checkInTime.trim() === "") {
+    ctx.addIssue({
+      code: "custom",
+      path: ["checkInTime"],
+      message: "Check-in time is required",
+    });
+  }
 
-    if (!data.checkOutDate) {
-      ctx.addIssue({ code: "custom", path: ["checkOutDate"], message: "Check-out date is required" });
-    }
-    if (!data.checkOutTime || data.checkOutTime.trim() === "") {
-      ctx.addIssue({ code: "custom", path: ["checkOutTime"], message: "Check-out time is required" });
-    }
+  if (!data.checkOutDate) {
+    ctx.addIssue({
+      code: "custom",
+      path: ["checkOutDate"],
+      message: "Check-out date is required",
+    });
+  }
+  if (!data.checkOutTime || data.checkOutTime.trim() === "") {
+    ctx.addIssue({
+      code: "custom",
+      path: ["checkOutTime"],
+      message: "Check-out time is required",
+    });
+  }
 
-    if (data.accomMaleMembers > 0) {
-      const males = (data.maleDetails ?? []) as { name?: string; phone?: string }[];
-      for (let i = 0; i < data.accomMaleMembers; i++) {
-        const name = males[i]?.name ?? "";
-        if (name.trim() === "") {
-          ctx.addIssue({
-            code: "custom",
-            path: ["maleDetails", i, "name"],
-            message: `Male member ${i + 1} name is required`,
-          });
-        }
+  if (data.accomMaleMembers > 0) {
+    const males = (data.maleDetails ?? []) as {
+      name?: string;
+      phone?: string;
+    }[];
+    for (let i = 0; i < data.accomMaleMembers; i++) {
+      const name = males[i]?.name ?? "";
+      if (name.trim() === "") {
+        ctx.addIssue({
+          code: "custom",
+          path: ["maleDetails", i, "name"],
+          message: `Male member ${i + 1} name is required`,
+        });
       }
     }
+  }
 
-    if (data.accomFemaleMembers > 0) {
-      const females = (data.femaleDetails ?? []) as { name?: string; phone?: string }[];
-      for (let i = 0; i < data.accomFemaleMembers; i++) {
-        const name = females[i]?.name ?? "";
-        if (name.trim() === "") {
-          ctx.addIssue({
-            code: "custom",
-            path: ["femaleDetails", i, "name"],
-            message: `Female member ${i + 1} name is required`,
-          });
-        }
+  if (data.accomFemaleMembers > 0) {
+    const females = (data.femaleDetails ?? []) as {
+      name?: string;
+      phone?: string;
+    }[];
+    for (let i = 0; i < data.accomFemaleMembers; i++) {
+      const name = females[i]?.name ?? "";
+      if (name.trim() === "") {
+        ctx.addIssue({
+          code: "custom",
+          path: ["femaleDetails", i, "name"],
+          message: `Female member ${i + 1} name is required`,
+        });
       }
     }
-
-  });
+  }
+});
 
 const AccommodationSchema = z.union([
   NoAccommodationSchema,
@@ -112,7 +134,7 @@ const AccommodationSchema = z.union([
 
 export default function Accomodate() {
   const { formData, updateForm } = useFormStore();
-  
+
   const checkRequired = (data: FormData) => {
     const parsed = AccommodationSchema.safeParse(data);
 
@@ -265,7 +287,7 @@ export default function Accomodate() {
             </Field>
 
             {formData.needAccommodation == "yes" && (
-                <>
+              <>
                 {formData.numMaleMembers != 0 && (
                   <Field>
                     <FieldLabel htmlFor="male-acoompany">
@@ -276,7 +298,7 @@ export default function Accomodate() {
                       max={formData.numMaleMembers}
                       step={1}
                       onValueChange={([v]) => {
-                          const updated = {
+                        const updated = {
                           ...formData,
                           accomMaleMembers: v,
                         };
@@ -340,7 +362,10 @@ export default function Accomodate() {
                       mode="single"
                       selected={formData.checkInDate}
                       captionLayout="dropdown"
-                      disabled={{ before: formData.arrivalDate || new Date(), after: formData.departureDate }}
+                      disabled={{
+                        before: formData.arrivalDate || new Date(),
+                        after: formData.departureDate,
+                      }}
                       onSelect={(date) => {
                         const updated = {
                           ...formData,
@@ -400,7 +425,10 @@ export default function Accomodate() {
                       mode="single"
                       selected={formData.checkOutDate}
                       captionLayout="dropdown"
-                      disabled={{ before: formData.checkInDate || new Date(), after: formData.departureDate }}
+                      disabled={{
+                        before: formData.checkInDate || new Date(),
+                        after: formData.departureDate,
+                      }}
                       onSelect={(date) => {
                         const updated = {
                           ...formData,
