@@ -161,14 +161,14 @@ export default function EventParticipationInfo() {
                   <RadioGroup 
                     value={formData.participateInQuizDrawing}
                     onValueChange={(val) => {
-                        console.log(val)
-                        // If quiz/drawing event is chosen, then no group event can be chosen
-                        // So, I am setting the state of participateInGroupEvent to none when the choose neither
-                        if (val === "quiz" || val === "drawing") {
-                          updateForm({ participateInQuizDrawing: val, participateInGroupEvent: "none" })
-                        } else {
-                          updateForm({ participateInQuizDrawing: val, participateInGroupEvent: "" })
-                        }
+                      console.log(val)
+                      // If quiz/drawing event is chosen, then no group event can be chosen
+                      // So, I am setting the state of participateInGroupEvent to none when the choose neither
+                      if (val === "quiz" || val === "drawing") {
+                        updateForm({ participateInQuizDrawing: val, participateInGroupEvent: "none" })
+                      } else {
+                        updateForm({ participateInQuizDrawing: val, participateInGroupEvent: "" })
+                      }
                     }}
                   >
                     <div className="flex items-center gap-3">
@@ -195,14 +195,14 @@ export default function EventParticipationInfo() {
                   <RadioGroup 
                     value={formData.participateInGroupEvent}
                     onValueChange={(val) => {
-                        console.log(val)
-                        // If group event is chosen, only 1 other individual event is allowed
-                        // So, I am resetting the state of individualChoice2 whenever a group event is chosen
-                        if (val !== "none") {
-                          updateForm({ participateInGroupEvent: val, individualChoice2: "" })
-                        } else {
-                          updateForm({ participateInGroupEvent: val })
-                        }
+                      console.log(val)
+                      // If group event is chosen, only 1 other individual event is allowed
+                      // So, I am resetting the state of individualChoice2 whenever a group event is chosen
+                      if (val !== "none") {
+                        updateForm({ participateInGroupEvent: val, individualChoice2: "" })
+                      } else {
+                        updateForm({ participateInGroupEvent: val })
+                      }
                     }}
                   >
                     <div className="flex items-center gap-3">
@@ -233,8 +233,8 @@ export default function EventParticipationInfo() {
                   <RadioGroup 
                     value={formData.individualChoice1}
                     onValueChange={(val) => {
-                        console.log(val)
-                        updateForm({ individualChoice1: val })
+                      console.log(val)
+                      updateForm({ individualChoice1: val })
                     }}
                   >
                     <div className="flex items-center gap-3">
@@ -281,8 +281,8 @@ export default function EventParticipationInfo() {
                     <RadioGroup 
                       value={formData.individualChoice2}
                       onValueChange={(val) => {
-                          console.log(val)
-                          updateForm({ individualChoice2: val })
+                        console.log(val)
+                        updateForm({ individualChoice2: val })
                       }}
                     >
                       <div className="flex items-center gap-3">
@@ -322,8 +322,32 @@ export default function EventParticipationInfo() {
                 )}
                 </>
               )}
-            </FieldGroup>
+              
+              {formData.group === "4" && (
+                <Field>
+                  <FieldLabel>
+                    Do you want to participate in Quiz? *
+                  </FieldLabel>
 
+                  <RadioGroup 
+                    value={formData.participateInQuizDrawing}
+                    onValueChange={(val) => {
+                      console.log(val)
+                      updateForm({ participateInQuizDrawing: val })
+                    }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <RadioGroupItem value="quiz" id="quiz-participate" />
+                      <Label htmlFor="quiz-participate">Yes</Label>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <RadioGroupItem value="none" id="none-participate" />
+                      <Label htmlFor="none-participate">No</Label>
+                    </div>
+                  </RadioGroup>
+                </Field>
+              )}
+            </FieldGroup>
         </FieldSet>
       </FieldGroup>
     </div>
