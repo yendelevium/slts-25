@@ -28,95 +28,6 @@ export default function Accompany() {
         updateForm({ [key]: value })
     })
 
-        const maleMemberElementsJSX = Array.from({ length: formData.numMaleMembers }).map((_, index) => {
-        const member = formData.maleDetails?.[index] || { name: "", phone: "" }
-
-        return (
-            <div key={index} className="flex gap-4 mt-3">
-            <div className="flex-1">
-                <FieldLabel htmlFor={`male-name-${index}`}>
-                Member(M) {index + 1} Name *
-                </FieldLabel>
-                <Input
-                id={`male-name-${index}`}
-                placeholder="Enter name"
-                value={member.name.toString()}
-                onChange={(e) => {
-                    const updated = [...(formData.maleDetails || [])]
-                    while (updated.length < formData.numMaleMembers)
-                    updated.push({ name: "", phone: "" })
-                    updated[index] = { ...updated[index], name: e.target.value }
-                    updateForm({ maleDetails: updated })
-                }}
-                />
-            </div>
-
-            <div className="flex-1">
-                <FieldLabel htmlFor={`male-phone-${index}`}>
-                Phone *
-                </FieldLabel>
-                <Input
-                id={`male-phone-${index}`}
-                placeholder="Enter phone number"
-                value={member.phone.toString()}
-                onChange={(e) => {
-                    const updated = [...(formData.maleDetails || [])]
-                    while (updated.length < formData.numMaleMembers)
-                    updated.push({ name: "", phone: "" })
-                    updated[index] = { ...updated[index], phone: e.target.value }
-                    updateForm({ maleDetails: updated })
-                    console.log(formData)
-                }}
-                />
-            </div>
-            </div>
-        )
-    })
-
-    const femaleMemberElementsJSX = Array.from({ length: formData.numFemaleMembers }).map((_, index) => {
-        const member = formData.femaleDetails?.[index] || { name: "", phone: "" }
-
-        return (
-            <div key={index} className="flex gap-4 mt-3">
-                <Field className="flex-1">
-                    <FieldLabel htmlFor={`female-name-${index}`}>
-                    Member(F) {index + 1} Name *
-                    </FieldLabel>
-                    <Input
-                    id={`female-name-${index}`}
-                    placeholder="Enter name"
-                    value={member.name.toString()}
-                    onChange={(e) => {
-                        const updated = [...(formData.femaleDetails || [])]
-                        while (updated.length < formData.numFemaleMembers)
-                        updated.push({ name: "", phone: "" })
-                        updated[index] = { ...updated[index], name: e.target.value }
-                        updateForm({ femaleDetails: updated })
-                    }}
-                    />
-                </Field>
-
-                <Field className="flex-1">
-                    <FieldLabel htmlFor={`female-phone-${index}`}>
-                    Phone *
-                    </FieldLabel>
-                    <Input
-                    id={`female-phone-${index}`}
-                    placeholder="Enter phone number"
-                    value={member.phone.toString()}
-                    onChange={(e) => {
-                        const updated = [...(formData.femaleDetails || [])]
-                        while (updated.length < formData.numFemaleMembers)
-                        updated.push({ name: "", phone: "" })
-                        updated[index] = { ...updated[index], phone: e.target.value }
-                        updateForm({ femaleDetails: updated })
-                        console.log(formData)
-                    }}
-                    />
-                </Field>
-            </div>
-        )
-    })
 
     const genderElementsJSX = ["Male", "Female"].map((gender) => {
 		return (
@@ -162,11 +73,11 @@ export default function Accompany() {
                         >
                             <div className="flex items-center gap-3">
                                 <RadioGroupItem value="yes" id="yes-accompany" />
-                                <Label htmlFor="yes-passed">Yes</Label>
+                                <Label htmlFor="yes-accompany">Yes</Label>
                             </div>
                             <div className="flex items-center gap-3">
                                 <RadioGroupItem value="no" id="no-accompany" />
-                                <Label htmlFor="no-passed">No</Label>
+                                <Label htmlFor="no-accompany">No</Label>
                             </div>
                         </RadioGroup>
                     </Field>
@@ -176,18 +87,14 @@ export default function Accompany() {
                                 <FieldLabel htmlFor="male-acoompany">Number of male members: {formData.numMaleMembers}</FieldLabel>
                                 <Slider defaultValue={[formData.numMaleMembers]} max={10} step={1} onValueChange={([v])=>{
                                     updateForm({numMaleMembers: v})
-
                                 }}/>
-                                {maleMemberElementsJSX}
                             </Field>
 
                             <Field>
                                 <FieldLabel htmlFor="female-acoompany">Number of female members: {formData.numFemaleMembers}</FieldLabel>
                                 <Slider defaultValue={[formData.numFemaleMembers]} max={10} step={1} onValueChange={([v])=>{
                                     updateForm({numFemaleMembers: v})
-
                                 }}/>
-                                {femaleMemberElementsJSX}
                             </Field>
 
                             <FieldSet>

@@ -12,6 +12,7 @@ import {
 
 import StudentInfo from "@/components/form/StudentInfo";
 import Accompany from "@/components/form/Accompany";
+import Accomodate from "@/components/form/Accomodate";
 
 export const Route = createFileRoute("/")({
 	component: App,
@@ -92,7 +93,7 @@ function App() {
 							<PaginationNext
 								href="/test_route"
 								onClick={(e) => {
-									// e.preventDefault();
+									e.preventDefault();
 									navigateNextPage();
 								}}
 							/>
