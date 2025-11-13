@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import StudentInfo from "@/components/form/StudentInfo";
 import Accompany from "@/components/form/Accompany";
 import Accomodate from "@/components/form/Accomodate";
+import EventParticipationInfo from "@/components/form/EventParticipationInfo";
+import LogisticsInfo from "@/components/form/LogisticsInfo";
 
 import { useFormStore } from "@/store/formStore";
 import { ArrowRight, ArrowLeft } from "lucide-react";
@@ -20,7 +22,7 @@ export const Route = createFileRoute("/")({
 
 function App() {
   const { formData, updateForm } = useFormStore();
-  const Sections = [<StudentInfo />, <Accompany />, <Accomodate />];
+  const Sections = [<StudentInfo />, <EventParticipationInfo />, <LogisticsInfo />, <Accompany />, <Accomodate />];
 
   let progress = (Math.min(formData.sectionNumber, 5) / 5) * 100;
 
