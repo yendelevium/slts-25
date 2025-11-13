@@ -2,6 +2,10 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 export interface FormData {
+	// Nav
+	sectionNumber: number;
+	nextSectionEnable: boolean[];
+
 	// Student Info
 	group: String;
 	hasGivenGroup2Exam: String;
@@ -66,6 +70,8 @@ const useFormStore = create<FormStore>()(
 	persist(
 		(set) => ({
 			formData: {
+				sectionNumber: 0,
+				nextSectionEnable: [false, false, false, false, false],
 				group: "",
 				hasGivenGroup2Exam: "",
 				name: "",
@@ -120,6 +126,8 @@ const useFormStore = create<FormStore>()(
 			resetForm: () =>
 				set({
 					formData: {
+						sectionNumber: 0,
+						nextSectionEnable: [false, false, false, false, false],
 						group: "",
 						hasGivenGroup2Exam: "",
 						name: "",

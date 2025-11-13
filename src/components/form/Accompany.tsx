@@ -13,16 +13,57 @@ import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 
-import { useFormStore } from "@/store/formStore";
+import { type FormData, useFormStore } from "@/store/formStore";
 import debouncedUpdate from "@/utils/debounce";
+import { z } from "zod";
+
+const NoAccompanySchema = z.object({
+	adultsAccompanying: z.literal("no"),
+});
+
+const YesAccompanySchema = z
+	.object({
+		adultsAccompanying: z.literal("yes"),
+
+		numMaleMembers: z.number().int().min(0),
+		numFemaleMembers: z.number().int().min(0),
+
+		pocName: z.string().min(1),
+		pocPhone: z.string().min(10).max(10),
+		pocGender: z.enum(["Male", "Female"]),
+		pocRelation: z.enum(["Father", "Mother", "Guru", "Legal Guardian"]),
+		pocAge: z.enum(["18-65", "65+"]),
+	})
+	.refine((data) => data.numMaleMembers + data.numFemaleMembers >= 1, {
+		message: "At least one accompanying member is required.",
+		path: ["numMaleMembers"],
+	});
+
+const AccompanySchema = z.union([NoAccompanySchema, YesAccompanySchema]);
 
 export default function Accompany() {
 	const { formData, updateForm } = useFormStore();
 
 	// Defining it ONCE as a debounced function to update the form
 	// But will need to repeat for all components as store is only accessible in functional components
+	const checkRequired = (data: FormData) => {
+		const parsed = AccompanySchema.safeParse(data);
+
+		const isSection1Valid = parsed.success;
+		console.log(isSection1Valid, data);
+		const newArr = [...data.nextSectionEnable];
+		newArr[data.sectionNumber] = isSection1Valid;
+		updateForm({ nextSectionEnable: newArr });
+	};
+
 	const debouncedFormUpdate = debouncedUpdate((key: string, value: string) => {
+		const updated = {
+			...formData,
+			[key]: value,
+		};
+
 		updateForm({ [key]: value });
+		checkRequired(updated);
 	});
 
 	const genderElementsJSX = ["Male", "Female"].map((gender) => {
@@ -30,8 +71,13 @@ export default function Accompany() {
 			<Button
 				key={gender}
 				onClick={() => {
-					// TODO: Update store to set the chosen gender...
+					const updated = {
+						...formData,
+						pocGender: gender,
+					};
+
 					updateForm({ pocGender: gender });
+					checkRequired(updated);
 				}}
 				variant="outline"
 				// size="lg"
@@ -57,15 +103,22 @@ export default function Accompany() {
 
 					<FieldGroup>
 						<Field>
-							<FieldLabel htmlFor="adults-accompanying">
+							<FieldLabel
+								htmlFor="adults-accompanying"
+								className="tracking-tight"
+							>
 								Are adults/non-participating siblings accompanying? *
 							</FieldLabel>
 
 							<RadioGroup
 								value={formData.adultsAccompanying.toString()}
 								onValueChange={(val) => {
-									console.log(val);
+									const updated = {
+										...formData,
+										adultsAccompanying: val,
+									};
 									updateForm({ adultsAccompanying: val });
+									checkRequired(updated);
 								}}
 								id="adults-accompanying"
 							>
@@ -90,7 +143,12 @@ export default function Accompany() {
 										max={10}
 										step={1}
 										onValueChange={([v]) => {
+											const updated = {
+												...formData,
+												numMaleMembers: v,
+											};
 											updateForm({ numMaleMembers: v });
+											checkRequired(updated);
 										}}
 									/>
 								</Field>
@@ -104,7 +162,12 @@ export default function Accompany() {
 										max={10}
 										step={1}
 										onValueChange={([v]) => {
+											const updated = {
+												...formData,
+												numFemaleMembers: v,
+											};
 											updateForm({ numFemaleMembers: v });
+											checkRequired(updated);
 										}}
 									/>
 								</Field>
@@ -165,7 +228,12 @@ export default function Accompany() {
 											value={formData.pocRelation.toString()}
 											onValueChange={(val) => {
 												console.log(val);
+												const updated = {
+													...formData,
+													pocRelation: val,
+												};
 												updateForm({ pocRelation: val });
+												checkRequired(updated);
 											}}
 											className="flex flex-wrap"
 										>
@@ -198,9 +266,13 @@ export default function Accompany() {
 										<RadioGroup
 											value={formData.pocAge.toString()}
 											onValueChange={(val) => {
-												console.log(val);
-												console.log(formData);
+												const updated = {
+													...formData,
+													pocAge: val,
+												};
+
 												updateForm({ pocAge: val });
+												checkRequired(updated);
 											}}
 											className="flex flex-wrap"
 										>

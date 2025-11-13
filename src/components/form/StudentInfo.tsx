@@ -28,8 +28,20 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 
-import { useFormStore } from "@/store/formStore";
+import { type FormData, useFormStore } from "@/store/formStore";
 import debouncedUpdate from "@/utils/debounce";
+
+import { z } from "zod";
+
+export const Section1Schema = z.object({
+	group: z.string().min(1),
+	name: z.string().min(1),
+	dob: z.date(),
+	gender: z.string().min(1),
+	district: z.string().min(1),
+	samithi: z.string().min(1),
+	yearOfJoining: z.string().min(1),
+});
 
 const districts = [
 	"Coimbatore",
@@ -74,9 +86,26 @@ export default function StudentInfo() {
 	const { formData, updateForm } = useFormStore();
 
 	// Defining it ONCE as a debounced function to update the form
-	// But will need to repeat for all components as store is only accessible in functional components
+	// But will need to repeat for all components as store is only accessible in functional component
+
+	const checkRequired = (data: FormData) => {
+		const parsed = Section1Schema.safeParse(data);
+
+		const isSection1Valid = parsed.success;
+
+		const newArr = [...data.nextSectionEnable];
+		newArr[data.sectionNumber] = isSection1Valid;
+		updateForm({ nextSectionEnable: newArr });
+	};
+
 	const debouncedFormUpdate = debouncedUpdate((key: string, value: string) => {
+		const updated = {
+			...formData,
+			[key]: value,
+		};
+
 		updateForm({ [key]: value });
+		checkRequired(updated);
 	});
 
 	// DOB state
@@ -88,13 +117,19 @@ export default function StudentInfo() {
 			<Button
 				key={group}
 				onClick={() => {
-					updateForm({ group: group });
-					console.log(formData);
+					const updated = {
+						...formData,
+						group,
+					};
+
 					// Setting `passed` to null if the group isn't group 3??
 					// Or should I keep it as the previous value?
-					if (group != "3") {
-						updateForm({ hasGivenGroup2Exam: "" });
+					if (group !== "3") {
+						updated.hasGivenGroup2Exam = "";
 					}
+
+					updateForm({ group: group });
+					checkRequired(updated); // pass updated state
 				}}
 				variant="outline"
 				// I'm using a simple logic to show which button was selected
@@ -113,8 +148,13 @@ export default function StudentInfo() {
 			<Button
 				key={gender}
 				onClick={() => {
-					// TODO: Update store to set the chosen gender...
+					const updated = {
+						...formData,
+						gender,
+					};
+
 					updateForm({ gender: gender });
+					checkRequired(updated);
 				}}
 				variant="outline"
 				// size="lg"
@@ -160,7 +200,12 @@ export default function StudentInfo() {
 									value={formData.hasGivenGroup2Exam.toString()}
 									onValueChange={(val) => {
 										console.log(val);
+										const updated = {
+											...formData,
+											hasGivenGroup2Exam: val,
+										};
 										updateForm({ hasGivenGroup2Exam: val });
+										checkRequired(updated);
 									}}
 								>
 									<div className="flex items-center gap-3">
@@ -202,8 +247,12 @@ export default function StudentInfo() {
 										selected={formData.dob}
 										captionLayout="dropdown"
 										onSelect={(date) => {
+											const updated = {
+												...formData,
+												dob: date,
+											};
 											updateForm({ dob: date });
-											setOpen(false);
+											checkRequired(updated);
 										}}
 									/>
 								</PopoverContent>

@@ -13,15 +13,9 @@ import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 
 import { useFormStore } from "@/store/formStore";
-import debouncedUpdate from "@/utils/debounce";
 
 export default function Accomodate() {
 	const { formData, updateForm } = useFormStore();
-	// Defining it ONCE as a debounced function to update the form
-	// But will need to repeat for all components as store is only accessible in functional components
-	const debouncedFormUpdate = debouncedUpdate((key: string, value: string) => {
-		updateForm({ [key]: value });
-	});
 
 	const maleMemberElementsJSX = Array.from({
 		length: formData.accomMaleMembers,
@@ -31,7 +25,7 @@ export default function Accomodate() {
 		return (
 			<div key={index} className="flex gap-4 mt-3">
 				<div className="flex-1">
-					<FieldLabel htmlFor={`male-name-${index}`}>
+					<FieldLabel htmlFor={`male-name-${index}`} className="tracking-tight">
 						Member(M) {index + 1} Name *
 					</FieldLabel>
 					<Input
@@ -76,7 +70,10 @@ export default function Accomodate() {
 		return (
 			<div key={index} className="flex gap-4 mt-3">
 				<Field className="flex-1">
-					<FieldLabel htmlFor={`female-name-${index}`}>
+					<FieldLabel
+						htmlFor={`female-name-${index}`}
+						className="tracking-tight"
+					>
 						Member(F) {index + 1} Name *
 					</FieldLabel>
 					<Input
@@ -150,35 +147,39 @@ export default function Accomodate() {
 
 						{formData.needAccommodation == "yes" && (
 							<FieldSet>
-								<Field>
-									<FieldLabel htmlFor="male-acoompany">
-										Number of male members: {formData.accomMaleMembers}
-									</FieldLabel>
-									<Slider
-										defaultValue={[formData.accomMaleMembers]}
-										max={10}
-										step={1}
-										onValueChange={([v]) => {
-											updateForm({ accomMaleMembers: v });
-										}}
-									/>
-									{maleMemberElementsJSX}
-								</Field>
+								{formData.numMaleMembers != 0 && (
+									<Field>
+										<FieldLabel htmlFor="male-acoompany">
+											Number of male members: {formData.accomMaleMembers}
+										</FieldLabel>
+										<Slider
+											defaultValue={[formData.accomMaleMembers]}
+											max={formData.numMaleMembers}
+											step={1}
+											onValueChange={([v]) => {
+												updateForm({ accomMaleMembers: v });
+											}}
+										/>
+										{maleMemberElementsJSX}
+									</Field>
+								)}
 
-								<Field>
-									<FieldLabel htmlFor="female-acoompany">
-										Number of female members: {formData.accomFemaleMembers}
-									</FieldLabel>
-									<Slider
-										defaultValue={[formData.accomFemaleMembers]}
-										max={10}
-										step={1}
-										onValueChange={([v]) => {
-											updateForm({ accomFemaleMembers: v });
-										}}
-									/>
-									{femaleMemberElementsJSX}
-								</Field>
+								{formData.numFemaleMembers != 0 && (
+									<Field>
+										<FieldLabel htmlFor="female-acoompany">
+											Number of female members: {formData.accomFemaleMembers}
+										</FieldLabel>
+										<Slider
+											defaultValue={[formData.accomFemaleMembers]}
+											max={formData.numFemaleMembers}
+											step={1}
+											onValueChange={([v]) => {
+												updateForm({ accomFemaleMembers: v });
+											}}
+										/>
+										{femaleMemberElementsJSX}
+									</Field>
+								)}
 							</FieldSet>
 						)}
 					</FieldGroup>
