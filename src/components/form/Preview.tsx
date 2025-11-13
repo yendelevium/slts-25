@@ -85,7 +85,7 @@ export default function Preview() {
                   )}
 
                 {/* c1 only */}
-                {!devotionalSinging &&
+                {devotionalSinging == "no" &&
                   individualChoice1 &&
                   !individualChoice2 && (
                     <Info
@@ -95,7 +95,7 @@ export default function Preview() {
                   )}
 
                 {/* c1 + c2 */}
-                {!devotionalSinging &&
+                {devotionalSinging == "no" &&
                   individualChoice1 &&
                   individualChoice2 && (
                     <>

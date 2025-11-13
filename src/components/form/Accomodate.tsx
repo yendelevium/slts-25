@@ -61,37 +61,11 @@ const NoAccommodationSchema = BaseAccommodationSchema.extend({
 
 const YesAccommodationSchema = BaseAccommodationSchema.extend({
   needAccommodation: z.literal("yes"),
+  checkInDate: z.date(),
+  checkInTime: z.string().min(1, "Check-in time is required"),
+  checkOutDate: z.date(),
+  checkOutTime: z.string().min(1, "Check-out time is required"),
 }).superRefine((data, ctx) => {
-  if (!data.checkInDate) {
-    ctx.addIssue({
-      code: "custom",
-      path: ["checkInDate"],
-      message: "Check-in date is required",
-    });
-  }
-  if (!data.checkInTime || data.checkInTime.trim() === "") {
-    ctx.addIssue({
-      code: "custom",
-      path: ["checkInTime"],
-      message: "Check-in time is required",
-    });
-  }
-
-  if (!data.checkOutDate) {
-    ctx.addIssue({
-      code: "custom",
-      path: ["checkOutDate"],
-      message: "Check-out date is required",
-    });
-  }
-  if (!data.checkOutTime || data.checkOutTime.trim() === "") {
-    ctx.addIssue({
-      code: "custom",
-      path: ["checkOutTime"],
-      message: "Check-out time is required",
-    });
-  }
-
   if (data.accomMaleMembers > 0) {
     const males = (data.maleDetails ?? []) as {
       name?: string;
@@ -142,7 +116,12 @@ export default function Accomodate() {
 
     const newArr = [...data.nextSectionEnable];
     newArr[data.sectionNumber] = isSection3Valid;
-    updateForm({ nextSectionEnable: newArr });
+    console.log("Accommodation Section Valid:", isSection3Valid);
+    if (isSection3Valid) {
+      updateForm({ nextSectionEnable: newArr, showErrors: false });
+    } else {
+      updateForm({ nextSectionEnable: newArr });
+    }
   };
 
   // Debouncing for the input fields
@@ -263,6 +242,19 @@ export default function Accomodate() {
 
           <FieldGroup>
             <Field>
+              {formData.showErrors &&
+                !(
+                  NoAccommodationSchema.shape.needAccommodation.safeParse(
+                    formData.needAccommodation,
+                  ).success ||
+                  YesAccommodationSchema.shape.needAccommodation.safeParse(
+                    formData.needAccommodation,
+                  ).success
+                ) && (
+                  <div className="text-red-600 text-sm">
+                    This field is required
+                  </div>
+                )}
               <FieldLabel htmlFor="accomodation?">
                 Does the student need accommodation? *
               </FieldLabel>
@@ -270,8 +262,12 @@ export default function Accomodate() {
               <RadioGroup
                 value={formData.needAccommodation.toString()}
                 onValueChange={(val) => {
-                  console.log(val);
+                  const updated = {
+                    ...formData,
+                    needAccommodation: val,
+                  };
                   updateForm({ needAccommodation: val });
+                  checkRequired(updated);
                 }}
                 id="accomodation"
               >
@@ -290,6 +286,14 @@ export default function Accomodate() {
               <>
                 {formData.numMaleMembers != 0 && (
                   <Field>
+                    {formData.showErrors &&
+                      (formData.maleDetails ?? []).filter((m) =>
+                        m?.name?.trim(),
+                      ).length < formData.accomMaleMembers && (
+                        <div className="text-red-600 text-sm">
+                          Please fill in all male member details
+                        </div>
+                      )}
                     <FieldLabel htmlFor="male-acoompany">
                       Number of male members: {formData.accomMaleMembers}
                     </FieldLabel>
@@ -301,8 +305,12 @@ export default function Accomodate() {
                         const updated = {
                           ...formData,
                           accomMaleMembers: v,
+                          maleDetails: formData.maleDetails?.slice(0, v),
                         };
-                        updateForm({ accomMaleMembers: v });
+                        updateForm({
+                          accomMaleMembers: v,
+                          maleDetails: formData.maleDetails?.slice(0, v),
+                        });
                         checkRequired(updated);
                       }}
                     />
@@ -312,6 +320,14 @@ export default function Accomodate() {
 
                 {formData.numFemaleMembers != 0 && (
                   <Field>
+                    {formData.showErrors &&
+                      (formData.femaleDetails ?? []).filter((f) =>
+                        f?.name?.trim(),
+                      ).length < formData.accomFemaleMembers && (
+                        <div className="text-red-600 text-sm">
+                          Please fill in all female member details
+                        </div>
+                      )}
                     <FieldLabel htmlFor="female-acoompany">
                       Number of female members: {formData.accomFemaleMembers}
                     </FieldLabel>
@@ -323,8 +339,12 @@ export default function Accomodate() {
                         const updated = {
                           ...formData,
                           accomFemaleMembers: v,
+                          femaleDetails: formData.femaleDetails?.slice(0, v),
                         };
-                        updateForm({ accomFemaleMembers: v });
+                        updateForm({
+                          accomFemaleMembers: v,
+                          femaleDetails: formData.femaleDetails?.slice(0, v),
+                        });
                         checkRequired(updated);
                       }}
                     />
@@ -334,6 +354,14 @@ export default function Accomodate() {
                 <div className="flex flex-col md:flex-row gap-3">
                   {/* Check-in Date Field */}
                   <Field>
+                    {formData.showErrors &&
+                      !YesAccommodationSchema.shape.checkInDate.safeParse(
+                        formData.checkInDate,
+                      ).success && (
+                        <div className="text-red-600 text-sm">
+                          Check-in Date is required
+                        </div>
+                      )}
                     <FieldLabel htmlFor="checkin-date">
                       Check-in Date *
                     </FieldLabel>
@@ -381,6 +409,14 @@ export default function Accomodate() {
 
                   {/* Check-in Time Field */}
                   <Field>
+                    {formData.showErrors &&
+                      !YesAccommodationSchema.shape.checkInTime.safeParse(
+                        formData.checkInTime,
+                      ).success && (
+                        <div className="text-red-600 text-sm">
+                          Check-in Time is required
+                        </div>
+                      )}
                     <FieldLabel htmlFor="checkin-time">
                       Check in Time *
                     </FieldLabel>
@@ -399,6 +435,14 @@ export default function Accomodate() {
                 <div className="flex flex-col md:flex-row gap-3">
                   {/* Checkout Date Field */}
                   <Field>
+                    {formData.showErrors &&
+                      !YesAccommodationSchema.shape.checkOutDate.safeParse(
+                        formData.checkOutDate,
+                      ).success && (
+                        <div className="text-red-600 text-sm">
+                          Check-out Date is required
+                        </div>
+                      )}
                     <FieldLabel htmlFor="checkout-date">
                       Departure Date *
                     </FieldLabel>
@@ -446,6 +490,14 @@ export default function Accomodate() {
 
                   {/* Checkout Time Field */}
                   <Field>
+                    {formData.showErrors &&
+                      !YesAccommodationSchema.shape.checkOutTime.safeParse(
+                        formData.checkOutTime,
+                      ).success && (
+                        <div className="text-red-600 text-sm">
+                          Check-out Time is required
+                        </div>
+                      )}
                     <FieldLabel htmlFor="checkout-time">
                       Departure Time *
                     </FieldLabel>

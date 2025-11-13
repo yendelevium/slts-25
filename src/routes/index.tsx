@@ -100,7 +100,7 @@ function App() {
               onClick={() =>
                 // submit sm shi
                 // idk
-                console.log("Submitted!")
+                console.log("Submitted", formData)
               }
               className="cursor-pointer"
             >
