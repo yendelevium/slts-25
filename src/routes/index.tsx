@@ -14,6 +14,7 @@ import Accompany from "@/components/form/Accompany";
 import Accomodate from "@/components/form/Accomodate";
 
 import { useFormStore } from "@/store/formStore";
+import { ArrowRight, ArrowLeft } from 'lucide-react';
 
 export const Route = createFileRoute("/")({
 	component: App,
@@ -61,7 +62,6 @@ function App() {
 				{/* This will be rendered dynamically based on form progress */}
 				{Sections[formData.sectionNumber]}
 
-				{/* Navigation */}
 				{/* I'm thinking only 1 page to be shown in pagination, the current page... */}
 				{/* Can be debated upon later */}
 				{/* The logic for navigation will also be extracted out to a diff component */}
@@ -71,6 +71,7 @@ function App() {
 						onClick={() => updateForm({ sectionNumber: formData.sectionNumber - 1 })}
 						disabled={formData.sectionNumber === 0}
 					>
+						<ArrowLeft />
 						Previous
 					</Button>
 
@@ -79,6 +80,7 @@ function App() {
 						disabled={!formData.nextSectionEnable?.[formData.sectionNumber]}
 					>
 						Next
+						<ArrowRight />
 					</Button>
 				</div>
 			</div>
