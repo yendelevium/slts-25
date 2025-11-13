@@ -75,7 +75,7 @@ const useFormStore = create<FormStore>()(
   persist(
     (set) => ({
       formData: {
-		showErrors: false,
+        showErrors: false,
         sectionNumber: 0,
         nextSectionEnable: [false, false, false, false, false],
         group: "",
@@ -136,7 +136,7 @@ const useFormStore = create<FormStore>()(
       resetForm: () =>
         set({
           formData: {
-			showErrors: false,
+            showErrors: false,
             sectionNumber: 0,
             nextSectionEnable: [false, false, false, false, false],
             group: "",

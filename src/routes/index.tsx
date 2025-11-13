@@ -80,15 +80,15 @@ function App() {
 
           {formData.sectionNumber != 5 && (
             <Button
-              onClick={() =>
-				{
-			      if(formData.nextSectionEnable[formData.sectionNumber] == false){
-					updateForm({showErrors: true})
-				  }else{
-				    updateForm({ sectionNumber: formData.sectionNumber + 1 })
-				  }
-              	}
-			  }
+              onClick={() => {
+                if (
+                  formData.nextSectionEnable[formData.sectionNumber] == false
+                ) {
+                  updateForm({ showErrors: true });
+                } else {
+                  updateForm({ sectionNumber: formData.sectionNumber + 1 });
+                }
+              }}
               className="cursor-pointer"
             >
               Next

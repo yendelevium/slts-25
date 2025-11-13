@@ -334,7 +334,9 @@ export default function Accomodate() {
                 <div className="flex flex-col md:flex-row gap-3">
                   {/* Check-in Date Field */}
                   <Field>
-                    <FieldLabel htmlFor="checkin-date">Check-in Date *</FieldLabel>
+                    <FieldLabel htmlFor="checkin-date">
+                      Check-in Date *
+                    </FieldLabel>
                     <Popover
                       open={openCheckinDate}
                       onOpenChange={setOpenCheckinDate}
@@ -379,7 +381,9 @@ export default function Accomodate() {
 
                   {/* Check-in Time Field */}
                   <Field>
-                    <FieldLabel htmlFor="checkin-time">Check in Time *</FieldLabel>
+                    <FieldLabel htmlFor="checkin-time">
+                      Check in Time *
+                    </FieldLabel>
                     <Input
                       type="time"
                       id="checkin-time"
@@ -458,8 +462,6 @@ export default function Accomodate() {
                 </div>
               </>
             )}
-
-
           </FieldGroup>
         </FieldSet>
       </FieldGroup>

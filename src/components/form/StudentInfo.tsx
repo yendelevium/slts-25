@@ -33,7 +33,8 @@ import debouncedUpdate from "@/utils/debounce";
 
 import { z } from "zod";
 
-const Section1Schema = z.object({
+const Section1Schema = z
+  .object({
     group: z.string().min(1),
     name: z.string().min(1),
     dob: z.date(),
@@ -55,7 +56,7 @@ const Section1Schema = z.object({
         });
       }
     }
-});
+  });
 
 const districts = [
   "Coimbatore",
@@ -109,9 +110,9 @@ export default function StudentInfo() {
 
     const newArr = [...data.nextSectionEnable];
     newArr[data.sectionNumber] = isSection1Valid;
-    if(isSection1Valid){
+    if (isSection1Valid) {
       updateForm({ nextSectionEnable: newArr, showErrors: false });
-    }else{
+    } else {
       updateForm({ nextSectionEnable: newArr });
     }
   };
@@ -146,7 +147,10 @@ export default function StudentInfo() {
             updated.hasGivenGroup2Exam = "";
           }
 
-          updateForm({ group: group, hasGivenGroup2Exam: updated.hasGivenGroup2Exam });
+          updateForm({
+            group: group,
+            hasGivenGroup2Exam: updated.hasGivenGroup2Exam,
+          });
           checkRequired(updated); // pass updated state
         }}
         variant="outline"
@@ -201,10 +205,10 @@ export default function StudentInfo() {
 
           {/* Group selection field */}
           <FieldGroup>
-            { formData.showErrors &&
+            {formData.showErrors &&
               !Section1Schema.shape.group.safeParse(formData.group).success && (
                 <div className="text-red-600 text-sm">Group is required</div>
-            )}
+              )}
             <Field>
               <FieldLabel htmlFor="student-group">Select Group *</FieldLabel>
 
@@ -214,46 +218,48 @@ export default function StudentInfo() {
             {/* Pop-up for grp 2 pass or not if the selected group is 3 */}
             {formData.group == "3" && (
               <>
-              {formData.showErrors && formData.hasGivenGroup2Exam=="" && (
-                 <div className="text-red-600 text-sm">Please indicate whether you have passed the Group 2 exam</div>
-              )}
-              <Field>
-                <FieldLabel htmlFor="passed-grp2-exam">
-                  Passed Group 2 Exam? *
-                </FieldLabel>
+                {formData.showErrors && formData.hasGivenGroup2Exam == "" && (
+                  <div className="text-red-600 text-sm">
+                    Please indicate whether you have passed the Group 2 exam
+                  </div>
+                )}
+                <Field>
+                  <FieldLabel htmlFor="passed-grp2-exam">
+                    Passed Group 2 Exam? *
+                  </FieldLabel>
 
-                <RadioGroup
-                  value={formData.hasGivenGroup2Exam.toString()}
-                  onValueChange={(val) => {
-                    console.log(val);
-                    const updated = {
-                      ...formData,
-                      hasGivenGroup2Exam: val,
-                    };
-                    updateForm({ hasGivenGroup2Exam: val });
-                    checkRequired(updated);
-                  }}
-                >
-                  <div className="flex items-center gap-3">
-                    <RadioGroupItem value="yes" id="yes-passed" />
-                    <Label htmlFor="yes-passed">Yes</Label>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <RadioGroupItem value="no" id="no-passed" />
-                    <Label htmlFor="no-passed">No</Label>
-                  </div>
-                </RadioGroup>
-              </Field>
+                  <RadioGroup
+                    value={formData.hasGivenGroup2Exam.toString()}
+                    onValueChange={(val) => {
+                      console.log(val);
+                      const updated = {
+                        ...formData,
+                        hasGivenGroup2Exam: val,
+                      };
+                      updateForm({ hasGivenGroup2Exam: val });
+                      checkRequired(updated);
+                    }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <RadioGroupItem value="yes" id="yes-passed" />
+                      <Label htmlFor="yes-passed">Yes</Label>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <RadioGroupItem value="no" id="no-passed" />
+                      <Label htmlFor="no-passed">No</Label>
+                    </div>
+                  </RadioGroup>
+                </Field>
               </>
             )}
 
             {/* Name */}
             {/* MAKE SURE UR defaultValue IS EQUAL TO THE STORE FOR INPUT FIELDS, NOT DIRECTLY `value` AS THAT WILL CAUSE LOT OF LAG */}
             <Field>
-              { formData.showErrors &&
+              {formData.showErrors &&
                 !Section1Schema.shape.name.safeParse(formData.name).success && (
-                <div className="text-red-600 text-sm">Name is required</div>
-              )}
+                  <div className="text-red-600 text-sm">Name is required</div>
+                )}
               <FieldLabel htmlFor="name">Name *</FieldLabel>
               <Input
                 type="text"
@@ -266,10 +272,12 @@ export default function StudentInfo() {
 
             {/* DOB */}
             <Field>
-              { formData.showErrors &&
+              {formData.showErrors &&
                 !Section1Schema.shape.dob.safeParse(formData.dob).success && (
-                <div className="text-red-600 text-sm">Date of Birth is required</div>
-              )}
+                  <div className="text-red-600 text-sm">
+                    Date of Birth is required
+                  </div>
+                )}
               <FieldLabel htmlFor="dob">Date of Birth *</FieldLabel>
               <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
@@ -311,20 +319,24 @@ export default function StudentInfo() {
 
             {/* Gender */}
             <Field>
-              { formData.showErrors &&
-                !Section1Schema.shape.gender.safeParse(formData.gender).success && (
-                <div className="text-red-600 text-sm">Gender is required</div>
-              )}
+              {formData.showErrors &&
+                !Section1Schema.shape.gender.safeParse(formData.gender)
+                  .success && (
+                  <div className="text-red-600 text-sm">Gender is required</div>
+                )}
               <FieldLabel htmlFor="gender">Gender *</FieldLabel>
               <div className="flex flex-wrap gap-3">{genderElementsJSX}</div>
             </Field>
 
             {/* District */}
             <Field>
-              { formData.showErrors &&
-                !Section1Schema.shape.district.safeParse(formData.district).success && (
-                <div className="text-red-600 text-sm">District is required</div>
-              )}
+              {formData.showErrors &&
+                !Section1Schema.shape.district.safeParse(formData.district)
+                  .success && (
+                  <div className="text-red-600 text-sm">
+                    District is required
+                  </div>
+                )}
               <FieldLabel htmlFor="district">District *</FieldLabel>
               <Select
                 value={formData.district.toString()}
@@ -344,10 +356,13 @@ export default function StudentInfo() {
 
             {/* Samithi */}
             <Field>
-              { formData.showErrors &&
-                !Section1Schema.shape.samithi.safeParse(formData.samithi).success && (
-                <div className="text-red-600 text-sm">Samithi is required</div>
-              )}
+              {formData.showErrors &&
+                !Section1Schema.shape.samithi.safeParse(formData.samithi)
+                  .success && (
+                  <div className="text-red-600 text-sm">
+                    Samithi is required
+                  </div>
+                )}
               <FieldLabel htmlFor="samithi">Samithi *</FieldLabel>
               <Input
                 type="text"
@@ -360,10 +375,14 @@ export default function StudentInfo() {
 
             {/* Couldn't find a year only dropdown in SHADCN, might just make it a select button later? */}
             <Field>
-              { formData.showErrors &&
-                !Section1Schema.shape.yearOfJoining.safeParse(formData.yearOfJoining).success && (
-                <div className="text-red-600 text-sm">Year of Joining Balvikas is required</div>
-              )}
+              {formData.showErrors &&
+                !Section1Schema.shape.yearOfJoining.safeParse(
+                  formData.yearOfJoining,
+                ).success && (
+                  <div className="text-red-600 text-sm">
+                    Year of Joining Balvikas is required
+                  </div>
+                )}
               <FieldLabel htmlFor="year-bv">
                 Student's Year of Joining Balvikas *
               </FieldLabel>
