@@ -87,7 +87,7 @@ export default function LogisticsInfo() {
 								<Input
 									type="time"
 									id="arrival-time"
-									defaultValue={formData.arrivalTime || "10:00"}
+									defaultValue={formData.arrivalTime.toString() || "10:00"}
 									onChange={(e) =>
 										debouncedFormUpdate("arrivalTime", e.target.value)
 									}
@@ -101,7 +101,7 @@ export default function LogisticsInfo() {
 							<FieldLabel>Does the student need pickup facility? *</FieldLabel>
 
 							<RadioGroup
-								value={formData.needPickup}
+								value={formData.needPickup.toString()}
 								onValueChange={(val) => {
 									console.log(val);
 									// Resetting the pickupPoint and arrivalMode if no pickup required
@@ -138,7 +138,7 @@ export default function LogisticsInfo() {
 										type="text"
 										placeholder="Train"
 										id="arrival-mode"
-										defaultValue={formData.arrivalMode}
+										defaultValue={formData.arrivalMode.toString()}
 										onChange={(e) =>
 											debouncedFormUpdate("arrivalMode", e.target.value)
 										}
@@ -152,7 +152,7 @@ export default function LogisticsInfo() {
 										type="text"
 										placeholder="Landmark"
 										id="pickup-point"
-										defaultValue={formData.pickupPoint}
+										defaultValue={formData.pickupPoint.toString()}
 										onChange={(e) =>
 											debouncedFormUpdate("pickupPoint", e.target.value)
 										}
@@ -205,7 +205,7 @@ export default function LogisticsInfo() {
 								<Input
 									type="time"
 									id="departure-time"
-									defaultValue={formData.departureTime || "18:00"}
+									defaultValue={formData.departureTime.toString() || "18:00"}
 									onChange={(e) =>
 										debouncedFormUpdate("departureTime", e.target.value)
 									}
@@ -219,7 +219,7 @@ export default function LogisticsInfo() {
 							<FieldLabel>Does the student need drop facility? *</FieldLabel>
 
 							<RadioGroup
-								value={formData.needDrop}
+								value={formData.needDrop.toString()}
 								onValueChange={(val) => {
 									console.log(val);
 									// Resetting the dropPoint and departureMode if no drop required
@@ -256,7 +256,7 @@ export default function LogisticsInfo() {
 										type="text"
 										placeholder="Train"
 										id="departure-mode"
-										defaultValue={formData.departureMode}
+										defaultValue={formData.departureMode.toString()}
 										onChange={(e) =>
 											debouncedFormUpdate("departureMode", e.target.value)
 										}
@@ -270,7 +270,7 @@ export default function LogisticsInfo() {
 										type="text"
 										placeholder="Landmark"
 										id="drop-point"
-										defaultValue={formData.dropPoint}
+										defaultValue={formData.dropPoint.toString()}
 										onChange={(e) =>
 											debouncedFormUpdate("dropPoint", e.target.value)
 										}

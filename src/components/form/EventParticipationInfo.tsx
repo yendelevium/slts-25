@@ -37,7 +37,7 @@ export default function EventParticipationInfo() {
 									</FieldLabel>
 
 									<RadioGroup
-										value={formData.devotionalSinging}
+										value={formData.devotionalSinging.toString()}
 										onValueChange={(val) => {
 											console.log(val);
 											// If group event is chosen, only 1 other individual event is allowed
@@ -71,7 +71,7 @@ export default function EventParticipationInfo() {
 									</FieldLabel>
 
 									<RadioGroup
-										value={formData.individualChoice1}
+										value={formData.individualChoice1.toString()}
 										onValueChange={(val) => {
 											if (val === "bhajans" || val === "tamizh-chants") {
 												toast.error(
@@ -173,7 +173,7 @@ export default function EventParticipationInfo() {
 										</FieldLabel>
 
 										<RadioGroup
-											value={formData.individualChoice2}
+											value={formData.individualChoice2.toString()}
 											onValueChange={(val) => {
 												if (val === "bhajans" || val === "tamizh-chants") {
 													toast.error(
@@ -284,7 +284,7 @@ export default function EventParticipationInfo() {
 									</FieldLabel>
 
 									<RadioGroup
-										value={formData.participateInQuizDrawing}
+										value={formData.participateInQuizDrawing.toString()}
 										onValueChange={(val) => {
 											console.log(val);
 											// If quiz/drawing event is chosen, then no group event can be chosen and only 1 other individual event can be chosen
@@ -329,7 +329,7 @@ export default function EventParticipationInfo() {
 										</FieldLabel>
 
 										<RadioGroup
-											value={formData.participateInGroupEvent}
+											value={formData.participateInGroupEvent.toString()}
 											onValueChange={(val) => {
 												console.log(val);
 												// If group event is chosen, only 1 other individual event is allowed
@@ -389,7 +389,7 @@ export default function EventParticipationInfo() {
 									</FieldLabel>
 
 									<RadioGroup
-										value={formData.individualChoice1}
+										value={formData.individualChoice1.toString()}
 										onValueChange={(val) => {
 											console.log(val);
 											if (val === "bhajans" || val === "tamizh-chants") {
@@ -508,7 +508,7 @@ export default function EventParticipationInfo() {
 											</FieldLabel>
 
 											<RadioGroup
-												value={formData.individualChoice2}
+												value={formData.individualChoice2.toString()}
 												onValueChange={(val) => {
 													console.log(val);
 													if (val === "bhajans" || val === "tamizh-chants") {
@@ -633,7 +633,7 @@ export default function EventParticipationInfo() {
 									<FieldLabel>Do you want to participate in Quiz? *</FieldLabel>
 
 									<RadioGroup
-										value={formData.participateInQuizDrawing}
+										value={formData.participateInQuizDrawing.toString()}
 										onValueChange={(val) => {
 											console.log(val);
 											updateForm({ participateInQuizDrawing: val });
