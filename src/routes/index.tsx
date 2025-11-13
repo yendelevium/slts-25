@@ -12,6 +12,7 @@ import {
 
 import StudentInfo from '@/components/form/StudentInfo'
 import EventParticipationInfo from '@/components/form/EventParticipationInfo'
+import LogisticsInfo from '@/components/form/Logisticsnfo'
 
 export const Route = createFileRoute('/')({
   component: App,
@@ -57,7 +58,8 @@ function App() {
         {/* Form content  */}
         {/* This will be rendered dynamically based on form progress */}
         {/* <StudentInfo /> */}
-        <EventParticipationInfo />
+        {/* <EventParticipationInfo /> */}
+        <LogisticsInfo />
 
 
         {/* Navigation */}

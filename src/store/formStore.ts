@@ -24,13 +24,15 @@ export interface FormData {
   participateInGroupEvent: string
 
   // Logistics
-  arrivalDateTime: Date | undefined
+  arrivalDate: Date | undefined
+  arrivalTime: string
   needPickup: string
-  pickupMode: string
+  arrivalMode: string
   pickupPoint: string
-  departureDateTime: Date | undefined
+  departureDate: Date | undefined
+  departureTime: string
   needDrop: string
-  dropMode: string
+  departureMode: string
   dropPoint: string
 
   // Accompanying
@@ -73,13 +75,15 @@ const initialFormData: FormData = {
   participateInQuizDrawing: "",
   participateInGroupEvent: "",
 
-  arrivalDateTime: undefined,
+  arrivalDate: undefined,
+  arrivalTime: "",
   needPickup: "",
-  pickupMode: "",
+  arrivalMode: "",
   pickupPoint: "",
-  departureDateTime: undefined,
+  departureDate: undefined,
+  departureTime: "",
   needDrop: "",
-  dropMode: "",
+  departureMode: "",
   dropPoint: "",
 
   adultsAccompanying: "",
@@ -133,8 +137,8 @@ const useFormStore = create<FormStore>()(
           const dates = [
             "dob",
             "dateOfJoining",
-            "arrivalDateTime",
-            "departureDateTime",
+            "arrivalDate",
+            "departureDate",
             "checkInDateTime",
             "checkOutDateTime",
           ]
