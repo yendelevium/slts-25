@@ -55,8 +55,10 @@ export interface FormData {
   accomFemaleMembers: number;
   maleDetails: { name: String; phone: String }[];
   femaleDetails: { name: String; phone: String }[];
-  checkInDateTime: Date | undefined;
-  checkOutDateTime: Date | undefined;
+  checkInDate: Date | undefined;
+  checkInTime: String;
+  checkOutDate: Date | undefined;
+  checkOutTime: String;
 }
 
 // Switch to zustand store
@@ -118,8 +120,10 @@ const useFormStore = create<FormStore>()(
         needAccommodation: "",
         accomMaleMembers: 0,
         accomFemaleMembers: 0,
-        checkInDateTime: undefined,
-        checkOutDateTime: undefined,
+        checkInDate: undefined,
+		checkInTime: "",
+        checkOutDate: undefined,
+		checkOutTime: ""
       },
 
       updateForm: (partial) =>
@@ -176,8 +180,10 @@ const useFormStore = create<FormStore>()(
             needAccommodation: "",
             accomMaleMembers: 0,
             accomFemaleMembers: 0,
-            checkInDateTime: undefined,
-            checkOutDateTime: undefined,
+			checkInDate: undefined,
+			checkInTime: "",
+			checkOutDate: undefined,
+			checkOutTime: ""
           },
         }),
     }),
@@ -197,8 +203,8 @@ const useFormStore = create<FormStore>()(
             "dateOfJoining",
             "arrivalDate",
             "departureDate",
-            "checkInDateTime",
-            "checkOutDateTime",
+            "checkInDate",
+            "checkOutDate",
           ];
 
           // Same fr numbers also
