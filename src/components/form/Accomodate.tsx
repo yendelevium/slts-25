@@ -331,134 +331,135 @@ export default function Accomodate() {
                     {femaleMemberElementsJSX}
                   </Field>
                 )}
+                <div className="flex flex-col md:flex-row gap-3">
+                  {/* Check-in Date Field */}
+                  <Field>
+                    <FieldLabel htmlFor="checkin-date">Check-in Date *</FieldLabel>
+                    <Popover
+                      open={openCheckinDate}
+                      onOpenChange={setOpenCheckinDate}
+                    >
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          id="checkin-date"
+                          className="w-[var(--radix-popover-trigger-width)] justify-between font-normal"
+                        >
+                          {formData.checkInDate
+                            ? formData.checkInDate.toLocaleDateString("en-IN")
+                            : "Select date"}
+                          <CalendarIcon />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent
+                        className="w-auto overflow-hidden p-0"
+                        align="start"
+                      >
+                        <Calendar
+                          mode="single"
+                          selected={formData.checkInDate}
+                          captionLayout="dropdown"
+                          disabled={{
+                            before: formData.arrivalDate || new Date(),
+                            after: formData.departureDate,
+                          }}
+                          onSelect={(date) => {
+                            const updated = {
+                              ...formData,
+                              checkInDate: date,
+                            };
+                            updateForm({ checkInDate: date });
+                            checkRequired(updated);
+                            setOpenCheckinDate(false);
+                          }}
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </Field>
+
+                  {/* Check-in Time Field */}
+                  <Field>
+                    <FieldLabel htmlFor="checkin-time">Check in Time *</FieldLabel>
+                    <Input
+                      type="time"
+                      id="checkin-time"
+                      defaultValue={formData.checkInTime.toString() || "00:00"}
+                      onChange={(e) =>
+                        debouncedFormUpdate("checkInTime", e.target.value)
+                      }
+                      className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                    />
+                  </Field>
+                </div>
+
+                <div className="flex flex-col md:flex-row gap-3">
+                  {/* Checkout Date Field */}
+                  <Field>
+                    <FieldLabel htmlFor="checkout-date">
+                      Departure Date *
+                    </FieldLabel>
+                    <Popover
+                      open={openCheckOutDate}
+                      onOpenChange={setOpenCheckOutDate}
+                    >
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          id="checkout-date"
+                          className="w-[var(--radix-popover-trigger-width)] justify-between font-normal"
+                        >
+                          {formData.checkOutDate
+                            ? formData.checkOutDate.toLocaleDateString("en-IN")
+                            : "Select date"}
+                          <CalendarIcon />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent
+                        className="w-auto overflow-hidden p-0"
+                        align="start"
+                      >
+                        <Calendar
+                          mode="single"
+                          selected={formData.checkOutDate}
+                          captionLayout="dropdown"
+                          disabled={{
+                            before: formData.checkInDate || new Date(),
+                            after: formData.departureDate,
+                          }}
+                          onSelect={(date) => {
+                            const updated = {
+                              ...formData,
+                              checkOutDate: date,
+                            };
+                            updateForm({ checkOutDate: date });
+                            checkRequired(updated);
+                            setOpenCheckOutDate(false);
+                          }}
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </Field>
+
+                  {/* Checkout Time Field */}
+                  <Field>
+                    <FieldLabel htmlFor="checkout-time">
+                      Departure Time *
+                    </FieldLabel>
+                    <Input
+                      type="time"
+                      id="checkout-time"
+                      defaultValue={formData.checkOutTime.toString() || "00:00"}
+                      onChange={(e) =>
+                        debouncedFormUpdate("checkOutTime", e.target.value)
+                      }
+                      className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                    />
+                  </Field>
+                </div>
               </>
             )}
 
-            <div className="flex flex-col md:flex-row gap-3">
-              {/* Check-in Date Field */}
-              <Field>
-                <FieldLabel htmlFor="checkin-date">Check-in Date *</FieldLabel>
-                <Popover
-                  open={openCheckinDate}
-                  onOpenChange={setOpenCheckinDate}
-                >
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      id="checkin-date"
-                      className="w-[var(--radix-popover-trigger-width)] justify-between font-normal"
-                    >
-                      {formData.checkInDate
-                        ? formData.checkInDate.toLocaleDateString("en-IN")
-                        : "Select date"}
-                      <CalendarIcon />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent
-                    className="w-auto overflow-hidden p-0"
-                    align="start"
-                  >
-                    <Calendar
-                      mode="single"
-                      selected={formData.checkInDate}
-                      captionLayout="dropdown"
-                      disabled={{
-                        before: formData.arrivalDate || new Date(),
-                        after: formData.departureDate,
-                      }}
-                      onSelect={(date) => {
-                        const updated = {
-                          ...formData,
-                          checkInDate: date,
-                        };
-                        updateForm({ checkInDate: date });
-                        checkRequired(updated);
-                        setOpenCheckinDate(false);
-                      }}
-                    />
-                  </PopoverContent>
-                </Popover>
-              </Field>
 
-              {/* Check-in Time Field */}
-              <Field>
-                <FieldLabel htmlFor="checkin-time">Check in Time *</FieldLabel>
-                <Input
-                  type="time"
-                  id="checkin-time"
-                  defaultValue={formData.checkInTime.toString() || "00:00"}
-                  onChange={(e) =>
-                    debouncedFormUpdate("checkInTime", e.target.value)
-                  }
-                  className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-                />
-              </Field>
-            </div>
-
-            <div className="flex flex-col md:flex-row gap-3">
-              {/* Checkout Date Field */}
-              <Field>
-                <FieldLabel htmlFor="checkout-date">
-                  Departure Date *
-                </FieldLabel>
-                <Popover
-                  open={openCheckOutDate}
-                  onOpenChange={setOpenCheckOutDate}
-                >
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      id="checkout-date"
-                      className="w-[var(--radix-popover-trigger-width)] justify-between font-normal"
-                    >
-                      {formData.checkOutDate
-                        ? formData.checkOutDate.toLocaleDateString("en-IN")
-                        : "Select date"}
-                      <CalendarIcon />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent
-                    className="w-auto overflow-hidden p-0"
-                    align="start"
-                  >
-                    <Calendar
-                      mode="single"
-                      selected={formData.checkOutDate}
-                      captionLayout="dropdown"
-                      disabled={{
-                        before: formData.checkInDate || new Date(),
-                        after: formData.departureDate,
-                      }}
-                      onSelect={(date) => {
-                        const updated = {
-                          ...formData,
-                          checkOutDate: date,
-                        };
-                        updateForm({ checkOutDate: date });
-                        checkRequired(updated);
-                        setOpenCheckOutDate(false);
-                      }}
-                    />
-                  </PopoverContent>
-                </Popover>
-              </Field>
-
-              {/* Checkout Time Field */}
-              <Field>
-                <FieldLabel htmlFor="checkout-time">
-                  Departure Time *
-                </FieldLabel>
-                <Input
-                  type="time"
-                  id="checkout-time"
-                  defaultValue={formData.checkOutTime.toString() || "00:00"}
-                  onChange={(e) =>
-                    debouncedFormUpdate("checkOutTime", e.target.value)
-                  }
-                  className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-                />
-              </Field>
-            </div>
           </FieldGroup>
         </FieldSet>
       </FieldGroup>
