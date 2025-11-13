@@ -9,7 +9,7 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
-import { ChevronDownIcon } from "lucide-react";
+import { CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
@@ -18,15 +18,62 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useFormStore } from "@/store/formStore";
+import { type FormData, useFormStore } from "@/store/formStore";
 import debouncedUpdate from "@/utils/debounce";
+import { z } from "zod";
+
+export const LogisticsSchema = z
+  .object({
+    arrivalDate: z.date(),
+    arrivalTime: z.string().trim().min(1),
+    needPickup: z.string().min(1),
+    arrivalMode: z.string(),
+    pickupPoint: z.string(),
+    departureDate: z.date(),
+    departureTime: z.string().trim().min(1),
+    needDrop: z.string().min(1),
+    departureMode: z.string(),
+    dropPoint: z.string(),
+  })
+  .refine((data) => {
+    if (data.needPickup === "yes") {
+      return (
+        data.arrivalMode.trim().length > 0 && data.pickupPoint.trim().length > 0
+      );
+    }
+    return true;
+  })
+  .refine((data) => {
+    if (data.needDrop === "yes") {
+      return (
+        data.departureMode.trim().length > 0 && data.dropPoint.trim().length > 0
+      );
+    }
+    return true;
+  });
 
 export default function LogisticsInfo() {
   const { formData, updateForm } = useFormStore();
 
+  const checkRequired = (data: FormData) => {
+    const parsed = LogisticsSchema.safeParse(data);
+
+    const isSection3Valid = parsed.success;
+
+    const newArr = [...data.nextSectionEnable];
+    newArr[data.sectionNumber] = isSection3Valid;
+    updateForm({ nextSectionEnable: newArr });
+  };
+
   // Debouncing for the input fields
   const debouncedFormUpdate = debouncedUpdate((key: string, value: string) => {
+    const updated = {
+      ...formData,
+      [key]: value,
+    };
+
     updateForm({ [key]: value });
+    checkRequired(updated);
   });
 
   // Arrival & Departure Date open state
@@ -46,7 +93,7 @@ export default function LogisticsInfo() {
             <div className="flex flex-col md:flex-row gap-3">
               {/* Arrival Date Field */}
               <Field>
-                <FieldLabel htmlFor="arrival-date">Arrival Date</FieldLabel>
+                <FieldLabel htmlFor="arrival-date">Arrival Date *</FieldLabel>
                 <Popover
                   open={openArrivalDate}
                   onOpenChange={setOpenArrivalDate}
@@ -60,7 +107,7 @@ export default function LogisticsInfo() {
                       {formData.arrivalDate
                         ? formData.arrivalDate.toLocaleDateString("en-IN")
                         : "Select date"}
-                      <ChevronDownIcon />
+                      <CalendarIcon />
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent
@@ -73,7 +120,12 @@ export default function LogisticsInfo() {
                       captionLayout="dropdown"
                       disabled={{ before: new Date() }}
                       onSelect={(date) => {
+                        const updated = {
+                          ...formData,
+                          arrivalDate: date,
+                        };
                         updateForm({ arrivalDate: date });
+                        checkRequired(updated);
                         setOpenArrivalDate(false);
                       }}
                     />
@@ -83,11 +135,11 @@ export default function LogisticsInfo() {
 
               {/* Arrival Time Field */}
               <Field>
-                <FieldLabel htmlFor="arrival-time">Arrival Time</FieldLabel>
+                <FieldLabel htmlFor="arrival-time">Arrival Time *</FieldLabel>
                 <Input
                   type="time"
                   id="arrival-time"
-                  defaultValue={formData.arrivalTime.toString() || "10:00"}
+                  defaultValue={formData.arrivalTime.toString() || "00:00"}
                   onChange={(e) =>
                     debouncedFormUpdate("arrivalTime", e.target.value)
                   }
@@ -104,15 +156,27 @@ export default function LogisticsInfo() {
                 value={formData.needPickup.toString()}
                 onValueChange={(val) => {
                   console.log(val);
-                  // Resetting the pickupPoint and arrivalMode if no pickup required
+                  // Resetting the pickupPoint and arrivalMode if no pickup is req
                   if (val === "no") {
+                    const updated = {
+                      ...formData,
+                      needPickup: val,
+                      arrivalMode: "",
+                      pickupPoint: "",
+                    };
                     updateForm({
                       needPickup: val,
                       arrivalMode: "",
                       pickupPoint: "",
                     });
+                    checkRequired(updated);
                   } else {
+                    const updated = {
+                      ...formData,
+                      needPickup: val,
+                    };
                     updateForm({ needPickup: val });
+                    checkRequired(updated);
                   }
                 }}
               >
@@ -164,7 +228,9 @@ export default function LogisticsInfo() {
             <div className="flex flex-col md:flex-row gap-3">
               {/* Departure Date Field */}
               <Field>
-                <FieldLabel htmlFor="departure-date">Departure Date</FieldLabel>
+                <FieldLabel htmlFor="departure-date">
+                  Departure Date *
+                </FieldLabel>
                 <Popover
                   open={openDepartureDate}
                   onOpenChange={setOpenDepartureDate}
@@ -178,7 +244,7 @@ export default function LogisticsInfo() {
                       {formData.departureDate
                         ? formData.departureDate.toLocaleDateString("en-IN")
                         : "Select date"}
-                      <ChevronDownIcon />
+                      <CalendarIcon />
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent
@@ -191,7 +257,12 @@ export default function LogisticsInfo() {
                       captionLayout="dropdown"
                       disabled={{ before: formData.arrivalDate || new Date() }}
                       onSelect={(date) => {
+                        const updated = {
+                          ...formData,
+                          departureDate: date,
+                        };
                         updateForm({ departureDate: date });
+                        checkRequired(updated);
                         setOpenDepartureDate(false);
                       }}
                     />
@@ -201,11 +272,13 @@ export default function LogisticsInfo() {
 
               {/* Departure Time Field */}
               <Field>
-                <FieldLabel htmlFor="departure-time">Departure Time</FieldLabel>
+                <FieldLabel htmlFor="departure-time">
+                  Departure Time *
+                </FieldLabel>
                 <Input
                   type="time"
                   id="departure-time"
-                  defaultValue={formData.departureTime.toString() || "18:00"}
+                  defaultValue={formData.departureTime.toString() || "00:00"}
                   onChange={(e) =>
                     debouncedFormUpdate("departureTime", e.target.value)
                   }
@@ -224,13 +297,25 @@ export default function LogisticsInfo() {
                   console.log(val);
                   // Resetting the dropPoint and departureMode if no drop required
                   if (val === "no") {
+                    const updated = {
+                      ...formData,
+                      needDrop: val,
+                      departureMode: "",
+                      dropPoint: "",
+                    };
                     updateForm({
                       needDrop: val,
                       departureMode: "",
                       dropPoint: "",
                     });
+                    checkRequired(updated);
                   } else {
+                    const updated = {
+                      ...formData,
+                      needDrop: val,
+                    };
                     updateForm({ needDrop: val });
+                    checkRequired(updated);
                   }
                 }}
               >

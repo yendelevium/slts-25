@@ -219,7 +219,7 @@ export default function StudentInfo() {
                 </RadioGroup>
               </Field>
             )}
-            
+
             {/* Name */}
             {/* MAKE SURE UR defaultValue IS EQUAL TO THE STORE FOR INPUT FIELDS, NOT DIRECTLY `value` AS THAT WILL CAUSE LOT OF LAG */}
             <Field>

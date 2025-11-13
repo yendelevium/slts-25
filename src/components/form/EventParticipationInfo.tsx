@@ -73,7 +73,10 @@ export default function EventParticipationInfo() {
                   <RadioGroup
                     value={formData.individualChoice1.toString()}
                     onValueChange={(val) => {
-                      if ((val === "bhajans" || val === "tamizh-chants") && formData.devotionalSinging === "no") {
+                      if (
+                        (val === "bhajans" || val === "tamizh-chants") &&
+                        formData.devotionalSinging === "no"
+                      ) {
                         toast.error(
                           "Bhajans and Tamizh Chants can't be chosen together. The other option has been cleared automatically.",
                         );
@@ -168,7 +171,8 @@ export default function EventParticipationInfo() {
                 {formData.devotionalSinging === "no" && (
                   <Field>
                     <FieldLabel>
-                      Please select the 2nd Individual Event you would like to participate in: (Optional)
+                      Please select the 2nd Individual Event you would like to
+                      participate in: (Optional)
                     </FieldLabel>
 
                     <RadioGroup
@@ -391,7 +395,10 @@ export default function EventParticipationInfo() {
                     value={formData.individualChoice1.toString()}
                     onValueChange={(val) => {
                       console.log(val);
-                      if ((val === "bhajans" || val === "tamizh-chants") && formData.participateInGroupEvent === "none") {
+                      if (
+                        (val === "bhajans" || val === "tamizh-chants") &&
+                        formData.participateInGroupEvent === "none"
+                      ) {
                         toast.error(
                           "Bhajans and Tamizh Chants can't be chosen together. The other option has been cleared automatically.",
                         );
@@ -502,7 +509,8 @@ export default function EventParticipationInfo() {
                   formData.participateInGroupEvent === "none" && (
                     <Field>
                       <FieldLabel>
-                        Please select the 2nd Individual Event you would like to participate in: (Optional)
+                        Please select the 2nd Individual Event you would like to
+                        participate in: (Optional)
                       </FieldLabel>
 
                       <RadioGroup

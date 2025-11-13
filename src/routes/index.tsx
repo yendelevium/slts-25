@@ -22,7 +22,13 @@ export const Route = createFileRoute("/")({
 
 function App() {
   const { formData, updateForm } = useFormStore();
-  const Sections = [<StudentInfo />, <EventParticipationInfo />, <LogisticsInfo />, <Accompany />, <Accomodate />];
+  const Sections = [
+    <StudentInfo />,
+    <EventParticipationInfo />,
+    <LogisticsInfo />,
+    <Accompany />,
+    <Accomodate />,
+  ];
 
   let progress = (Math.min(formData.sectionNumber, 5) / 5) * 100;
 
@@ -35,9 +41,7 @@ function App() {
           <h1 className="text-xl md:text-3xl font-bold text-slate-900 tracking-tight">
             State Level Balvikas Talent Search 2025
           </h1>
-          <p className="text-slate-600 text-base mt-2">
-            Registration Portal
-          </p>
+          <p className="text-slate-600 text-base mt-2">Registration Portal</p>
         </div>
 
         {/* Progress bar  */}
@@ -47,7 +51,7 @@ function App() {
             <span className="text-slate-700 font-medium">
               Section {formData.sectionNumber + 1} of {Sections.length}
             </span>
-            <span className="text-indigo-600 font-medium">
+            <span className="text-black font-medium">
               {Math.round(progress)}% Complete
             </span>
           </div>
