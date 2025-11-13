@@ -26,7 +26,7 @@ export default function EventParticipationInfo() {
             </FieldDescription>
 
             <FieldGroup>
-              {/* Contestant Info for Group 1 Participants */}
+              {/* Event Participation Info for Group 1 Participants */}
               {formData.group === "1" && (
                 <>
                 {/* Devotional Singing Field (Group Event) */}
@@ -151,8 +151,10 @@ export default function EventParticipationInfo() {
                 </>
               )}
 
+              {/* Event Participation Info for Group 2 or 3 Participants */}
               {(formData.group === "2" || formData.group === "3") && (
                 <>
+                {/* Quiz or Drawing Participation Field */}
                 <Field>
                   <FieldLabel>
                     Do you want to participate in Quiz or Drawing? *
@@ -162,12 +164,12 @@ export default function EventParticipationInfo() {
                     value={formData.participateInQuizDrawing}
                     onValueChange={(val) => {
                       console.log(val)
-                      // If quiz/drawing event is chosen, then no group event can be chosen
-                      // So, I am setting the state of participateInGroupEvent to none when the choose neither
+                      // If quiz/drawing event is chosen, then no group event can be chosen and only 1 other individual event can be chosen
+                      // So, I am resetting the state of participateInGroupEvent and individualChoice2
                       if (val === "quiz" || val === "drawing") {
-                        updateForm({ participateInQuizDrawing: val, participateInGroupEvent: "none" })
+                        updateForm({ participateInQuizDrawing: val, participateInGroupEvent: "", individualChoice2: ""})
                       } else {
-                        updateForm({ participateInQuizDrawing: val, participateInGroupEvent: "" })
+                        updateForm({ participateInQuizDrawing: val })
                       }
                     }}
                   >
@@ -185,46 +187,48 @@ export default function EventParticipationInfo() {
                     </div>
                   </RadioGroup>
                 </Field>
-
+                
+                {/* Group Event Field (shown only if participant doesn't participate in quiz/drawing as grp events not allowed with quiz/drawing)*/}
                 {formData.participateInQuizDrawing === "none" && (
                   <Field>
-                  <FieldLabel>
-                    Please select the Group Event you would like to participate in: *
-                  </FieldLabel>
+                    <FieldLabel>
+                      Please select the Group Event you would like to participate in: *
+                    </FieldLabel>
 
-                  <RadioGroup 
-                    value={formData.participateInGroupEvent}
-                    onValueChange={(val) => {
-                      console.log(val)
-                      // If group event is chosen, only 1 other individual event is allowed
-                      // So, I am resetting the state of individualChoice2 whenever a group event is chosen
-                      if (val !== "none") {
-                        updateForm({ participateInGroupEvent: val, individualChoice2: "" })
-                      } else {
-                        updateForm({ participateInGroupEvent: val })
-                      }
-                    }}
-                  >
-                    <div className="flex items-center gap-3">
-                      <RadioGroupItem value="altar-decoration" id="altar-decoration-participate" />
-                      <Label htmlFor="altar-decoration-participate">Altar Decoration</Label>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <RadioGroupItem value="rudram-namakam-chanting" id="rudram-namakam-chanting-participate" />
-                      <Label htmlFor="rudram-namakam-chanting-participate">Rudram Namakam Chanting</Label>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <RadioGroupItem value="devotional-singing" id="devotional-singing-participate" />
-                      <Label htmlFor="devotional-singing-participate">Devotional Singing</Label>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <RadioGroupItem value="none" id="none-participate" />
-                      <Label htmlFor="none-participate">I don't want to participate in Group Event</Label>
-                    </div>
-                  </RadioGroup>
-                </Field>
+                    <RadioGroup 
+                      value={formData.participateInGroupEvent}
+                      onValueChange={(val) => {
+                        console.log(val)
+                        // If group event is chosen, only 1 other individual event is allowed
+                        // So, I am resetting the state of individualChoice2 whenever a group event is chosen
+                        if (val !== "none") {
+                          updateForm({ participateInGroupEvent: val, individualChoice2: "" })
+                        } else {
+                          updateForm({ participateInGroupEvent: val })
+                        }
+                      }}
+                    >
+                      <div className="flex items-center gap-3">
+                        <RadioGroupItem value="altar-decoration" id="altar-decoration-participate" />
+                        <Label htmlFor="altar-decoration-participate">Altar Decoration</Label>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <RadioGroupItem value="rudram-namakam-chanting" id="rudram-namakam-chanting-participate" />
+                        <Label htmlFor="rudram-namakam-chanting-participate">Rudram Namakam Chanting</Label>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <RadioGroupItem value="devotional-singing" id="devotional-singing-participate" />
+                        <Label htmlFor="devotional-singing-participate">Devotional Singing</Label>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <RadioGroupItem value="none" id="none-participate" />
+                        <Label htmlFor="none-participate">I don't want to participate in Group Event</Label>
+                      </div>
+                    </RadioGroup>
+                  </Field>
                 )}
-
+                
+                {/* Individual Event Choice 1 Field*/}
                 <Field>
                   <FieldLabel>
                     Please select the Individual Event you would like to participate in: *
@@ -271,7 +275,8 @@ export default function EventParticipationInfo() {
                     </div>
                   </RadioGroup>
                 </Field>
-
+                
+                {/* Individual Event Choice 2 Field (shown only if participant doesn't participate in quiz/drawing and grp events)*/}
                 {formData.participateInQuizDrawing === "none" && formData.participateInGroupEvent === "none" && (
                   <Field>
                     <FieldLabel>
@@ -323,7 +328,10 @@ export default function EventParticipationInfo() {
                 </>
               )}
               
+              {/* Event Participation Info for Group 4 Participants */}
               {formData.group === "4" && (
+                <>
+                {/* Quiz Participation Field*/}
                 <Field>
                   <FieldLabel>
                     Do you want to participate in Quiz? *
@@ -346,6 +354,7 @@ export default function EventParticipationInfo() {
                     </div>
                   </RadioGroup>
                 </Field>
+                </>
               )}
             </FieldGroup>
         </FieldSet>
