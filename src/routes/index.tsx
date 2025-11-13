@@ -17,12 +17,12 @@ export const Route = createFileRoute("/")({
 
 // Have a Section identifier to know what section it is rn
 // Using the section identifier, we implement navigation next or prev
-ssssssssssssssssssssssssssssssssssssssssssssssss;
+
 function App() {
 	const { formData, updateForm } = useFormStore();
 	const Sections = [<StudentInfo />, <Accompany />, <Accomodate />];
 
-	let progresss = (Math.min(formData.sectionNumber, 5) / 5) * 100;
+	let progress = (Math.min(formData.sectionNumber, 5) / 5) * 100;
 
 	return (
 		// Progress Bar
@@ -41,9 +41,9 @@ function App() {
 				<div className="mb-5 bg-white rounded-lg shadow-sm p-6">
 					<div className="flex justify-between items-center mb-3">
 						<span className="text-slate-700">Section x of y</span>
-						<span className="text-indigo-600">{progresss}% Complete</span>
+						<span className="text-indigo-600">{progress}% Complete</span>
 					</div>
-					<Progress value={progresss} />
+					<Progress value={progress} />
 					<p className="mt-3 text-slate-600">Section Title</p>
 				</div>
 

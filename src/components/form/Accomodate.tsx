@@ -147,35 +147,39 @@ export default function Accomodate() {
 
 						{formData.needAccommodation == "yes" && (
 							<FieldSet>
-								<Field>
-									<FieldLabel htmlFor="male-acoompany">
-										Number of male members: {formData.accomMaleMembers}
-									</FieldLabel>
-									<Slider
-										defaultValue={[formData.accomMaleMembers]}
-										max={10}
-										step={1}
-										onValueChange={([v]) => {
-											updateForm({ accomMaleMembers: v });
-										}}
-									/>
-									{maleMemberElementsJSX}
-								</Field>
+								{formData.numMaleMembers != 0 && (
+									<Field>
+										<FieldLabel htmlFor="male-acoompany">
+											Number of male members: {formData.accomMaleMembers}
+										</FieldLabel>
+										<Slider
+											defaultValue={[formData.accomMaleMembers]}
+											max={formData.numMaleMembers}
+											step={1}
+											onValueChange={([v]) => {
+												updateForm({ accomMaleMembers: v });
+											}}
+										/>
+										{maleMemberElementsJSX}
+									</Field>
+								)}
 
-								<Field>
-									<FieldLabel htmlFor="female-acoompany">
-										Number of female members: {formData.accomFemaleMembers}
-									</FieldLabel>
-									<Slider
-										defaultValue={[formData.accomFemaleMembers]}
-										max={10}
-										step={1}
-										onValueChange={([v]) => {
-											updateForm({ accomFemaleMembers: v });
-										}}
-									/>
-									{femaleMemberElementsJSX}
-								</Field>
+								{formData.numFemaleMembers != 0 && (
+									<Field>
+										<FieldLabel htmlFor="female-acoompany">
+											Number of female members: {formData.accomFemaleMembers}
+										</FieldLabel>
+										<Slider
+											defaultValue={[formData.accomFemaleMembers]}
+											max={formData.numFemaleMembers}
+											step={1}
+											onValueChange={([v]) => {
+												updateForm({ accomFemaleMembers: v });
+											}}
+										/>
+										{femaleMemberElementsJSX}
+									</Field>
+								)}
 							</FieldSet>
 						)}
 					</FieldGroup>
