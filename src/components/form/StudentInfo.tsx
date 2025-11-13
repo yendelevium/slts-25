@@ -10,7 +10,7 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
-import { ChevronDownIcon } from "lucide-react";
+import { CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
@@ -246,7 +246,7 @@ export default function StudentInfo() {
                     {formData.dob
                       ? formData.dob.toLocaleDateString()
                       : "Select date"}
-                    <ChevronDownIcon />
+                    <CalendarIcon />
                   </Button>
                 </PopoverTrigger>
 
@@ -343,7 +343,7 @@ export default function StudentInfo() {
                     {formData.dateOfJoining
                       ? formData.dateOfJoining.toLocaleDateString()
                       : "Select date"}
-                    <ChevronDownIcon />
+                    <CalendarIcon />
                   </Button>
                 </PopoverTrigger>
 
