@@ -20,7 +20,7 @@ export interface FormData {
   individualChoice2: string
   passedGroup2Exam: string
   rulesAcknowledged: boolean
-  participateInQuiz: string
+  participateInQuizDrawing: string
   participateInGroupEvent: string
 
   // Logistics
@@ -70,7 +70,7 @@ const initialFormData: FormData = {
   individualChoice2: "",
   passedGroup2Exam: "",
   rulesAcknowledged: false,
-  participateInQuiz: "",
+  participateInQuizDrawing: "",
   participateInGroupEvent: "",
 
   arrivalDateTime: undefined,
