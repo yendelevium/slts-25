@@ -9,13 +9,135 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { CalendarIcon } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Button } from "../ui/button";
 
 import { Slider } from "@/components/ui/slider";
+import { useState } from "react";
+import { type FormData, useFormStore } from "@/store/formStore";
+import debouncedUpdate from "@/utils/debounce";
+import { z } from "zod";
 
-import { useFormStore } from "@/store/formStore";
+const BaseAccommodationSchema = z.object({
+  needAccommodation: z.enum(["yes", "no"]),
+
+  checkInDate: z.date().optional(),
+  checkInTime: z.string().optional(),
+
+  checkOutDate: z.date().optional(),
+  checkOutTime: z.string().optional(),
+
+  accomMaleMembers: z.number().min(0),
+  accomFemaleMembers: z.number().min(0),
+
+  maleDetails: z
+    .array(
+      z.object({
+        name: z.string().optional(),
+        phone: z.string().optional(),
+      }),
+    )
+    .optional(),
+
+  femaleDetails: z
+    .array(
+      z.object({
+        name: z.string().optional(),
+        phone: z.string().optional(),
+      }),
+    )
+    .optional(),
+});
+
+const NoAccommodationSchema = BaseAccommodationSchema.extend({
+  needAccommodation: z.literal("no"),
+});
+
+const YesAccommodationSchema = BaseAccommodationSchema.extend({
+  needAccommodation: z.literal("yes"),
+  checkInDate: z.date(),
+  checkInTime: z.string().min(1, "Check-in time is required"),
+  checkOutDate: z.date(),
+  checkOutTime: z.string().min(1, "Check-out time is required"),
+}).superRefine((data, ctx) => {
+  if (data.accomMaleMembers > 0) {
+    const males = (data.maleDetails ?? []) as {
+      name?: string;
+      phone?: string;
+    }[];
+    for (let i = 0; i < data.accomMaleMembers; i++) {
+      const name = males[i]?.name ?? "";
+      if (name.trim() === "") {
+        ctx.addIssue({
+          code: "custom",
+          path: ["maleDetails", i, "name"],
+          message: `Male member ${i + 1} name is required`,
+        });
+      }
+    }
+  }
+
+  if (data.accomFemaleMembers > 0) {
+    const females = (data.femaleDetails ?? []) as {
+      name?: string;
+      phone?: string;
+    }[];
+    for (let i = 0; i < data.accomFemaleMembers; i++) {
+      const name = females[i]?.name ?? "";
+      if (name.trim() === "") {
+        ctx.addIssue({
+          code: "custom",
+          path: ["femaleDetails", i, "name"],
+          message: `Female member ${i + 1} name is required`,
+        });
+      }
+    }
+  }
+});
+
+const AccommodationSchema = z.union([
+  NoAccommodationSchema,
+  YesAccommodationSchema,
+]);
 
 export default function Accomodate() {
   const { formData, updateForm } = useFormStore();
+
+  const checkRequired = (data: FormData) => {
+    const parsed = AccommodationSchema.safeParse(data);
+
+    const isSection3Valid = parsed.success;
+
+    const newArr = [...data.nextSectionEnable];
+    newArr[data.sectionNumber] = isSection3Valid;
+    console.log("Accommodation Section Valid:", isSection3Valid);
+    if (isSection3Valid) {
+      updateForm({ nextSectionEnable: newArr, showErrors: false });
+    } else {
+      updateForm({ nextSectionEnable: newArr });
+    }
+  };
+
+  // Debouncing for the input fields
+  const debouncedFormUpdate = debouncedUpdate((key: string, value: string) => {
+    const updated = {
+      ...formData,
+      [key]: value,
+    };
+
+    updateForm({ [key]: value });
+    checkRequired(updated);
+  });
+
+  // Arrival & Departure Date open state
+  const [openCheckinDate, setOpenCheckinDate] = useState(false);
+  const [openCheckOutDate, setOpenCheckOutDate] = useState(false);
 
   const maleMemberElementsJSX = Array.from({
     length: formData.accomMaleMembers,
@@ -31,13 +153,13 @@ export default function Accomodate() {
           <Input
             id={`male-name-${index}`}
             placeholder="Enter name"
-            value={member.name.toString()}
+            defaultValue={member.name.toString()}
             onChange={(e) => {
               const updated = [...(formData.maleDetails || [])];
               while (updated.length < formData.accomMaleMembers)
                 updated.push({ name: "", phone: "" });
               updated[index] = { ...updated[index], name: e.target.value };
-              updateForm({ maleDetails: updated });
+              debouncedFormUpdate("maleDetails", updated);
             }}
           />
         </div>
@@ -47,14 +169,13 @@ export default function Accomodate() {
           <Input
             id={`male-phone-${index}`}
             placeholder="Enter phone number"
-            value={member.phone.toString()}
+            defaultValue={member.phone.toString()}
             onChange={(e) => {
               const updated = [...(formData.maleDetails || [])];
               while (updated.length < formData.accomMaleMembers)
                 updated.push({ name: "", phone: "" });
               updated[index] = { ...updated[index], phone: e.target.value };
-              updateForm({ maleDetails: updated });
-              console.log(formData);
+              debouncedFormUpdate("maleDetails", updated);
             }}
           />
         </div>
@@ -79,13 +200,13 @@ export default function Accomodate() {
           <Input
             id={`female-name-${index}`}
             placeholder="Enter name"
-            value={member.name.toString()}
+            defaultValue={member.name.toString()}
             onChange={(e) => {
               const updated = [...(formData.femaleDetails || [])];
               while (updated.length < formData.accomFemaleMembers)
                 updated.push({ name: "", phone: "" });
               updated[index] = { ...updated[index], name: e.target.value };
-              updateForm({ femaleDetails: updated });
+              debouncedFormUpdate("femaleDetails", updated);
             }}
           />
         </Field>
@@ -95,14 +216,13 @@ export default function Accomodate() {
           <Input
             id={`female-phone-${index}`}
             placeholder="Enter phone number"
-            value={member.phone.toString()}
+            defaultValue={member.phone.toString()}
             onChange={(e) => {
               const updated = [...(formData.femaleDetails || [])];
               while (updated.length < formData.accomFemaleMembers)
                 updated.push({ name: "", phone: "" });
               updated[index] = { ...updated[index], phone: e.target.value };
-              updateForm({ femaleDetails: updated });
-              console.log(formData);
+              debouncedFormUpdate("femaleDetails", updated);
             }}
           />
         </Field>
@@ -122,6 +242,19 @@ export default function Accomodate() {
 
           <FieldGroup>
             <Field>
+              {formData.showErrors &&
+                !(
+                  NoAccommodationSchema.shape.needAccommodation.safeParse(
+                    formData.needAccommodation,
+                  ).success ||
+                  YesAccommodationSchema.shape.needAccommodation.safeParse(
+                    formData.needAccommodation,
+                  ).success
+                ) && (
+                  <div className="text-red-600 text-sm">
+                    This field is required
+                  </div>
+                )}
               <FieldLabel htmlFor="accomodation?">
                 Does the student need accommodation? *
               </FieldLabel>
@@ -129,8 +262,12 @@ export default function Accomodate() {
               <RadioGroup
                 value={formData.needAccommodation.toString()}
                 onValueChange={(val) => {
-                  console.log(val);
+                  const updated = {
+                    ...formData,
+                    needAccommodation: val,
+                  };
                   updateForm({ needAccommodation: val });
+                  checkRequired(updated);
                 }}
                 id="accomodation"
               >
@@ -146,9 +283,17 @@ export default function Accomodate() {
             </Field>
 
             {formData.needAccommodation == "yes" && (
-              <FieldSet>
+              <>
                 {formData.numMaleMembers != 0 && (
                   <Field>
+                    {formData.showErrors &&
+                      (formData.maleDetails ?? []).filter((m) =>
+                        m?.name?.trim(),
+                      ).length < formData.accomMaleMembers && (
+                        <div className="text-red-600 text-sm">
+                          Please fill in all male member details
+                        </div>
+                      )}
                     <FieldLabel htmlFor="male-acoompany">
                       Number of male members: {formData.accomMaleMembers}
                     </FieldLabel>
@@ -157,7 +302,16 @@ export default function Accomodate() {
                       max={formData.numMaleMembers}
                       step={1}
                       onValueChange={([v]) => {
-                        updateForm({ accomMaleMembers: v });
+                        const updated = {
+                          ...formData,
+                          accomMaleMembers: v,
+                          maleDetails: formData.maleDetails?.slice(0, v),
+                        };
+                        updateForm({
+                          accomMaleMembers: v,
+                          maleDetails: formData.maleDetails?.slice(0, v),
+                        });
+                        checkRequired(updated);
                       }}
                     />
                     {maleMemberElementsJSX}
@@ -166,6 +320,14 @@ export default function Accomodate() {
 
                 {formData.numFemaleMembers != 0 && (
                   <Field>
+                    {formData.showErrors &&
+                      (formData.femaleDetails ?? []).filter((f) =>
+                        f?.name?.trim(),
+                      ).length < formData.accomFemaleMembers && (
+                        <div className="text-red-600 text-sm">
+                          Please fill in all female member details
+                        </div>
+                      )}
                     <FieldLabel htmlFor="female-acoompany">
                       Number of female members: {formData.accomFemaleMembers}
                     </FieldLabel>
@@ -174,13 +336,183 @@ export default function Accomodate() {
                       max={formData.numFemaleMembers}
                       step={1}
                       onValueChange={([v]) => {
-                        updateForm({ accomFemaleMembers: v });
+                        const updated = {
+                          ...formData,
+                          accomFemaleMembers: v,
+                          femaleDetails: formData.femaleDetails?.slice(0, v),
+                        };
+                        updateForm({
+                          accomFemaleMembers: v,
+                          femaleDetails: formData.femaleDetails?.slice(0, v),
+                        });
+                        checkRequired(updated);
                       }}
                     />
                     {femaleMemberElementsJSX}
                   </Field>
                 )}
-              </FieldSet>
+                <div className="flex flex-col md:flex-row gap-3">
+                  {/* Check-in Date Field */}
+                  <Field>
+                    {formData.showErrors &&
+                      !YesAccommodationSchema.shape.checkInDate.safeParse(
+                        formData.checkInDate,
+                      ).success && (
+                        <div className="text-red-600 text-sm">
+                          Check-in Date is required
+                        </div>
+                      )}
+                    <FieldLabel htmlFor="checkin-date">
+                      Check-in Date *
+                    </FieldLabel>
+                    <Popover
+                      open={openCheckinDate}
+                      onOpenChange={setOpenCheckinDate}
+                    >
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          id="checkin-date"
+                          className="w-[var(--radix-popover-trigger-width)] justify-between font-normal"
+                        >
+                          {formData.checkInDate
+                            ? formData.checkInDate.toLocaleDateString("en-IN")
+                            : "Select date"}
+                          <CalendarIcon />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent
+                        className="w-auto overflow-hidden p-0"
+                        align="start"
+                      >
+                        <Calendar
+                          mode="single"
+                          selected={formData.checkInDate}
+                          captionLayout="dropdown"
+                          disabled={{
+                            before: formData.arrivalDate || new Date(),
+                            after: formData.departureDate,
+                          }}
+                          onSelect={(date) => {
+                            const updated = {
+                              ...formData,
+                              checkInDate: date,
+                            };
+                            updateForm({ checkInDate: date });
+                            checkRequired(updated);
+                            setOpenCheckinDate(false);
+                          }}
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </Field>
+
+                  {/* Check-in Time Field */}
+                  <Field>
+                    {formData.showErrors &&
+                      !YesAccommodationSchema.shape.checkInTime.safeParse(
+                        formData.checkInTime,
+                      ).success && (
+                        <div className="text-red-600 text-sm">
+                          Check-in Time is required
+                        </div>
+                      )}
+                    <FieldLabel htmlFor="checkin-time">
+                      Check in Time *
+                    </FieldLabel>
+                    <Input
+                      type="time"
+                      id="checkin-time"
+                      defaultValue={formData.checkInTime.toString() || "00:00"}
+                      onChange={(e) =>
+                        debouncedFormUpdate("checkInTime", e.target.value)
+                      }
+                      className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                    />
+                  </Field>
+                </div>
+
+                <div className="flex flex-col md:flex-row gap-3">
+                  {/* Checkout Date Field */}
+                  <Field>
+                    {formData.showErrors &&
+                      !YesAccommodationSchema.shape.checkOutDate.safeParse(
+                        formData.checkOutDate,
+                      ).success && (
+                        <div className="text-red-600 text-sm">
+                          Check-out Date is required
+                        </div>
+                      )}
+                    <FieldLabel htmlFor="checkout-date">
+                      Departure Date *
+                    </FieldLabel>
+                    <Popover
+                      open={openCheckOutDate}
+                      onOpenChange={setOpenCheckOutDate}
+                    >
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          id="checkout-date"
+                          className="w-[var(--radix-popover-trigger-width)] justify-between font-normal"
+                        >
+                          {formData.checkOutDate
+                            ? formData.checkOutDate.toLocaleDateString("en-IN")
+                            : "Select date"}
+                          <CalendarIcon />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent
+                        className="w-auto overflow-hidden p-0"
+                        align="start"
+                      >
+                        <Calendar
+                          mode="single"
+                          selected={formData.checkOutDate}
+                          captionLayout="dropdown"
+                          disabled={{
+                            before: formData.checkInDate || new Date(),
+                            after: formData.departureDate,
+                          }}
+                          onSelect={(date) => {
+                            const updated = {
+                              ...formData,
+                              checkOutDate: date,
+                            };
+                            updateForm({ checkOutDate: date });
+                            checkRequired(updated);
+                            setOpenCheckOutDate(false);
+                          }}
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </Field>
+
+                  {/* Checkout Time Field */}
+                  <Field>
+                    {formData.showErrors &&
+                      !YesAccommodationSchema.shape.checkOutTime.safeParse(
+                        formData.checkOutTime,
+                      ).success && (
+                        <div className="text-red-600 text-sm">
+                          Check-out Time is required
+                        </div>
+                      )}
+                    <FieldLabel htmlFor="checkout-time">
+                      Departure Time *
+                    </FieldLabel>
+                    <Input
+                      type="time"
+                      id="checkout-time"
+                      defaultValue={formData.checkOutTime.toString() || "00:00"}
+                      onChange={(e) =>
+                        debouncedFormUpdate("checkOutTime", e.target.value)
+                      }
+                      className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                    />
+                  </Field>
+                </div>
+              </>
             )}
           </FieldGroup>
         </FieldSet>

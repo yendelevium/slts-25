@@ -53,7 +53,11 @@ export default function Accompany() {
     console.log(isSection1Valid, data);
     const newArr = [...data.nextSectionEnable];
     newArr[data.sectionNumber] = isSection1Valid;
-    updateForm({ nextSectionEnable: newArr });
+    if (isSection1Valid) {
+      updateForm({ nextSectionEnable: newArr, showErrors: false });
+    } else {
+      updateForm({ nextSectionEnable: newArr });
+    }
   };
 
   const debouncedFormUpdate = debouncedUpdate((key: string, value: string) => {
@@ -103,6 +107,19 @@ export default function Accompany() {
 
           <FieldGroup>
             <Field>
+              {formData.showErrors &&
+                !(
+                  NoAccompanySchema.shape.adultsAccompanying.safeParse(
+                    formData.adultsAccompanying,
+                  ).success ||
+                  YesAccompanySchema.shape.adultsAccompanying.safeParse(
+                    formData.adultsAccompanying,
+                  ).success
+                ) && (
+                  <div className="text-red-600 text-sm">
+                    This field is required
+                  </div>
+                )}
               <FieldLabel
                 htmlFor="adults-accompanying"
                 className="tracking-tight"
@@ -134,6 +151,12 @@ export default function Accompany() {
             </Field>
             {formData.adultsAccompanying == "yes" && (
               <FieldSet>
+                {formData.showErrors &&
+                  formData.numMaleMembers + formData.numFemaleMembers < 1 && (
+                    <div className="text-red-600 text-sm">
+                      Atleast 1 accompanying member is required
+                    </div>
+                  )}
                 <Field>
                   <FieldLabel htmlFor="male-acoompany">
                     Number of male members: {formData.numMaleMembers}
@@ -178,7 +201,26 @@ export default function Accompany() {
                     Information about the point of contact for all accompanying
                     members
                   </FieldDescription>
-
+                  {formData.showErrors &&
+                    (!YesAccompanySchema.shape.pocName.safeParse(
+                      formData.pocName,
+                    ).success ||
+                      !YesAccompanySchema.shape.pocPhone.safeParse(
+                        formData.pocPhone,
+                      ).success ||
+                      !YesAccompanySchema.shape.pocGender.safeParse(
+                        formData.pocGender,
+                      ).success ||
+                      !YesAccompanySchema.shape.pocRelation.safeParse(
+                        formData.pocRelation,
+                      ).success ||
+                      !YesAccompanySchema.shape.pocAge.safeParse(
+                        formData.pocAge,
+                      ).success) && (
+                      <div className="text-red-600 text-sm">
+                        All POC details are required
+                      </div>
+                    )}
                   <div className="flex gap-4">
                     <div className="flex-1">
                       {/* Name, Phone */}
