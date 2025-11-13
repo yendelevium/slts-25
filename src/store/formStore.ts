@@ -5,6 +5,7 @@ export interface FormData {
   // Nav
   sectionNumber: number;
   nextSectionEnable: boolean[];
+  showErrors: boolean;
 
   // Student Info
   group: String;
@@ -74,6 +75,7 @@ const useFormStore = create<FormStore>()(
   persist(
     (set) => ({
       formData: {
+		showErrors: false,
         sectionNumber: 0,
         nextSectionEnable: [false, false, false, false, false],
         group: "",
@@ -134,6 +136,7 @@ const useFormStore = create<FormStore>()(
       resetForm: () =>
         set({
           formData: {
+			showErrors: false,
             sectionNumber: 0,
             nextSectionEnable: [false, false, false, false, false],
             group: "",

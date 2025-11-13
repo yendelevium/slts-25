@@ -81,9 +81,14 @@ function App() {
           {formData.sectionNumber != 5 && (
             <Button
               onClick={() =>
-                updateForm({ sectionNumber: formData.sectionNumber + 1 })
-              }
-              disabled={!formData.nextSectionEnable?.[formData.sectionNumber]}
+				{
+			      if(formData.nextSectionEnable[formData.sectionNumber] == false){
+					updateForm({showErrors: true})
+				  }else{
+				    updateForm({ sectionNumber: formData.sectionNumber + 1 })
+				  }
+              	}
+			  }
               className="cursor-pointer"
             >
               Next
