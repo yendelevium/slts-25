@@ -13,15 +13,9 @@ import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 
 import { useFormStore } from "@/store/formStore";
-import debouncedUpdate from "@/utils/debounce";
 
 export default function Accomodate() {
 	const { formData, updateForm } = useFormStore();
-	// Defining it ONCE as a debounced function to update the form
-	// But will need to repeat for all components as store is only accessible in functional components
-	const debouncedFormUpdate = debouncedUpdate((key: string, value: string) => {
-		updateForm({ [key]: value });
-	});
 
 	const maleMemberElementsJSX = Array.from({
 		length: formData.accomMaleMembers,

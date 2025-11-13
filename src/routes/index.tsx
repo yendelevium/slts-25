@@ -1,13 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Progress } from "@/components/ui/progress";
-import {
-	Pagination,
-	PaginationContent,
-	PaginationItem,
-	PaginationNext,
-	PaginationPrevious,
-} from "@/components/ui/pagination";
-
 import { Button } from "@/components/ui/button";
 import StudentInfo from "@/components/form/StudentInfo";
 import Accompany from "@/components/form/Accompany";
@@ -35,6 +27,8 @@ function App() {
 		<Accomodate/>
 	]
 
+	let progresss = (Math.min(formData.sectionNumber,5)/5)*100;
+
 	return (
 		// Progress Bar
 		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
@@ -52,9 +46,9 @@ function App() {
 				<div className="mb-5 bg-white rounded-lg shadow-sm p-6">
 					<div className="flex justify-between items-center mb-3">
 						<span className="text-slate-700">Section x of y</span>
-						<span className="text-indigo-600">15% Complete</span>
+						<span className="text-indigo-600">{progresss}% Complete</span>
 					</div>
-					<Progress value={((formData.sectionNumber+1)/3)*100} />
+					<Progress value={progresss} />
 					<p className="mt-3 text-slate-600">Section Title</p>
 				</div>
 
