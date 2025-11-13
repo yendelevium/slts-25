@@ -37,8 +37,8 @@ export interface FormData {
 	adultsAccompanying: String;
 	numMaleMembers: number;
 	numFemaleMembers: number;
-	maleNames: String[];
-	femaleNames: String[];
+	maleDetails: {name: String, phone: String}[];
+	femaleDetails: {name: String, phone: String}[];
 	pocName: String;
 	pocGender: String;
 	pocRelation: String;
@@ -97,8 +97,8 @@ const useFormStore = create<FormStore>()(
 				adultsAccompanying: "",
 				numMaleMembers: 0,
 				numFemaleMembers: 0,
-				maleNames: [],
-				femaleNames: [],
+				maleDetails: [],
+				femaleDetails: [],
 				pocName: "",
 				pocGender: "",
 				pocRelation: "",
@@ -151,8 +151,8 @@ const useFormStore = create<FormStore>()(
 						adultsAccompanying: "",
 						numMaleMembers: 0,
 						numFemaleMembers: 0,
-						maleNames: [],
-						femaleNames: [],
+						maleDetails: [],
+						femaleDetails: [],
 						pocName: "",
 						pocGender: "",
 						pocRelation: "",
