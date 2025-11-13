@@ -28,27 +28,32 @@ function App() {
 
   return (
     // Progress Bar
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-100/60 via-indigo-100/60 to-purple-100/60">
       <div className="container w-full md:w-1/2 mx-auto px-4 py-8">
         {/* Header */}
-        <div className="text-center mb-5">
-          <h1 className="text-indigo-900">Balvikas Registration Form</h1>
-          <p className="text-slate-600">
-            Complete all sections to register for the event
+        <div className="text-center mb-8">
+          <h1 className="text-xl md:text-3xl font-bold text-slate-900 tracking-tight">
+            State Level Balvikas Talent Search 2025
+          </h1>
+          <p className="text-slate-600 text-base mt-2">
+            Registration Portal
           </p>
         </div>
 
         {/* Progress bar  */}
         {/* Will store section, percentage complete, title in tanstack global store for dynamic renderring */}
-        <div className="mb-5 bg-white rounded-lg shadow-sm p-6">
+        <div className="mb-6 bg-white rounded-xl shadow-md p-6">
           <div className="flex justify-between items-center mb-3">
-            <span className="text-slate-700">Section x of y</span>
-            <span className="text-indigo-600">{progress}% Complete</span>
+            <span className="text-slate-700 font-medium">
+              Section {formData.sectionNumber + 1} of {Sections.length}
+            </span>
+            <span className="text-indigo-600 font-medium">
+              {Math.round(progress)}% Complete
+            </span>
           </div>
-          <Progress value={progress} />
-          <p className="mt-3 text-slate-600">Section Title</p>
-        </div>
 
+          <Progress value={progress} />
+        </div>
         {/* Form content  */}
         {/* This will be rendered dynamically based on form progress */}
         {Sections[formData.sectionNumber]}

@@ -219,6 +219,19 @@ export default function StudentInfo() {
                 </RadioGroup>
               </Field>
             )}
+            
+            {/* Name */}
+            {/* MAKE SURE UR defaultValue IS EQUAL TO THE STORE FOR INPUT FIELDS, NOT DIRECTLY `value` AS THAT WILL CAUSE LOT OF LAG */}
+            <Field>
+              <FieldLabel htmlFor="name">Name *</FieldLabel>
+              <Input
+                type="text"
+                placeholder="Your Name"
+                id="name"
+                defaultValue={formData.name.toString()}
+                onChange={(e) => debouncedFormUpdate("name", e.target.value)}
+              />
+            </Field>
 
             {/* DOB */}
             <Field>
@@ -259,19 +272,6 @@ export default function StudentInfo() {
               </Popover>
             </Field>
 
-            {/* Name */}
-            {/* MAKE SURE UR defaultValue IS EQUAL TO THE STORE FOR INPUT FIELDS, NOT DIRECTLY `value` AS THAT WILL CAUSE LOT OF LAG */}
-            <Field>
-              <FieldLabel htmlFor="name">Name *</FieldLabel>
-              <Input
-                type="text"
-                placeholder="Yash"
-                id="name"
-                defaultValue={formData.name.toString()}
-                onChange={(e) => debouncedFormUpdate("name", e.target.value)}
-              />
-            </Field>
-
             {/* Gender */}
             <Field>
               <FieldLabel htmlFor="gender">Gender *</FieldLabel>
@@ -302,7 +302,7 @@ export default function StudentInfo() {
               <FieldLabel htmlFor="samithi">Samithi *</FieldLabel>
               <Input
                 type="text"
-                placeholder="idk"
+                placeholder="Your Samithi"
                 id="samithi"
                 defaultValue={formData.samithi.toString()}
                 onChange={(e) => debouncedFormUpdate("samithi", e.target.value)}
@@ -312,7 +312,7 @@ export default function StudentInfo() {
             {/* Couldn't find a year only dropdown in SHADCN, might just make it a select button later? */}
             <Field>
               <FieldLabel htmlFor="year-bv">
-                Student's Year of Joining Balvikas*
+                Student's Year of Joining Balvikas *
               </FieldLabel>
               <Input
                 type="number"
@@ -371,7 +371,7 @@ export default function StudentInfo() {
               </FieldLabel>
               <Input
                 type="text"
-                placeholder="peanuts, gluten"
+                placeholder="Peanuts, Gluten..."
                 defaultValue={formData.foodAllergies.toString()}
                 onChange={(e) =>
                   debouncedFormUpdate("foodAllergies", e.target.value)
