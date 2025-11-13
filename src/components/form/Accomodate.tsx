@@ -31,7 +31,7 @@ export default function Accomodate() {
 		return (
 			<div key={index} className="flex gap-4 mt-3">
 				<div className="flex-1">
-					<FieldLabel htmlFor={`male-name-${index}`}>
+					<FieldLabel htmlFor={`male-name-${index}`} className="tracking-tight">
 						Member(M) {index + 1} Name *
 					</FieldLabel>
 					<Input
@@ -76,7 +76,7 @@ export default function Accomodate() {
 		return (
 			<div key={index} className="flex gap-4 mt-3">
 				<Field className="flex-1">
-					<FieldLabel htmlFor={`female-name-${index}`}>
+					<FieldLabel htmlFor={`female-name-${index}`} className="tracking-tight">
 						Member(F) {index + 1} Name *
 					</FieldLabel>
 					<Input

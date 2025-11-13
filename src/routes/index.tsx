@@ -3,16 +3,17 @@ import { Progress } from "@/components/ui/progress";
 import {
 	Pagination,
 	PaginationContent,
-	PaginationEllipsis,
 	PaginationItem,
-	PaginationLink,
 	PaginationNext,
 	PaginationPrevious,
 } from "@/components/ui/pagination";
 
+import { Button } from "@/components/ui/button";
 import StudentInfo from "@/components/form/StudentInfo";
 import Accompany from "@/components/form/Accompany";
 import Accomodate from "@/components/form/Accomodate";
+
+import { useFormStore } from "@/store/formStore";
 
 export const Route = createFileRoute("/")({
 	component: App,
@@ -24,15 +25,15 @@ export const Route = createFileRoute("/")({
 // Have a Section identifier to know what section it is rn
 // Using the section identifier, we implement navigation next or prev
 
-function navigatePrevPage() {
-	// Conditional logic to navigate to the prev page needed
-}
-
-function navigateNextPage() {
-	// Conditional logic to navigate to the next page needed
-}
 
 function App() {
+	const {formData, updateForm } = useFormStore();
+	const Sections = [
+		<StudentInfo/>,
+		<Accompany/>,
+		<Accomodate/>
+	]
+
 	return (
 		// Progress Bar
 		<div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
@@ -52,54 +53,34 @@ function App() {
 						<span className="text-slate-700">Section x of y</span>
 						<span className="text-indigo-600">15% Complete</span>
 					</div>
-					<Progress value={15} />
+					<Progress value={((formData.sectionNumber+1)/3)*100} />
 					<p className="mt-3 text-slate-600">Section Title</p>
 				</div>
 
 				{/* Form content  */}
 				{/* This will be rendered dynamically based on form progress */}
-				<Accompany />
+				{Sections[formData.sectionNumber]}
 
 				{/* Navigation */}
 				{/* I'm thinking only 1 page to be shown in pagination, the current page... */}
 				{/* Can be debated upon later */}
 				{/* The logic for navigation will also be extracted out to a diff component */}
-				<Pagination>
-					<PaginationContent>
-						<PaginationItem>
-							<PaginationPrevious
-								href="#"
-								onClick={(e) => {
-									e.preventDefault();
-									navigatePrevPage();
-								}}
-							/>
-						</PaginationItem>
-						<PaginationItem>
-							<PaginationLink href="#" isActive>
-								1
-							</PaginationLink>
-						</PaginationItem>
-						<PaginationItem>
-							<PaginationLink href="#">2</PaginationLink>
-						</PaginationItem>
-						<PaginationItem>
-							<PaginationLink href="#">3</PaginationLink>
-						</PaginationItem>
-						<PaginationItem>
-							<PaginationEllipsis />
-						</PaginationItem>
-						<PaginationItem>
-							<PaginationNext
-								href="/test_route"
-								onClick={(e) => {
-									e.preventDefault();
-									navigateNextPage();
-								}}
-							/>
-						</PaginationItem>
-					</PaginationContent>
-				</Pagination>
+				<div className="flex items-center justify-between mt-4">
+					<Button
+						variant="outline"
+						onClick={() => updateForm({ sectionNumber: formData.sectionNumber - 1 })}
+						disabled={formData.sectionNumber === 0}
+					>
+						Previous
+					</Button>
+
+					<Button
+						onClick={() => updateForm({ sectionNumber: formData.sectionNumber + 1 })}
+						disabled={!formData.nextSectionEnable?.[formData.sectionNumber]}
+					>
+						Next
+					</Button>
+				</div>
 			</div>
 		</div>
 		// Next-Prev buttons
