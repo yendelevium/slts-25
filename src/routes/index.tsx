@@ -12,7 +12,7 @@ import {
 
 import StudentInfo from '@/components/form/StudentInfo'
 import EventParticipationInfo from '@/components/form/EventParticipationInfo'
-import LogisticsInfo from '@/components/form/Logisticsnfo'
+import LogisticsInfo from '@/components/form/LogisticsInfo'
 
 export const Route = createFileRoute('/')({
   component: App,
