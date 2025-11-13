@@ -9,7 +9,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination"
-import { Toaster } from "@/components/ui/sonner"
+
 
 import StudentInfo from '@/components/form/StudentInfo'
 import EventParticipationInfo from '@/components/form/EventParticipationInfo'
@@ -36,7 +36,6 @@ function navigateNextPage(){
 function App() {
   return (
     // Progress Bar
-    <>
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       <div className="container w-full md:w-1/2 mx-auto px-4 py-8">
         {/* Header */}
@@ -107,7 +106,5 @@ function App() {
       </div>
     </div>
     // Next-Prev buttons
-    <Toaster />
-    </>
   )
 }

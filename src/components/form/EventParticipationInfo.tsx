@@ -12,6 +12,7 @@ import {
   RadioGroupItem,
 } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
+import { Toaster } from "@/components/ui/sonner"
 import { toast } from "sonner"
 
 export default function EventParticipationInfo() {
@@ -70,7 +71,7 @@ export default function EventParticipationInfo() {
                     value={formData.individualChoice1}
                     onValueChange={(val) => {
                       if (val === "bhajans" || val === "tamizh-chants") {
-                        toast.error("Bhajans and Tamizh Events can't be chosen together for individual events.")
+                        toast.error("Bhajans and Tamizh Chants can't be chosen together. The other option has been cleared automatically.")
                       }
                       console.log(val)
                       if ((val === "bhajans" && formData.individualChoice2 === "tamizh-chants") || val === "tamizh-chants" && formData.individualChoice2 === "bhajans"){
@@ -136,7 +137,7 @@ export default function EventParticipationInfo() {
                       value={formData.individualChoice2}
                       onValueChange={(val) => {
                         if (val === "bhajans" || val === "tamizh-chants") {
-                          toast.error("Bhajans and Tamizh Events can't be chosen together for individual events.")
+                          toast.error("You can only choose one of Bhajans or Tamizh Chants. The other option has been cleared automatically.")
                         }
                         console.log(val)
                         if ((val === "bhajans" && formData.individualChoice1 === "tamizh-chants") || val === "tamizh-chants" && formData.individualChoice1 === "bhajans"){
@@ -282,7 +283,7 @@ export default function EventParticipationInfo() {
                     onValueChange={(val) => {
                       console.log(val)
                       if (val === "bhajans" || val === "tamizh-chants") {
-                        toast.error("Bhajans and Tamizh Events can't be chosen together for individual events.")
+                        toast.error("You can only choose one of Bhajans or Tamizh Chants. The other option has been cleared automatically.")
                       }
                       if ((val === "bhajans" && formData.individualChoice2 === "tamizh-chants") || val === "tamizh-chants" && formData.individualChoice2 === "bhajans"){
                         updateForm({ individualChoice1: val, individualChoice2: "" })
@@ -354,7 +355,7 @@ export default function EventParticipationInfo() {
                       onValueChange={(val) => {
                         console.log(val)
                         if (val === "bhajans" || val === "tamizh-chants") {
-                          toast.error("Bhajans and Tamizh Events can't be chosen together for individual events.")
+                          toast.error("You can only choose one of Bhajans or Tamizh Chants. The other option has been cleared automatically.")
                         }
                         if ((val === "bhajans" && formData.individualChoice1 === "tamizh-chants") || val === "tamizh-chants" && formData.individualChoice1 === "bhajans"){
                           updateForm({ individualChoice2: val, individualChoice1: "" })
@@ -448,6 +449,7 @@ export default function EventParticipationInfo() {
             </FieldGroup>
         </FieldSet>
       </FieldGroup>
+      <Toaster />
     </div>
   )
 }
