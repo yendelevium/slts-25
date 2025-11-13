@@ -6,14 +6,72 @@ import {
   Field,
   FieldLabel,
 } from "../ui/field";
-import { useFormStore } from "@/store/formStore";
+import { type FormData, useFormStore } from "@/store/formStore";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
+import { z } from "zod";
+
+export const EventsSchema = z
+  .object({
+    group: z.string().min(1),
+    devotionalSinging: z.string(),
+    individualChoice1: z.string(),
+    individualChoice2: z.string(),
+    participateInQuizDrawing: z.string(),
+    participateInGroupEvent: z.string(),
+  })
+  .refine((data) => {
+    // Group 1 validation
+    if (data.group === "1") {
+      return (
+        data.devotionalSinging.length > 0 && data.individualChoice1.length > 0
+      );
+    }
+
+    // Group 2 or 3 validation
+    if (data.group === "2" || data.group === "3") {
+      if (data.participateInQuizDrawing.length === 0) return false;
+
+      if (data.participateInQuizDrawing === "none") {
+        if (data.participateInGroupEvent.length === 0) return false;
+        if (
+          data.participateInGroupEvent !== "none" &&
+          data.individualChoice1.length === 0
+        ) {
+          return false;
+        }
+      }
+      if (
+        (data.participateInQuizDrawing === "quiz" ||
+          data.participateInQuizDrawing === "drawing") &&
+        data.individualChoice1.length === 0
+      ) {
+        return false;
+      }
+      return true;
+    }
+
+    // Group 4 validation
+    if (data.group === "4") {
+      return data.participateInQuizDrawing.length > 0;
+    }
+    return true;
+  });
 
 export default function EventParticipationInfo() {
   const { formData, updateForm } = useFormStore();
+
+  const checkRequired = (data: FormData) => {
+    const parsed = EventsSchema.safeParse(data);
+
+    const isSection2Valid = parsed.success;
+
+    const newArr = [...data.nextSectionEnable];
+    newArr[data.sectionNumber] = isSection2Valid;
+    updateForm({ nextSectionEnable: newArr });
+  };
 
   return (
     <div className="mb-5 bg-white rounded-lg shadow-sm p-6">
@@ -43,12 +101,23 @@ export default function EventParticipationInfo() {
                       // If group event is chosen, only 1 other individual event is allowed
                       // So, I am resetting the state of individualChoice2 whenever devotional singing is set to yes
                       if (val === "yes") {
+                        const updated = {
+                          ...formData,
+                          devotionalSinging: val,
+                          individualChoice2: "",
+                        };
                         updateForm({
                           devotionalSinging: val,
                           individualChoice2: "",
                         });
+                        checkRequired(updated);
                       } else {
+                        const updated = {
+                          ...formData,
+                          devotionalSinging: val,
+                        };
                         updateForm({ devotionalSinging: val });
+                        checkRequired(updated);
                       }
                     }}
                   >
@@ -73,7 +142,10 @@ export default function EventParticipationInfo() {
                   <RadioGroup
                     value={formData.individualChoice1.toString()}
                     onValueChange={(val) => {
-                      if (val === "bhajans" || val === "tamizh-chants") {
+                      if (
+                        (val === "bhajans" || val === "tamizh-chants") &&
+                        formData.devotionalSinging === "no"
+                      ) {
                         toast.error(
                           "Bhajans and Tamizh Chants can't be chosen together. The other option has been cleared automatically.",
                         );
@@ -85,12 +157,23 @@ export default function EventParticipationInfo() {
                         (val === "tamizh-chants" &&
                           formData.individualChoice2 === "bhajans")
                       ) {
+                        const updated = {
+                          ...formData,
+                          individualChoice1: val,
+                          individualChoice2: "",
+                        };
                         updateForm({
                           individualChoice1: val,
                           individualChoice2: "",
                         });
+                        checkRequired(updated);
                       } else {
+                        const updated = {
+                          ...formData,
+                          individualChoice1: val,
+                        };
                         updateForm({ individualChoice1: val });
+                        checkRequired(updated);
                       }
                     }}
                   >
@@ -169,7 +252,7 @@ export default function EventParticipationInfo() {
                   <Field>
                     <FieldLabel>
                       Please select the 2nd Individual Event you would like to
-                      participate in:
+                      participate in: (Optional)
                     </FieldLabel>
 
                     <RadioGroup
@@ -177,7 +260,7 @@ export default function EventParticipationInfo() {
                       onValueChange={(val) => {
                         if (val === "bhajans" || val === "tamizh-chants") {
                           toast.error(
-                            "You can only choose one of Bhajans or Tamizh Chants. The other option has been cleared automatically.",
+                            "Bhajans and Tamizh Chants can't be chosen together. The other option has been cleared automatically.",
                           );
                         }
                         console.log(val);
@@ -187,12 +270,23 @@ export default function EventParticipationInfo() {
                           (val === "tamizh-chants" &&
                             formData.individualChoice1 === "bhajans")
                         ) {
+                          const updated = {
+                            ...formData,
+                            individualChoice2: val,
+                            individualChoice1: "",
+                          };
                           updateForm({
                             individualChoice2: val,
                             individualChoice1: "",
                           });
+                          checkRequired(updated);
                         } else {
+                          const updated = {
+                            ...formData,
+                            individualChoice2: val,
+                          };
                           updateForm({ individualChoice2: val });
+                          checkRequired(updated);
                         }
                       }}
                     >
@@ -290,13 +384,25 @@ export default function EventParticipationInfo() {
                       // If quiz/drawing event is chosen, then no group event can be chosen and only 1 other individual event can be chosen
                       // So, I am resetting the state of participateInGroupEvent and individualChoice2
                       if (val === "quiz" || val === "drawing") {
+                        const updated = {
+                          ...formData,
+                          participateInQuizDrawing: val,
+                          participateInGroupEvent: "",
+                          individualChoice2: "",
+                        };
                         updateForm({
                           participateInQuizDrawing: val,
                           participateInGroupEvent: "",
                           individualChoice2: "",
                         });
+                        checkRequired(updated);
                       } else {
+                        const updated = {
+                          ...formData,
+                          participateInQuizDrawing: val,
+                        };
                         updateForm({ participateInQuizDrawing: val });
+                        checkRequired(updated);
                       }
                     }}
                   >
@@ -335,12 +441,23 @@ export default function EventParticipationInfo() {
                         // If group event is chosen, only 1 other individual event is allowed
                         // So, I am resetting the state of individualChoice2 whenever a group event is chosen
                         if (val !== "none") {
+                          const updated = {
+                            ...formData,
+                            participateInGroupEvent: val,
+                            individualChoice2: "",
+                          };
                           updateForm({
                             participateInGroupEvent: val,
                             individualChoice2: "",
                           });
+                          checkRequired(updated);
                         } else {
+                          const updated = {
+                            ...formData,
+                            participateInGroupEvent: val,
+                          };
                           updateForm({ participateInGroupEvent: val });
+                          checkRequired(updated);
                         }
                       }}
                     >
@@ -392,9 +509,12 @@ export default function EventParticipationInfo() {
                     value={formData.individualChoice1.toString()}
                     onValueChange={(val) => {
                       console.log(val);
-                      if (val === "bhajans" || val === "tamizh-chants") {
+                      if (
+                        (val === "bhajans" || val === "tamizh-chants") &&
+                        formData.participateInGroupEvent === "none"
+                      ) {
                         toast.error(
-                          "You can only choose one of Bhajans or Tamizh Chants. The other option has been cleared automatically.",
+                          "Bhajans and Tamizh Chants can't be chosen together. The other option has been cleared automatically.",
                         );
                       }
                       if (
@@ -403,12 +523,23 @@ export default function EventParticipationInfo() {
                         (val === "tamizh-chants" &&
                           formData.individualChoice2 === "bhajans")
                       ) {
+                        const updated = {
+                          ...formData,
+                          individualChoice1: val,
+                          individualChoice2: "",
+                        };
                         updateForm({
                           individualChoice1: val,
                           individualChoice2: "",
                         });
+                        checkRequired(updated);
                       } else {
+                        const updated = {
+                          ...formData,
+                          individualChoice1: val,
+                        };
                         updateForm({ individualChoice1: val });
+                        checkRequired(updated);
                       }
                     }}
                   >
@@ -504,7 +635,7 @@ export default function EventParticipationInfo() {
                     <Field>
                       <FieldLabel>
                         Please select the 2nd Individual Event you would like to
-                        participate in:
+                        participate in: (Optional)
                       </FieldLabel>
 
                       <RadioGroup
@@ -513,7 +644,7 @@ export default function EventParticipationInfo() {
                           console.log(val);
                           if (val === "bhajans" || val === "tamizh-chants") {
                             toast.error(
-                              "You can only choose one of Bhajans or Tamizh Chants. The other option has been cleared automatically.",
+                              "Bhajans and Tamizh Chants can't be chosen together. The other option has been cleared automatically.",
                             );
                           }
                           if (
@@ -522,12 +653,23 @@ export default function EventParticipationInfo() {
                             (val === "tamizh-chants" &&
                               formData.individualChoice1 === "bhajans")
                           ) {
+                            const updated = {
+                              ...formData,
+                              individualChoice2: val,
+                              individualChoice1: "",
+                            };
                             updateForm({
                               individualChoice2: val,
                               individualChoice1: "",
                             });
+                            checkRequired(updated);
                           } else {
+                            const updated = {
+                              ...formData,
+                              individualChoice2: val,
+                            };
                             updateForm({ individualChoice2: val });
+                            checkRequired(updated);
                           }
                         }}
                       >
@@ -636,7 +778,12 @@ export default function EventParticipationInfo() {
                     value={formData.participateInQuizDrawing.toString()}
                     onValueChange={(val) => {
                       console.log(val);
+                      const updated = {
+                        ...formData,
+                        participateInQuizDrawing: val,
+                      };
                       updateForm({ participateInQuizDrawing: val });
+                      checkRequired(updated);
                     }}
                   >
                     <div className="flex items-center gap-3">

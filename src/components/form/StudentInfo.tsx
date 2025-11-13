@@ -10,7 +10,7 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
-import { ChevronDownIcon } from "lucide-react";
+import { CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
@@ -220,6 +220,19 @@ export default function StudentInfo() {
               </Field>
             )}
 
+            {/* Name */}
+            {/* MAKE SURE UR defaultValue IS EQUAL TO THE STORE FOR INPUT FIELDS, NOT DIRECTLY `value` AS THAT WILL CAUSE LOT OF LAG */}
+            <Field>
+              <FieldLabel htmlFor="name">Name *</FieldLabel>
+              <Input
+                type="text"
+                placeholder="Your Name"
+                id="name"
+                defaultValue={formData.name.toString()}
+                onChange={(e) => debouncedFormUpdate("name", e.target.value)}
+              />
+            </Field>
+
             {/* DOB */}
             <Field>
               <FieldLabel htmlFor="dob">Date of Birth *</FieldLabel>
@@ -233,7 +246,7 @@ export default function StudentInfo() {
                     {formData.dob
                       ? formData.dob.toLocaleDateString()
                       : "Select date"}
-                    <ChevronDownIcon />
+                    <CalendarIcon />
                   </Button>
                 </PopoverTrigger>
 
@@ -246,6 +259,7 @@ export default function StudentInfo() {
                     mode="single"
                     selected={formData.dob}
                     captionLayout="dropdown"
+                    disabled={{ after: new Date() }}
                     onSelect={(date) => {
                       const updated = {
                         ...formData,
@@ -257,19 +271,6 @@ export default function StudentInfo() {
                   />
                 </PopoverContent>
               </Popover>
-            </Field>
-
-            {/* Name */}
-            {/* MAKE SURE UR defaultValue IS EQUAL TO THE STORE FOR INPUT FIELDS, NOT DIRECTLY `value` AS THAT WILL CAUSE LOT OF LAG */}
-            <Field>
-              <FieldLabel htmlFor="name">Name *</FieldLabel>
-              <Input
-                type="text"
-                placeholder="Yash"
-                id="name"
-                defaultValue={formData.name.toString()}
-                onChange={(e) => debouncedFormUpdate("name", e.target.value)}
-              />
             </Field>
 
             {/* Gender */}
@@ -302,7 +303,7 @@ export default function StudentInfo() {
               <FieldLabel htmlFor="samithi">Samithi *</FieldLabel>
               <Input
                 type="text"
-                placeholder="idk"
+                placeholder="Your Samithi"
                 id="samithi"
                 defaultValue={formData.samithi.toString()}
                 onChange={(e) => debouncedFormUpdate("samithi", e.target.value)}
@@ -312,7 +313,7 @@ export default function StudentInfo() {
             {/* Couldn't find a year only dropdown in SHADCN, might just make it a select button later? */}
             <Field>
               <FieldLabel htmlFor="year-bv">
-                Student's Year of Joining Balvikas*
+                Student's Year of Joining Balvikas *
               </FieldLabel>
               <Input
                 type="number"
@@ -342,7 +343,7 @@ export default function StudentInfo() {
                     {formData.dateOfJoining
                       ? formData.dateOfJoining.toLocaleDateString()
                       : "Select date"}
-                    <ChevronDownIcon />
+                    <CalendarIcon />
                   </Button>
                 </PopoverTrigger>
 
@@ -371,7 +372,7 @@ export default function StudentInfo() {
               </FieldLabel>
               <Input
                 type="text"
-                placeholder="peanuts, gluten"
+                placeholder="Peanuts, Gluten..."
                 defaultValue={formData.foodAllergies.toString()}
                 onChange={(e) =>
                   debouncedFormUpdate("foodAllergies", e.target.value)
