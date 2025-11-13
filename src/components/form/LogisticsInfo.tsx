@@ -59,7 +59,7 @@ export default function LogisticsInfo() {
                       id="arrival-date"
                       className="w-[var(--radix-popover-trigger-width)] justify-between font-normal"
                     >
-                      {formData.arrivalDate ? formData.arrivalDate.toLocaleDateString() : "Select date"}
+                      {formData.arrivalDate ? formData.arrivalDate.toLocaleDateString("en-IN") : "Select date"}
                       <ChevronDownIcon />
                     </Button>
                   </PopoverTrigger>
@@ -155,7 +155,7 @@ export default function LogisticsInfo() {
                       id="departure-date"
                       className="w-[var(--radix-popover-trigger-width)] justify-between font-normal"
                     >
-                      {formData.departureDate ? formData.departureDate.toLocaleDateString() : "Select date"}
+                      {formData.departureDate ? formData.departureDate.toLocaleDateString("en-IN") : "Select date"}
                       <ChevronDownIcon />
                     </Button>
                   </PopoverTrigger>
