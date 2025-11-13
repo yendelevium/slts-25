@@ -73,7 +73,7 @@ export default function EventParticipationInfo() {
                   <RadioGroup
                     value={formData.individualChoice1.toString()}
                     onValueChange={(val) => {
-                      if (val === "bhajans" || val === "tamizh-chants") {
+                      if ((val === "bhajans" || val === "tamizh-chants") && formData.devotionalSinging === "no") {
                         toast.error(
                           "Bhajans and Tamizh Chants can't be chosen together. The other option has been cleared automatically.",
                         );
@@ -168,8 +168,7 @@ export default function EventParticipationInfo() {
                 {formData.devotionalSinging === "no" && (
                   <Field>
                     <FieldLabel>
-                      Please select the 2nd Individual Event you would like to
-                      participate in:
+                      Please select the 2nd Individual Event you would like to participate in: (Optional)
                     </FieldLabel>
 
                     <RadioGroup
@@ -177,7 +176,7 @@ export default function EventParticipationInfo() {
                       onValueChange={(val) => {
                         if (val === "bhajans" || val === "tamizh-chants") {
                           toast.error(
-                            "You can only choose one of Bhajans or Tamizh Chants. The other option has been cleared automatically.",
+                            "Bhajans and Tamizh Chants can't be chosen together. The other option has been cleared automatically.",
                           );
                         }
                         console.log(val);
@@ -392,9 +391,9 @@ export default function EventParticipationInfo() {
                     value={formData.individualChoice1.toString()}
                     onValueChange={(val) => {
                       console.log(val);
-                      if (val === "bhajans" || val === "tamizh-chants") {
+                      if ((val === "bhajans" || val === "tamizh-chants") && formData.participateInGroupEvent === "none") {
                         toast.error(
-                          "You can only choose one of Bhajans or Tamizh Chants. The other option has been cleared automatically.",
+                          "Bhajans and Tamizh Chants can't be chosen together. The other option has been cleared automatically.",
                         );
                       }
                       if (
@@ -503,8 +502,7 @@ export default function EventParticipationInfo() {
                   formData.participateInGroupEvent === "none" && (
                     <Field>
                       <FieldLabel>
-                        Please select the 2nd Individual Event you would like to
-                        participate in:
+                        Please select the 2nd Individual Event you would like to participate in: (Optional)
                       </FieldLabel>
 
                       <RadioGroup
@@ -513,7 +511,7 @@ export default function EventParticipationInfo() {
                           console.log(val);
                           if (val === "bhajans" || val === "tamizh-chants") {
                             toast.error(
-                              "You can only choose one of Bhajans or Tamizh Chants. The other option has been cleared automatically.",
+                              "Bhajans and Tamizh Chants can't be chosen together. The other option has been cleared automatically.",
                             );
                           }
                           if (
