@@ -1,11 +1,11 @@
 import { Button } from "@/components/ui/button";
 import {
-	Field,
-	FieldDescription,
-	FieldGroup,
-	FieldLabel,
-	FieldLegend,
-	FieldSet,
+  Field,
+  FieldDescription,
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
+  FieldSet,
 } from "@/components/ui/field";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
@@ -13,19 +13,19 @@ import { useState } from "react";
 import { ChevronDownIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
 } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
 import {
-	Select,
-	SelectContent,
-	SelectGroup,
-	SelectItem,
-	SelectLabel,
-	SelectTrigger,
-	SelectValue,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 
 import { type FormData, useFormStore } from "@/store/formStore";
@@ -34,354 +34,354 @@ import debouncedUpdate from "@/utils/debounce";
 import { z } from "zod";
 
 export const Section1Schema = z.object({
-	group: z.string().min(1),
-	name: z.string().min(1),
-	dob: z.date(),
-	gender: z.string().min(1),
-	district: z.string().min(1),
-	samithi: z.string().min(1),
-	yearOfJoining: z.string().min(1),
+  group: z.string().min(1),
+  name: z.string().min(1),
+  dob: z.date(),
+  gender: z.string().min(1),
+  district: z.string().min(1),
+  samithi: z.string().min(1),
+  yearOfJoining: z.string().min(1),
 });
 
 const districts = [
-	"Coimbatore",
-	"Dharmapuri / Krishnagiri",
-	"Dindigul",
-	"Erode",
-	"Kanchipuram North",
-	"Kanchipuram South",
-	"Kanyakumari",
-	"Karur",
-	"Madurai",
-	"Namakkal",
-	"Nilgiris",
-	"Salem",
-	"Sivaganga&Ramnad",
-	"Thanjavur",
-	"Theni",
-	"Trichy",
-	"Tirunelveli",
-	"Tirupur",
-	"Tiruvannamalai",
-	"Tuticorin",
-	"Vellore",
-	"Villupuram",
-	"Virudhunagar",
-	"Chennai East Coast",
-	"Chennai North",
-	"Chennai North West",
-	"Chennai South",
-	"Chennai South East",
-	"Chennai West",
-	"Cuddalore",
-	"Nagapattinam",
-	"Puducherry",
-	"Tiruvallur East",
-	"Tiruvallur West",
-	"Mayiladuthurai",
+  "Coimbatore",
+  "Dharmapuri / Krishnagiri",
+  "Dindigul",
+  "Erode",
+  "Kanchipuram North",
+  "Kanchipuram South",
+  "Kanyakumari",
+  "Karur",
+  "Madurai",
+  "Namakkal",
+  "Nilgiris",
+  "Salem",
+  "Sivaganga&Ramnad",
+  "Thanjavur",
+  "Theni",
+  "Trichy",
+  "Tirunelveli",
+  "Tirupur",
+  "Tiruvannamalai",
+  "Tuticorin",
+  "Vellore",
+  "Villupuram",
+  "Virudhunagar",
+  "Chennai East Coast",
+  "Chennai North",
+  "Chennai North West",
+  "Chennai South",
+  "Chennai South East",
+  "Chennai West",
+  "Cuddalore",
+  "Nagapattinam",
+  "Puducherry",
+  "Tiruvallur East",
+  "Tiruvallur West",
+  "Mayiladuthurai",
 ];
 
 // Form starts
 export default function StudentInfo() {
-	const { formData, updateForm } = useFormStore();
+  const { formData, updateForm } = useFormStore();
 
-	// Defining it ONCE as a debounced function to update the form
-	// But will need to repeat for all components as store is only accessible in functional component
+  // Defining it ONCE as a debounced function to update the form
+  // But will need to repeat for all components as store is only accessible in functional component
 
-	const checkRequired = (data: FormData) => {
-		const parsed = Section1Schema.safeParse(data);
+  const checkRequired = (data: FormData) => {
+    const parsed = Section1Schema.safeParse(data);
 
-		const isSection1Valid = parsed.success;
+    const isSection1Valid = parsed.success;
 
-		const newArr = [...data.nextSectionEnable];
-		newArr[data.sectionNumber] = isSection1Valid;
-		updateForm({ nextSectionEnable: newArr });
-	};
+    const newArr = [...data.nextSectionEnable];
+    newArr[data.sectionNumber] = isSection1Valid;
+    updateForm({ nextSectionEnable: newArr });
+  };
 
-	const debouncedFormUpdate = debouncedUpdate((key: string, value: string) => {
-		const updated = {
-			...formData,
-			[key]: value,
-		};
+  const debouncedFormUpdate = debouncedUpdate((key: string, value: string) => {
+    const updated = {
+      ...formData,
+      [key]: value,
+    };
 
-		updateForm({ [key]: value });
-		checkRequired(updated);
-	});
+    updateForm({ [key]: value });
+    checkRequired(updated);
+  });
 
-	// DOB state
-	const [open, setOpen] = useState(false);
-	const [openJoin, setOpenJoin] = useState(false);
+  // DOB state
+  const [open, setOpen] = useState(false);
+  const [openJoin, setOpenJoin] = useState(false);
 
-	const groupElementsJSX = ["1", "2", "3", "4"].map((group) => {
-		return (
-			<Button
-				key={group}
-				onClick={() => {
-					const updated = {
-						...formData,
-						group,
-					};
+  const groupElementsJSX = ["1", "2", "3", "4"].map((group) => {
+    return (
+      <Button
+        key={group}
+        onClick={() => {
+          const updated = {
+            ...formData,
+            group,
+          };
 
-					// Setting `passed` to null if the group isn't group 3??
-					// Or should I keep it as the previous value?
-					if (group !== "3") {
-						updated.hasGivenGroup2Exam = "";
-					}
+          // Setting `passed` to null if the group isn't group 3??
+          // Or should I keep it as the previous value?
+          if (group !== "3") {
+            updated.hasGivenGroup2Exam = "";
+          }
 
-					updateForm({ group: group });
-					checkRequired(updated); // pass updated state
-				}}
-				variant="outline"
-				// I'm using a simple logic to show which button was selected
-				// Using ! for the selected style as shadCN hower continues to be on when i select making it look bad
-				// Maybe it won't be an issue in phone, but it sure is in a PC
-				className={`flex items-center gap-2 cursor-pointer font-normal 
+          updateForm({ group: group });
+          checkRequired(updated); // pass updated state
+        }}
+        variant="outline"
+        // I'm using a simple logic to show which button was selected
+        // Using ! for the selected style as shadCN hower continues to be on when i select making it look bad
+        // Maybe it won't be an issue in phone, but it sure is in a PC
+        className={`flex items-center gap-2 cursor-pointer font-normal 
                 ${formData.group === group ? "!bg-indigo-500 !text-white !border-indigo-500" : ""}`}
-			>
-				Group {group}
-			</Button>
-		);
-	});
+      >
+        Group {group}
+      </Button>
+    );
+  });
 
-	const genderElementsJSX = ["Male", "Female"].map((gender) => {
-		return (
-			<Button
-				key={gender}
-				onClick={() => {
-					const updated = {
-						...formData,
-						gender,
-					};
+  const genderElementsJSX = ["Male", "Female"].map((gender) => {
+    return (
+      <Button
+        key={gender}
+        onClick={() => {
+          const updated = {
+            ...formData,
+            gender,
+          };
 
-					updateForm({ gender: gender });
-					checkRequired(updated);
-				}}
-				variant="outline"
-				// size="lg"
-				className={`flex items-center gap-2 cursor-pointer font-normal 
+          updateForm({ gender: gender });
+          checkRequired(updated);
+        }}
+        variant="outline"
+        // size="lg"
+        className={`flex items-center gap-2 cursor-pointer font-normal 
                 ${formData.gender === gender ? "!bg-indigo-500 !text-white !border-indigo-500" : ""}`}
-			>
-				{gender}
-			</Button>
-		);
-	});
+      >
+        {gender}
+      </Button>
+    );
+  });
 
-	const districtElementsJSX = districts.map((district) => (
-		<SelectItem key={district} value={district}>
-			{district}
-		</SelectItem>
-	));
+  const districtElementsJSX = districts.map((district) => (
+    <SelectItem key={district} value={district}>
+      {district}
+    </SelectItem>
+  ));
 
-	return (
-		<div className="mb-5 bg-white rounded-lg shadow-sm p-6">
-			<FieldGroup>
-				<FieldSet>
-					<FieldLegend>Student Information</FieldLegend>
-					<FieldDescription>
-						Please enter the CORRECT information about the participation
-					</FieldDescription>
+  return (
+    <div className="mb-5 bg-white rounded-lg shadow-sm p-6">
+      <FieldGroup>
+        <FieldSet>
+          <FieldLegend>Student Information</FieldLegend>
+          <FieldDescription>
+            Please enter the CORRECT information about the participation
+          </FieldDescription>
 
-					{/* Group selection field */}
-					<FieldGroup>
-						<Field>
-							<FieldLabel htmlFor="student-group">Select Group *</FieldLabel>
+          {/* Group selection field */}
+          <FieldGroup>
+            <Field>
+              <FieldLabel htmlFor="student-group">Select Group *</FieldLabel>
 
-							<div className="flex flex-wrap gap-3">{groupElementsJSX}</div>
-						</Field>
+              <div className="flex flex-wrap gap-3">{groupElementsJSX}</div>
+            </Field>
 
-						{/* Pop-up for grp 2 pass or not if the selected group is 3 */}
-						{formData.group == "3" && (
-							<Field>
-								<FieldLabel htmlFor="passed-grp2-exam">
-									Passed Group 2 Exam? *
-								</FieldLabel>
+            {/* Pop-up for grp 2 pass or not if the selected group is 3 */}
+            {formData.group == "3" && (
+              <Field>
+                <FieldLabel htmlFor="passed-grp2-exam">
+                  Passed Group 2 Exam? *
+                </FieldLabel>
 
-								<RadioGroup
-									value={formData.hasGivenGroup2Exam.toString()}
-									onValueChange={(val) => {
-										console.log(val);
-										const updated = {
-											...formData,
-											hasGivenGroup2Exam: val,
-										};
-										updateForm({ hasGivenGroup2Exam: val });
-										checkRequired(updated);
-									}}
-								>
-									<div className="flex items-center gap-3">
-										<RadioGroupItem value="yes" id="yes-passed" />
-										<Label htmlFor="yes-passed">Yes</Label>
-									</div>
-									<div className="flex items-center gap-3">
-										<RadioGroupItem value="no" id="no-passed" />
-										<Label htmlFor="no-passed">No</Label>
-									</div>
-								</RadioGroup>
-							</Field>
-						)}
+                <RadioGroup
+                  value={formData.hasGivenGroup2Exam.toString()}
+                  onValueChange={(val) => {
+                    console.log(val);
+                    const updated = {
+                      ...formData,
+                      hasGivenGroup2Exam: val,
+                    };
+                    updateForm({ hasGivenGroup2Exam: val });
+                    checkRequired(updated);
+                  }}
+                >
+                  <div className="flex items-center gap-3">
+                    <RadioGroupItem value="yes" id="yes-passed" />
+                    <Label htmlFor="yes-passed">Yes</Label>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <RadioGroupItem value="no" id="no-passed" />
+                    <Label htmlFor="no-passed">No</Label>
+                  </div>
+                </RadioGroup>
+              </Field>
+            )}
 
-						{/* DOB */}
-						<Field>
-							<FieldLabel htmlFor="dob">Date of Birth *</FieldLabel>
-							<Popover open={open} onOpenChange={setOpen}>
-								<PopoverTrigger asChild>
-									<Button
-										variant="outline"
-										id="date"
-										className="w-[var(--radix-popover-trigger-width)] justify-between font-normal"
-									>
-										{formData.dob
-											? formData.dob.toLocaleDateString()
-											: "Select date"}
-										<ChevronDownIcon />
-									</Button>
-								</PopoverTrigger>
+            {/* DOB */}
+            <Field>
+              <FieldLabel htmlFor="dob">Date of Birth *</FieldLabel>
+              <Popover open={open} onOpenChange={setOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    id="date"
+                    className="w-[var(--radix-popover-trigger-width)] justify-between font-normal"
+                  >
+                    {formData.dob
+                      ? formData.dob.toLocaleDateString()
+                      : "Select date"}
+                    <ChevronDownIcon />
+                  </Button>
+                </PopoverTrigger>
 
-								{/* TODO: Make the pop-over calendart the same length as the button and center it */}
-								<PopoverContent
-									className="w-auto overflow-hidden p-0"
-									align="start"
-								>
-									<Calendar
-										mode="single"
-										selected={formData.dob}
-										captionLayout="dropdown"
-										onSelect={(date) => {
-											const updated = {
-												...formData,
-												dob: date,
-											};
-											updateForm({ dob: date });
-											checkRequired(updated);
-										}}
-									/>
-								</PopoverContent>
-							</Popover>
-						</Field>
+                {/* TODO: Make the pop-over calendart the same length as the button and center it */}
+                <PopoverContent
+                  className="w-auto overflow-hidden p-0"
+                  align="start"
+                >
+                  <Calendar
+                    mode="single"
+                    selected={formData.dob}
+                    captionLayout="dropdown"
+                    onSelect={(date) => {
+                      const updated = {
+                        ...formData,
+                        dob: date,
+                      };
+                      updateForm({ dob: date });
+                      checkRequired(updated);
+                    }}
+                  />
+                </PopoverContent>
+              </Popover>
+            </Field>
 
-						{/* Name */}
-						{/* MAKE SURE UR defaultValue IS EQUAL TO THE STORE FOR INPUT FIELDS, NOT DIRECTLY `value` AS THAT WILL CAUSE LOT OF LAG */}
-						<Field>
-							<FieldLabel htmlFor="name">Name *</FieldLabel>
-							<Input
-								type="text"
-								placeholder="Yash"
-								id="name"
-								defaultValue={formData.name.toString()}
-								onChange={(e) => debouncedFormUpdate("name", e.target.value)}
-							/>
-						</Field>
+            {/* Name */}
+            {/* MAKE SURE UR defaultValue IS EQUAL TO THE STORE FOR INPUT FIELDS, NOT DIRECTLY `value` AS THAT WILL CAUSE LOT OF LAG */}
+            <Field>
+              <FieldLabel htmlFor="name">Name *</FieldLabel>
+              <Input
+                type="text"
+                placeholder="Yash"
+                id="name"
+                defaultValue={formData.name.toString()}
+                onChange={(e) => debouncedFormUpdate("name", e.target.value)}
+              />
+            </Field>
 
-						{/* Gender */}
-						<Field>
-							<FieldLabel htmlFor="gender">Gender *</FieldLabel>
-							<div className="flex flex-wrap gap-3">{genderElementsJSX}</div>
-						</Field>
+            {/* Gender */}
+            <Field>
+              <FieldLabel htmlFor="gender">Gender *</FieldLabel>
+              <div className="flex flex-wrap gap-3">{genderElementsJSX}</div>
+            </Field>
 
-						{/* District */}
-						<Field>
-							<FieldLabel htmlFor="district">District *</FieldLabel>
-							<Select
-								value={formData.district.toString()}
-								onValueChange={(val) => updateForm({ district: val })}
-							>
-								<SelectTrigger className="font-normal">
-									<SelectValue placeholder="Select your district" />
-								</SelectTrigger>
-								<SelectContent>
-									<SelectGroup>
-										<SelectLabel>Districts</SelectLabel>
-										{districtElementsJSX}
-									</SelectGroup>
-								</SelectContent>
-							</Select>
-						</Field>
+            {/* District */}
+            <Field>
+              <FieldLabel htmlFor="district">District *</FieldLabel>
+              <Select
+                value={formData.district.toString()}
+                onValueChange={(val) => updateForm({ district: val })}
+              >
+                <SelectTrigger className="font-normal">
+                  <SelectValue placeholder="Select your district" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Districts</SelectLabel>
+                    {districtElementsJSX}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </Field>
 
-						{/* Samithi */}
-						<Field>
-							<FieldLabel htmlFor="samithi">Samithi *</FieldLabel>
-							<Input
-								type="text"
-								placeholder="idk"
-								id="samithi"
-								defaultValue={formData.samithi.toString()}
-								onChange={(e) => debouncedFormUpdate("samithi", e.target.value)}
-							/>
-						</Field>
+            {/* Samithi */}
+            <Field>
+              <FieldLabel htmlFor="samithi">Samithi *</FieldLabel>
+              <Input
+                type="text"
+                placeholder="idk"
+                id="samithi"
+                defaultValue={formData.samithi.toString()}
+                onChange={(e) => debouncedFormUpdate("samithi", e.target.value)}
+              />
+            </Field>
 
-						{/* Couldn't find a year only dropdown in SHADCN, might just make it a select button later? */}
-						<Field>
-							<FieldLabel htmlFor="year-bv">
-								Student's Year of Joining Balvikas*
-							</FieldLabel>
-							<Input
-								type="number"
-								placeholder="2019"
-								id="year-bv"
-								defaultValue={formData.yearOfJoining.toString()}
-								min={2000}
-								max={2025}
-								onChange={(e) =>
-									debouncedFormUpdate("yearOfJoining", e.target.value)
-								}
-							/>
-						</Field>
+            {/* Couldn't find a year only dropdown in SHADCN, might just make it a select button later? */}
+            <Field>
+              <FieldLabel htmlFor="year-bv">
+                Student's Year of Joining Balvikas*
+              </FieldLabel>
+              <Input
+                type="number"
+                placeholder="2019"
+                id="year-bv"
+                defaultValue={formData.yearOfJoining.toString()}
+                min={2000}
+                max={2025}
+                onChange={(e) =>
+                  debouncedFormUpdate("yearOfJoining", e.target.value)
+                }
+              />
+            </Field>
 
-						{/* Date of Joining Balvikas */}
-						<Field>
-							<FieldLabel htmlFor="date-bv">
-								Date of Joining Balvikas (Optional)
-							</FieldLabel>
-							<Popover open={openJoin} onOpenChange={setOpenJoin}>
-								<PopoverTrigger asChild>
-									<Button
-										variant="outline"
-										id="date"
-										className="w-[var(--radix-popover-trigger-width)] justify-between font-normal"
-									>
-										{formData.dateOfJoining
-											? formData.dateOfJoining.toLocaleDateString()
-											: "Select date"}
-										<ChevronDownIcon />
-									</Button>
-								</PopoverTrigger>
+            {/* Date of Joining Balvikas */}
+            <Field>
+              <FieldLabel htmlFor="date-bv">
+                Date of Joining Balvikas (Optional)
+              </FieldLabel>
+              <Popover open={openJoin} onOpenChange={setOpenJoin}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    id="date"
+                    className="w-[var(--radix-popover-trigger-width)] justify-between font-normal"
+                  >
+                    {formData.dateOfJoining
+                      ? formData.dateOfJoining.toLocaleDateString()
+                      : "Select date"}
+                    <ChevronDownIcon />
+                  </Button>
+                </PopoverTrigger>
 
-								{/* TODO: Make the pop-over calendart the same length as the button and center it */}
-								<PopoverContent
-									className="w-auto overflow-hidden p-0"
-									align="start"
-								>
-									<Calendar
-										mode="single"
-										selected={formData.dateOfJoining}
-										captionLayout="dropdown"
-										onSelect={(date) => {
-											updateForm({ dateOfJoining: date });
-											setOpenJoin(false);
-										}}
-									/>
-								</PopoverContent>
-							</Popover>
-						</Field>
+                {/* TODO: Make the pop-over calendart the same length as the button and center it */}
+                <PopoverContent
+                  className="w-auto overflow-hidden p-0"
+                  align="start"
+                >
+                  <Calendar
+                    mode="single"
+                    selected={formData.dateOfJoining}
+                    captionLayout="dropdown"
+                    onSelect={(date) => {
+                      updateForm({ dateOfJoining: date });
+                      setOpenJoin(false);
+                    }}
+                  />
+                </PopoverContent>
+              </Popover>
+            </Field>
 
-						{/* Food Allergies */}
-						<Field>
-							<FieldLabel htmlFor="allergy">
-								Food Allergies (Optional)
-							</FieldLabel>
-							<Input
-								type="text"
-								placeholder="peanuts, gluten"
-								defaultValue={formData.foodAllergies.toString()}
-								onChange={(e) =>
-									debouncedFormUpdate("foodAllergies", e.target.value)
-								}
-								id="allergy"
-							/>
-						</Field>
-					</FieldGroup>
-				</FieldSet>
-			</FieldGroup>
-		</div>
-	);
+            {/* Food Allergies */}
+            <Field>
+              <FieldLabel htmlFor="allergy">
+                Food Allergies (Optional)
+              </FieldLabel>
+              <Input
+                type="text"
+                placeholder="peanuts, gluten"
+                defaultValue={formData.foodAllergies.toString()}
+                onChange={(e) =>
+                  debouncedFormUpdate("foodAllergies", e.target.value)
+                }
+                id="allergy"
+              />
+            </Field>
+          </FieldGroup>
+        </FieldSet>
+      </FieldGroup>
+    </div>
+  );
 }
