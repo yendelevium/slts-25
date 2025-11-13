@@ -70,6 +70,7 @@ function App() {
               updateForm({ sectionNumber: formData.sectionNumber - 1 })
             }
             disabled={formData.sectionNumber === 0}
+            className="cursor-pointer"
           >
             <ArrowLeft />
             Previous
@@ -80,6 +81,7 @@ function App() {
               updateForm({ sectionNumber: formData.sectionNumber + 1 })
             }
             disabled={!formData.nextSectionEnable?.[formData.sectionNumber]}
+            className="cursor-pointer"
           >
             Next
             <ArrowRight />

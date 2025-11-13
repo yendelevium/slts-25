@@ -259,6 +259,7 @@ export default function StudentInfo() {
                     mode="single"
                     selected={formData.dob}
                     captionLayout="dropdown"
+                    disabled={{ after: new Date() }}
                     onSelect={(date) => {
                       const updated = {
                         ...formData,
