@@ -68,38 +68,56 @@ export default function EventParticipationInfo() {
                   <RadioGroup 
                     value={formData.individualChoice1}
                     onValueChange={(val) => {
-                        console.log(val)
+                      console.log(val)
+                      if ((val === "bhajans" && formData.individualChoice2 === "tamizh-chants") || val === "tamizh-chants" && formData.individualChoice2 === "bhajans"){
+                        updateForm({ individualChoice1: val, individualChoice2: "" })
+                      } else {
                         updateForm({ individualChoice1: val })
+                      }
                     }}
-                  >
-                    <div className="flex items-center gap-3">
-                      <RadioGroupItem value="bhajans" id="bhajans-choice1" />
-                      <Label htmlFor="bhajans-choice1">Bhajans</Label>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <RadioGroupItem value="slokas" id="slokas-choice1" />
-                      <Label htmlFor="slokas-choice1">Slokas</Label>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <RadioGroupItem value="vedam-chanting" id="vedam-chanting-choice1" />
-                      <Label htmlFor="vedam-chanting-choice1">Vedam Chanting</Label>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <RadioGroupItem value="story-telling-english" id="story-telling-english-choice1" />
-                      <Label htmlFor="story-telling-english-choice1">Story Telling (English)</Label>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <RadioGroupItem value="story-telling-tamizh" id="story-telling-tamizh-choice1" />
-                      <Label htmlFor="story-telling-tamizh-choice1">Story Telling (Tamizh)</Label>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <RadioGroupItem value="drawing" id="drawing-choice1" />
-                      <Label htmlFor="drawing-choice1">Drawing</Label>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <RadioGroupItem value="tamizh-chants" id="tamizh-chants-choice1" />
-                      <Label htmlFor="tamizh-chants-choice1">Tamizh Chants</Label>
-                    </div>
+                  > 
+                    {formData.individualChoice2 !== "tamizh-chants" && formData.individualChoice2 !== "bhajans" && (
+                      <div className="flex items-center gap-3">
+                        <RadioGroupItem value="bhajans" id="bhajans-choice1" />
+                        <Label htmlFor="bhajans-choice1">Bhajans</Label>
+                      </div>
+                    )}
+                    {formData.individualChoice2 !== "slokas" && (
+                      <div className="flex items-center gap-3">
+                        <RadioGroupItem value="slokas" id="slokas-choice1" />
+                        <Label htmlFor="slokas-choice1">Slokas</Label>
+                      </div>
+                    )}
+                    {formData.individualChoice2 !== "vedam-chanting" && (
+                      <div className="flex items-center gap-3">
+                        <RadioGroupItem value="vedam-chanting" id="vedam-chanting-choice1" />
+                        <Label htmlFor="vedam-chanting-choice1">Vedam Chanting</Label>
+                      </div>
+                    )}
+                    {formData.individualChoice2 !== "story-telling-english" && (
+                      <div className="flex items-center gap-3">
+                        <RadioGroupItem value="story-telling-english" id="story-telling-english-choice1" />
+                        <Label htmlFor="story-telling-english-choice1">Story Telling (English)</Label>
+                      </div>
+                    )}
+                    {formData.individualChoice2 !== "story-telling-tamizh" && (
+                      <div className="flex items-center gap-3">
+                        <RadioGroupItem value="story-telling-tamizh" id="story-telling-tamizh-choice1" />
+                        <Label htmlFor="story-telling-tamizh-choice1">Story Telling (Tamizh)</Label>
+                      </div>
+                    )}
+                    {formData.individualChoice2 !== "drawing" && (
+                      <div className="flex items-center gap-3">
+                        <RadioGroupItem value="drawing" id="drawing-choice1" />
+                        <Label htmlFor="drawing-choice1">Drawing</Label>
+                      </div>
+                    )}
+                    {formData.individualChoice2 !== "bhajans" && formData.individualChoice2 !== "tamizh-chants" && (
+                      <div className="flex items-center gap-3">
+                        <RadioGroupItem value="tamizh-chants" id="tamizh-chants-choice1" />
+                        <Label htmlFor="tamizh-chants-choice1">Tamizh Chants</Label>
+                      </div>
+                    )}
                   </RadioGroup>
                 </Field>
 
@@ -107,44 +125,62 @@ export default function EventParticipationInfo() {
                 {formData.devotionalSinging === "no" && (
                   <Field>
                     <FieldLabel>
-                      Please select the 2nd Individual Event you would like to participate in: *
+                      Please select the 2nd Individual Event you would like to participate in:
                     </FieldLabel>
 
                     <RadioGroup 
                       value={formData.individualChoice2}
                       onValueChange={(val) => {
-                          console.log(val)
+                        console.log(val)
+                        if ((val === "bhajans" && formData.individualChoice1 === "tamizh-chants") || val === "tamizh-chants" && formData.individualChoice1 === "bhajans"){
+                          updateForm({ individualChoice2: val, individualChoice1: "" })
+                        } else {
                           updateForm({ individualChoice2: val })
+                        }
                       }}
                     >
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem value="bhajans" id="bhajans-choice2" />
-                        <Label htmlFor="bhajans-choice2">Bhajans</Label>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem value="slokas" id="slokas-choice2" />
-                        <Label htmlFor="slokas-choice2">Slokas</Label>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem value="vedam-chanting" id="vedam-chanting-choice2" />
-                        <Label htmlFor="vedam-chanting-choice2">Vedam Chanting</Label>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem value="story-telling-english" id="story-telling-english-choice2" />
-                        <Label htmlFor="story-telling-english-choice2">Story Telling (English)</Label>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem value="story-telling-tamizh" id="story-telling-tamizh-choice2" />
-                        <Label htmlFor="story-telling-tamizh-choice2">Story Telling (Tamizh)</Label>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem value="drawing" id="drawing-choice2" />
-                        <Label htmlFor="drawing-choice2">Drawing</Label>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem value="tamizh-chants" id="tamizh-chants-choice2" />
-                        <Label htmlFor="tamizh-chants-choice2">Tamizh Chants</Label>
-                      </div>
+                      {formData.individualChoice1 !== "tamizh-chants" && formData.individualChoice1 !== "bhajans" && (
+                        <div className="flex items-center gap-3">
+                          <RadioGroupItem value="bhajans" id="bhajans-choice2" />
+                          <Label htmlFor="bhajans-choice2">Bhajans</Label>
+                        </div>
+                      )}
+                      {formData.individualChoice1 !== "slokas" && (
+                        <div className="flex items-center gap-3">
+                          <RadioGroupItem value="slokas" id="slokas-choice2" />
+                          <Label htmlFor="slokas-choice2">Slokas</Label>
+                        </div>
+                      )}
+                      {formData.individualChoice1 !== "vedam-chanting" && (
+                        <div className="flex items-center gap-3">
+                          <RadioGroupItem value="vedam-chanting" id="vedam-chanting-choice2" />
+                          <Label htmlFor="vedam-chanting-choice2">Vedam Chanting</Label>
+                        </div>
+                      )}
+                      {formData.individualChoice1 !== "story-telling-english" && (
+                        <div className="flex items-center gap-3">
+                          <RadioGroupItem value="story-telling-english" id="story-telling-english-choice2" />
+                          <Label htmlFor="story-telling-english-choice2">Story Telling (English)</Label>
+                        </div>
+                      )}
+                      {formData.individualChoice1 !== "story-telling-tamizh" && (
+                        <div className="flex items-center gap-3">
+                          <RadioGroupItem value="story-telling-tamizh" id="story-telling-tamizh-choice2" />
+                          <Label htmlFor="story-telling-tamizh-choice2">Story Telling (Tamizh)</Label>
+                        </div>
+                      )}
+                      {formData.individualChoice1 !== "drawing" && (
+                        <div className="flex items-center gap-3">
+                          <RadioGroupItem value="drawing" id="drawing-choice2" />
+                          <Label htmlFor="drawing-choice2">Drawing</Label>
+                        </div>
+                      )}
+                      {formData.individualChoice1 !== "bhajans" && formData.individualChoice1 !== "tamizh-chants" && (
+                        <div className="flex items-center gap-3">
+                          <RadioGroupItem value="tamizh-chants" id="tamizh-chants-choice2" />
+                          <Label htmlFor="tamizh-chants-choice2">Tamizh Chants</Label>
+                        </div>
+                      )}
                     </RadioGroup>
                   </Field>
                 )}
@@ -238,41 +274,61 @@ export default function EventParticipationInfo() {
                     value={formData.individualChoice1}
                     onValueChange={(val) => {
                       console.log(val)
-                      updateForm({ individualChoice1: val })
+                      if ((val === "bhajans" && formData.individualChoice2 === "tamizh-chants") || val === "tamizh-chants" && formData.individualChoice2 === "bhajans"){
+                        updateForm({ individualChoice1: val, individualChoice2: "" })
+                      } else {
+                        updateForm({ individualChoice1: val })
+                      }
                     }}
                   >
-                    <div className="flex items-center gap-3">
-                      <RadioGroupItem value="bhajans" id="bhajans-choice1" />
-                      <Label htmlFor="bhajans-choice1">Bhajans</Label>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <RadioGroupItem value="slokas" id="slokas-choice1" />
-                      <Label htmlFor="slokas-choice1">Slokas</Label>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <RadioGroupItem value="vedam-chanting" id="vedam-chanting-choice1" />
-                      <Label htmlFor="vedam-chanting-choice1">Vedam Chanting</Label>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <RadioGroupItem value="story-telling-english" id="story-telling-english-choice1" />
-                      <Label htmlFor="story-telling-english-choice1">Story Telling (English)</Label>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <RadioGroupItem value="story-telling-tamizh" id="story-telling-tamizh-choice1" />
-                      <Label htmlFor="story-telling-tamizh-choice1">Story Telling (Tamizh)</Label>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <RadioGroupItem value="elocution-english" id="elocution-english-choice1" />
-                      <Label htmlFor="elocution-english-choice1">Elocution (English)</Label>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <RadioGroupItem value="elocution-tamizh" id="elocution-tamizh-choice1" />
-                      <Label htmlFor="elocution-tamizh-choice1">Elocution (Tamizh)</Label>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <RadioGroupItem value="tamizh-chants" id="tamizh-chants-choice1" />
-                      <Label htmlFor="tamizh-chants-choice1">Tamizh Chants</Label>
-                    </div>
+                    {formData.individualChoice2 !== "tamizh-chants" && formData.individualChoice2 !== "bhajans" && (
+                      <div className="flex items-center gap-3">
+                        <RadioGroupItem value="bhajans" id="bhajans-choice1" />
+                        <Label htmlFor="bhajans-choice1">Bhajans</Label>
+                      </div>
+                    )}
+                    {formData.individualChoice2 !== "slokas" && (
+                      <div className="flex items-center gap-3">
+                        <RadioGroupItem value="slokas" id="slokas-choice1" />
+                        <Label htmlFor="slokas-choice1">Slokas</Label>
+                      </div>
+                    )}
+                    {formData.individualChoice2 !== "vedam-chanting" && (
+                      <div className="flex items-center gap-3">
+                        <RadioGroupItem value="vedam-chanting" id="vedam-chanting-choice1" />
+                        <Label htmlFor="vedam-chanting-choice1">Vedam Chanting</Label>
+                      </div>
+                    )}
+                    {formData.individualChoice2 !== "story-telling-english" && (
+                      <div className="flex items-center gap-3">
+                        <RadioGroupItem value="story-telling-english" id="story-telling-english-choice1" />
+                        <Label htmlFor="story-telling-english-choice1">Story Telling (English)</Label>
+                      </div>
+                    )}
+                    {formData.individualChoice2 !== "story-telling-tamizh" && (
+                      <div className="flex items-center gap-3">
+                        <RadioGroupItem value="story-telling-tamizh" id="story-telling-tamizh-choice1" />
+                        <Label htmlFor="story-telling-tamizh-choice1">Story Telling (Tamizh)</Label>
+                      </div>
+                    )}
+                    {formData.individualChoice2 !== "elocution-english" && (
+                      <div className="flex items-center gap-3">
+                        <RadioGroupItem value="elocution-english" id="elocution-english-choice1" />
+                        <Label htmlFor="elocution-english-choice1">Elocution (English)</Label>
+                      </div>
+                    )}
+                    {formData.individualChoice2 !== "elocution-tamizh" && (
+                      <div className="flex items-center gap-3">
+                        <RadioGroupItem value="elocution-tamizh" id="elocution-tamizh-choice1" />
+                        <Label htmlFor="elocution-tamizh-choice1">Elocution (Tamizh)</Label>
+                      </div>
+                    )}
+                    {formData.individualChoice2 !== "bhajans" && formData.individualChoice2 !== "tamizh-chants" && (
+                      <div className="flex items-center gap-3">
+                        <RadioGroupItem value="tamizh-chants" id="tamizh-chants-choice1" />
+                        <Label htmlFor="tamizh-chants-choice1">Tamizh Chants</Label>
+                      </div>
+                    )}
                   </RadioGroup>
                 </Field>
                 
@@ -280,48 +336,68 @@ export default function EventParticipationInfo() {
                 {formData.participateInQuizDrawing === "none" && formData.participateInGroupEvent === "none" && (
                   <Field>
                     <FieldLabel>
-                      Please select the 2nd Individual Event you would like to participate in: *
+                      Please select the 2nd Individual Event you would like to participate in:
                     </FieldLabel>
 
                     <RadioGroup 
                       value={formData.individualChoice2}
                       onValueChange={(val) => {
                         console.log(val)
-                        updateForm({ individualChoice2: val })
+                        if ((val === "bhajans" && formData.individualChoice1 === "tamizh-chants") || val === "tamizh-chants" && formData.individualChoice1 === "bhajans"){
+                          updateForm({ individualChoice2: val, individualChoice1: "" })
+                        } else {
+                          updateForm({ individualChoice2: val })
+                        }
                       }}
                     >
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem value="bhajans" id="bhajans-choice2" />
-                        <Label htmlFor="bhajans-choice2">Bhajans</Label>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem value="slokas" id="slokas-choice2" />
-                        <Label htmlFor="slokas-choice2">Slokas</Label>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem value="vedam-chanting" id="vedam-chanting-choice2" />
-                        <Label htmlFor="vedam-chanting-choice2">Vedam Chanting</Label>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem value="story-telling-english" id="story-telling-english-choice2" />
-                        <Label htmlFor="story-telling-english-choice2">Story Telling (English)</Label>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem value="story-telling-tamizh" id="story-telling-tamizh-choice2" />
-                        <Label htmlFor="story-telling-tamizh-choice2">Story Telling (Tamizh)</Label>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem value="elocution-english" id="elocution-english-choice2" />
-                        <Label htmlFor="elocution-english-choice2">Elocution (English)</Label>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem value="elocution-tamizh" id="elocution-tamizh-choice2" />
-                        <Label htmlFor="elocution-tamizh-choice2">Elocution (Tamizh)</Label>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem value="tamizh-chants" id="tamizh-chants-choice2" />
-                        <Label htmlFor="tamizh-chants-choice2">Tamizh Chants</Label>
-                      </div>
+                      {formData.individualChoice1 !== "tamizh-chants" && formData.individualChoice1 !== "bhajans" && (
+                        <div className="flex items-center gap-3">
+                          <RadioGroupItem value="bhajans" id="bhajans-choice2" />
+                          <Label htmlFor="bhajans-choice2">Bhajans</Label>
+                        </div>
+                      )}
+                      {formData.individualChoice1 !== "slokas" && (
+                        <div className="flex items-center gap-3">
+                          <RadioGroupItem value="slokas" id="slokas-choice2" />
+                          <Label htmlFor="slokas-choice2">Slokas</Label>
+                        </div>
+                      )}
+                      {formData.individualChoice1 !== "vedam-chanting" && (
+                        <div className="flex items-center gap-3">
+                          <RadioGroupItem value="vedam-chanting" id="vedam-chanting-choice2" />
+                          <Label htmlFor="vedam-chanting-choice2">Vedam Chanting</Label>
+                        </div>
+                      )}
+                      {formData.individualChoice1 !== "story-telling-english" && (
+                        <div className="flex items-center gap-3">
+                          <RadioGroupItem value="story-telling-english" id="story-telling-english-choice2" />
+                          <Label htmlFor="story-telling-english-choice2">Story Telling (English)</Label>
+                        </div>
+                      )}
+                      {formData.individualChoice1 !== "story-telling-tamizh" && (
+                        <div className="flex items-center gap-3">
+                          <RadioGroupItem value="story-telling-tamizh" id="story-telling-tamizh-choice2" />
+                          <Label htmlFor="story-telling-tamizh-choice2">Story Telling (Tamizh)</Label>
+                        </div>
+                      )}
+                      {formData.individualChoice1 !== "elocution-english" && (
+                        <div className="flex items-center gap-3">
+                          <RadioGroupItem value="elocution-english" id="elocution-english-choice2" />
+                          <Label htmlFor="elocution-english-choice2">Elocution (English)</Label>
+                        </div>
+                      )}
+                      {formData.individualChoice1 !== "elocution-tamizh" && (
+                        <div className="flex items-center gap-3">
+                          <RadioGroupItem value="elocution-tamizh" id="elocution-tamizh-choice2" />
+                          <Label htmlFor="elocution-tamizh-choice2">Elocution (Tamizh)</Label>
+                        </div>
+                      )}
+                      {formData.individualChoice1 !== "bhajans" && formData.individualChoice1 !== "tamizh-chants" && (
+                        <div className="flex items-center gap-3">
+                          <RadioGroupItem value="tamizh-chants" id="tamizh-chants-choice2" />
+                          <Label htmlFor="tamizh-chants-choice2">Tamizh Chants</Label>
+                        </div>
+                      )}
                     </RadioGroup>
                   </Field>
                 )}

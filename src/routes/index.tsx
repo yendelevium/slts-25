@@ -58,8 +58,8 @@ function App() {
         {/* Form content  */}
         {/* This will be rendered dynamically based on form progress */}
         {/* <StudentInfo /> */}
-        {/* <EventParticipationInfo /> */}
-        <LogisticsInfo />
+        <EventParticipationInfo />
+        {/* <LogisticsInfo /> */}
 
 
         {/* Navigation */}
