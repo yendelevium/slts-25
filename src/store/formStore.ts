@@ -47,8 +47,8 @@ export interface FormData {
 	needAccommodation: String;
 	accomMaleMembers: number;
 	accomFemaleMembers: number;
-	maleDetails: {name: String, phone: String}[];
-	femaleDetails: {name: String, phone: String}[];
+	maleDetails: { name: String; phone: String }[];
+	femaleDetails: { name: String; phone: String }[];
 	checkInDateTime: Date | undefined;
 	checkOutDateTime: Date | undefined;
 }
