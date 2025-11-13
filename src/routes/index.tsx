@@ -11,6 +11,8 @@ import {
 } from "@/components/ui/pagination";
 
 import StudentInfo from "@/components/form/StudentInfo";
+import Accompany from "@/components/form/Accompany";
+import Accomodate from "@/components/form/Accomodate";
 
 export const Route = createFileRoute("/")({
 	component: App,
@@ -56,7 +58,7 @@ function App() {
 
 				{/* Form content  */}
 				{/* This will be rendered dynamically based on form progress */}
-				<StudentInfo />
+				<Accompany />
 
 				{/* Navigation */}
 				{/* I'm thinking only 1 page to be shown in pagination, the current page... */}

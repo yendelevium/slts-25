@@ -108,7 +108,7 @@ export default function StudentInfo() {
 		);
 	});
 
-	const genderElementsJSX = ["Male", "Female", "Other"].map((gender) => {
+	const genderElementsJSX = ["Male", "Female"].map((gender) => {
 		return (
 			<Button
 				key={gender}
@@ -157,7 +157,7 @@ export default function StudentInfo() {
 								</FieldLabel>
 
 								<RadioGroup
-									value={formData.hasGivenGroup2Exam}
+									value={formData.hasGivenGroup2Exam.toString()}
 									onValueChange={(val) => {
 										console.log(val);
 										updateForm({ hasGivenGroup2Exam: val });
@@ -218,7 +218,7 @@ export default function StudentInfo() {
 								type="text"
 								placeholder="Yash"
 								id="name"
-								defaultValue={formData.name}
+								defaultValue={formData.name.toString()}
 								onChange={(e) => debouncedFormUpdate("name", e.target.value)}
 							/>
 						</Field>
@@ -233,7 +233,7 @@ export default function StudentInfo() {
 						<Field>
 							<FieldLabel htmlFor="district">District *</FieldLabel>
 							<Select
-								value={formData.district}
+								value={formData.district.toString()}
 								onValueChange={(val) => updateForm({ district: val })}
 							>
 								<SelectTrigger className="font-normal">
@@ -255,7 +255,7 @@ export default function StudentInfo() {
 								type="text"
 								placeholder="idk"
 								id="samithi"
-								defaultValue={formData.samithi}
+								defaultValue={formData.samithi.toString()}
 								onChange={(e) => debouncedFormUpdate("samithi", e.target.value)}
 							/>
 						</Field>
@@ -269,7 +269,7 @@ export default function StudentInfo() {
 								type="number"
 								placeholder="2019"
 								id="year-bv"
-								defaultValue={formData.yearOfJoining}
+								defaultValue={formData.yearOfJoining.toString()}
 								min={2000}
 								max={2025}
 								onChange={(e) =>
@@ -323,7 +323,7 @@ export default function StudentInfo() {
 							<Input
 								type="text"
 								placeholder="peanuts, gluten"
-								defaultValue={formData.foodAllergies}
+								defaultValue={formData.foodAllergies.toString()}
 								onChange={(e) =>
 									debouncedFormUpdate("foodAllergies", e.target.value)
 								}

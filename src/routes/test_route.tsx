@@ -9,6 +9,8 @@ import {
 	PaginationPrevious,
 } from "@/components/ui/pagination";
 
+import StudentInfo from "@/components/form/StudentInfo";
+
 export const Route = createFileRoute("/test_route")({
 	component: RouteComponent,
 });
@@ -16,6 +18,7 @@ export const Route = createFileRoute("/test_route")({
 function RouteComponent() {
 	return (
 		<>
+			<StudentInfo />
 			<div>Hello "/test_route"!</div>
 			<Pagination>
 				<PaginationContent>
