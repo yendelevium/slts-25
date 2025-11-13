@@ -23,32 +23,41 @@ export const EventsSchema = z
     participateInGroupEvent: z.string(),
   })
   .refine((data) => {
-      // Group 1 validation
-      if (data.group === "1") {
-        return (data.devotionalSinging.length > 0 && data.individualChoice1.length > 0);
-      }
+    // Group 1 validation
+    if (data.group === "1") {
+      return (
+        data.devotionalSinging.length > 0 && data.individualChoice1.length > 0
+      );
+    }
 
-      // Group 2 or 3 validation
-      if (data.group === "2" || data.group === "3") {
-        if (data.participateInQuizDrawing.length === 0) return false;
-        
-        if (data.participateInQuizDrawing === "none") {
-          if (data.participateInGroupEvent.length === 0) return false;
-          if (data.participateInGroupEvent !== "none" && data.individualChoice1.length === 0) {
-            return false;
-          }
-        }
-        if ((data.participateInQuizDrawing === "quiz" || data.participateInQuizDrawing === "drawing") && data.individualChoice1.length === 0) {
+    // Group 2 or 3 validation
+    if (data.group === "2" || data.group === "3") {
+      if (data.participateInQuizDrawing.length === 0) return false;
+
+      if (data.participateInQuizDrawing === "none") {
+        if (data.participateInGroupEvent.length === 0) return false;
+        if (
+          data.participateInGroupEvent !== "none" &&
+          data.individualChoice1.length === 0
+        ) {
           return false;
         }
-        return true;
       }
-
-      // Group 4 validation
-      if (data.group === "4") {
-        return data.participateInQuizDrawing.length > 0;
+      if (
+        (data.participateInQuizDrawing === "quiz" ||
+          data.participateInQuizDrawing === "drawing") &&
+        data.individualChoice1.length === 0
+      ) {
+        return false;
       }
       return true;
+    }
+
+    // Group 4 validation
+    if (data.group === "4") {
+      return data.participateInQuizDrawing.length > 0;
+    }
+    return true;
   });
 
 export default function EventParticipationInfo() {
