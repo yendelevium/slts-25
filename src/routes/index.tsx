@@ -6,6 +6,7 @@ import Accompany from "@/components/form/Accompany";
 import Accomodate from "@/components/form/Accomodate";
 import EventParticipationInfo from "@/components/form/EventParticipationInfo";
 import LogisticsInfo from "@/components/form/LogisticsInfo";
+import Preview from "@/components/form/Preview";
 
 import { useFormStore } from "@/store/formStore";
 import { ArrowRight, ArrowLeft } from "lucide-react";
@@ -28,6 +29,7 @@ function App() {
     <LogisticsInfo />,
     <Accompany />,
     <Accomodate />,
+	<Preview />
   ];
 
   let progress = (Math.min(formData.sectionNumber, 5) / 5) * 100;
@@ -76,7 +78,7 @@ function App() {
             Previous
           </Button>
 
-          <Button
+          { formData.sectionNumber != 5 && <Button
             onClick={() =>
               updateForm({ sectionNumber: formData.sectionNumber + 1 })
             }
@@ -86,6 +88,18 @@ function App() {
             Next
             <ArrowRight />
           </Button>
+		  }
+		  { formData.sectionNumber == 5 && <Button
+            onClick={() =>
+            	// submit sm shi
+				// idk
+				console.log("Submitted!")
+            }
+            className="cursor-pointer"
+          >
+            SUBMIT FORM
+          </Button>
+		  }
         </div>
       </div>
     </div>
