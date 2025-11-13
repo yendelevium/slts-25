@@ -6,7 +6,7 @@ import Accompany from "@/components/form/Accompany";
 import Accomodate from "@/components/form/Accomodate";
 
 import { useFormStore } from "@/store/formStore";
-import { ArrowRight, ArrowLeft } from 'lucide-react';
+import { ArrowRight, ArrowLeft } from "lucide-react";
 
 export const Route = createFileRoute("/")({
 	component: App,
@@ -17,17 +17,12 @@ export const Route = createFileRoute("/")({
 
 // Have a Section identifier to know what section it is rn
 // Using the section identifier, we implement navigation next or prev
-
-
+ssssssssssssssssssssssssssssssssssssssssssssssss;
 function App() {
-	const {formData, updateForm } = useFormStore();
-	const Sections = [
-		<StudentInfo/>,
-		<Accompany/>,
-		<Accomodate/>
-	]
+	const { formData, updateForm } = useFormStore();
+	const Sections = [<StudentInfo />, <Accompany />, <Accomodate />];
 
-	let progresss = (Math.min(formData.sectionNumber,5)/5)*100;
+	let progresss = (Math.min(formData.sectionNumber, 5) / 5) * 100;
 
 	return (
 		// Progress Bar
@@ -56,13 +51,13 @@ function App() {
 				{/* This will be rendered dynamically based on form progress */}
 				{Sections[formData.sectionNumber]}
 
-				{/* I'm thinking only 1 page to be shown in pagination, the current page... */}
-				{/* Can be debated upon later */}
-				{/* The logic for navigation will also be extracted out to a diff component */}
+				{/* Prev Next */}
 				<div className="flex items-center justify-between mt-4">
 					<Button
 						variant="outline"
-						onClick={() => updateForm({ sectionNumber: formData.sectionNumber - 1 })}
+						onClick={() =>
+							updateForm({ sectionNumber: formData.sectionNumber - 1 })
+						}
 						disabled={formData.sectionNumber === 0}
 					>
 						<ArrowLeft />
@@ -70,7 +65,9 @@ function App() {
 					</Button>
 
 					<Button
-						onClick={() => updateForm({ sectionNumber: formData.sectionNumber + 1 })}
+						onClick={() =>
+							updateForm({ sectionNumber: formData.sectionNumber + 1 })
+						}
 						disabled={!formData.nextSectionEnable?.[formData.sectionNumber]}
 					>
 						Next

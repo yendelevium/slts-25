@@ -3,8 +3,8 @@ import { persist } from "zustand/middleware";
 
 export interface FormData {
 	// Nav
-	sectionNumber: number
-	nextSectionEnable: boolean[]
+	sectionNumber: number;
+	nextSectionEnable: boolean[];
 
 	// Student Info
 	group: String;

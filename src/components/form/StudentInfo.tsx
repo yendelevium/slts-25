@@ -101,13 +101,12 @@ export default function StudentInfo() {
 	const debouncedFormUpdate = debouncedUpdate((key: string, value: string) => {
 		const updated = {
 			...formData,
-			[key]: value
+			[key]: value,
 		};
-	
+
 		updateForm({ [key]: value });
 		checkRequired(updated);
 	});
-
 
 	// DOB state
 	const [open, setOpen] = useState(false);
@@ -122,14 +121,14 @@ export default function StudentInfo() {
 						...formData,
 						group,
 					};
-					
+
 					// Setting `passed` to null if the group isn't group 3??
 					// Or should I keep it as the previous value?
 					if (group !== "3") {
 						updated.hasGivenGroup2Exam = "";
 					}
 
-					updateForm({group: group});
+					updateForm({ group: group });
 					checkRequired(updated); // pass updated state
 				}}
 				variant="outline"
@@ -154,7 +153,7 @@ export default function StudentInfo() {
 						gender,
 					};
 
-					updateForm({gender: gender});
+					updateForm({ gender: gender });
 					checkRequired(updated);
 				}}
 				variant="outline"
@@ -203,9 +202,9 @@ export default function StudentInfo() {
 										console.log(val);
 										const updated = {
 											...formData,
-											hasGivenGroup2Exam: val
+											hasGivenGroup2Exam: val,
 										};
-										updateForm({hasGivenGroup2Exam: val});
+										updateForm({ hasGivenGroup2Exam: val });
 										checkRequired(updated);
 									}}
 								>
@@ -250,9 +249,9 @@ export default function StudentInfo() {
 										onSelect={(date) => {
 											const updated = {
 												...formData,
-												dob: date
+												dob: date,
 											};
-											updateForm({dob: date});
+											updateForm({ dob: date });
 											checkRequired(updated);
 										}}
 									/>
