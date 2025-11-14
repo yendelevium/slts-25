@@ -431,7 +431,9 @@ export default function StudentInfo() {
                   formData.yearOfJoining,
                 ).success && (
                   <div className="text-red-600 text-sm">
-                    Year of Joining Balvikas is required
+                    {formData.yearOfJoining === 0
+                      ? "Year of Joining Balvikas is required"
+                      : "Year must be between 2000 and 2025"}
                   </div>
                 )}
               <FieldLabel htmlFor="year-bv">
