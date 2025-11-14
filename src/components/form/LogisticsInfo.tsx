@@ -71,10 +71,11 @@ export default function LogisticsInfo() {
   }, []);
 
   const checkRequired = (data: FormData) => {
+    console.log(data);
     const parsed = LogisticsSchema.safeParse(data);
 
     const isSection3Valid = parsed.success;
-
+    console.log(parsed.error);
     const newArr = [...data.nextSectionEnable];
     newArr[data.sectionNumber] = isSection3Valid;
     if (isSection3Valid) {
@@ -409,6 +410,7 @@ export default function LogisticsInfo() {
               <FieldLabel>Does the student need drop facility? *</FieldLabel>
 
               <RadioGroup
+                key={formData.needDrop.toString()}
                 value={formData.needDrop.toString()}
                 onValueChange={(val) => {
                   console.log(val);

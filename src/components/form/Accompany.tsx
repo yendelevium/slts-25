@@ -28,8 +28,8 @@ const YesAccompanySchema = z
     numMaleMembers: z.number().int().min(0),
     numFemaleMembers: z.number().int().min(0),
 
-    pocName: z.string().min(1),
-    pocPhone: z.string().min(10).max(10),
+    pocName: z.string().trim().min(1),
+    pocPhone: z.number().min(1000000000).max(9999999999),
     pocGender: z.enum(["Male", "Female"]),
     pocRelation: z.enum(["Father", "Mother", "Guru", "Legal Guardian"]),
     pocAge: z.enum(["18-65", "65+"]),
