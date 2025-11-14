@@ -11,6 +11,22 @@ export default function Preview() {
   const { formData } = useFormStore();
 
   const fmt = (date?: Date) => (date ? date.toLocaleDateString("en-IN") : "—");
+  
+  const fmtYesNo = (value?: string) => {
+    if (!value) return "—";
+    if (value === "yes") return "Yes";
+    if (value === "no") return "No";
+    return value;
+  };
+  
+  // formatting the event names to show (removing hyphens and capitalising)
+  const fmtEventName = (value?: string) => {
+    if (!value || value === "none") return "—";
+    return value
+      .split("-")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
 
   const showAccompany = formData.adultsAccompanying === "yes";
   const showAccom = formData.needAccommodation === "yes";
@@ -64,7 +80,7 @@ export default function Preview() {
                   !individualChoice2 && (
                     <Info
                       label="Devotional Singing"
-                      value={devotionalSinging.toString()}
+                      value={fmtYesNo(devotionalSinging.toString())}
                     />
                   )}
 
@@ -75,11 +91,11 @@ export default function Preview() {
                     <>
                       <Info
                         label="Devotional Singing"
-                        value={devotionalSinging.toString()}
+                        value={fmtYesNo(devotionalSinging.toString())}
                       />
                       <Info
                         label="Individual Event 1"
-                        value={individualChoice1.toString()}
+                        value={fmtEventName(individualChoice1.toString())}
                       />
                     </>
                   )}
@@ -90,7 +106,7 @@ export default function Preview() {
                   !individualChoice2 && (
                     <Info
                       label="Individual Event 1"
-                      value={individualChoice1.toString()}
+                      value={fmtEventName(individualChoice1.toString())}
                     />
                   )}
 
@@ -101,11 +117,11 @@ export default function Preview() {
                     <>
                       <Info
                         label="Individual Event 1"
-                        value={individualChoice1.toString()}
+                        value={fmtEventName(individualChoice1.toString())}
                       />
                       <Info
                         label="Individual Event 2"
-                        value={individualChoice2.toString()}
+                        value={fmtEventName(individualChoice2.toString())}
                       />
                     </>
                   )}
@@ -122,14 +138,14 @@ export default function Preview() {
                     {/* EVENT 1 → ALWAYS quiz */}
                     <Info
                       label="Individual Event 1"
-                      value={participateInQuizDrawing.toString()}
+                      value={fmtEventName(participateInQuizDrawing.toString())}
                     />
 
                     {/* If they ALSO picked an individualChoice1, show as Event 2 */}
                     {individualChoice1 && individualChoice1 !== "none" && (
                       <Info
                         label="Individual Event 2"
-                        value={individualChoice1.toString()}
+                        value={fmtEventName(individualChoice1.toString())}
                       />
                     )}
                   </>
@@ -143,14 +159,14 @@ export default function Preview() {
                         <>
                           <Info
                             label="Group Event"
-                            value={participateInGroupEvent.toString()}
+                            value={fmtEventName(participateInGroupEvent.toString())}
                           />
 
                           {individualChoice1 &&
                             individualChoice1 !== "none" && (
                               <Info
                                 label="Individual Event 1"
-                                value={individualChoice1.toString()}
+                                value={fmtEventName(individualChoice1.toString())}
                               />
                             )}
                         </>
@@ -162,14 +178,14 @@ export default function Preview() {
                         {individualChoice1 && individualChoice1 !== "none" && (
                           <Info
                             label="Individual Event 1"
-                            value={individualChoice1.toString()}
+                            value={fmtEventName(individualChoice1.toString())}
                           />
                         )}
 
                         {individualChoice2 && individualChoice2 !== "none" && (
                           <Info
                             label="Individual Event 2"
-                            value={individualChoice2.toString()}
+                            value={fmtEventName(individualChoice2.toString())}
                           />
                         )}
                       </>
@@ -184,7 +200,7 @@ export default function Preview() {
                 {/* If quiz = YES */}
                 {(participateInQuizDrawing === "yes" ||
                   participateInQuizDrawing === "quiz") && (
-                  <Info label="Individual Event 1" value="quiz" />
+                  <Info label="Individual Event 1" value="Quiz" />
                 )}
 
                 {/* If quiz = NO → show nothing */}
@@ -208,7 +224,7 @@ export default function Preview() {
               label="Arrival Time"
               value={formData.arrivalTime.toString() || "—"}
             />
-            <Info label="Need Pickup" value={formData.needPickup.toString()} />
+            <Info label="Need Pickup" value={fmtYesNo(formData.needPickup.toString())} />
 
             {formData.needPickup === "yes" && (
               <>
@@ -230,7 +246,7 @@ export default function Preview() {
               label="Departure Time"
               value={formData.departureTime.toString() || "—"}
             />
-            <Info label="Need Drop" value={formData.needDrop.toString()} />
+            <Info label="Need Drop" value={fmtYesNo(formData.needDrop.toString())} />
 
             {formData.needDrop === "yes" && (
               <>
