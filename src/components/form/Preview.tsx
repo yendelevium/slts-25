@@ -309,11 +309,12 @@ export default function Preview() {
                   value={formData.accomFemaleMembers.toString()}
                 />
 
-                {formData.accomMaleMembers === 0 && formData.accomFemaleMembers === 0 && (
-                  <p className="col-span-2 text-sm text-muted-foreground">
-                    Accommodation chosen for student only.
-                  </p>
-                )}
+                {formData.accomMaleMembers === 0 &&
+                  formData.accomFemaleMembers === 0 && (
+                    <p className="col-span-2 text-sm text-muted-foreground">
+                      Accommodation chosen for student only.
+                    </p>
+                  )}
 
                 {/* Male staying */}
                 {formData.accomMaleMembers > 0 && (
@@ -330,7 +331,9 @@ export default function Preview() {
                 {/* Female staying */}
                 {formData.accomFemaleMembers > 0 && (
                   <div>
-                    <h4 className="font-semibold mb-2">Female Members Staying</h4>
+                    <h4 className="font-semibold mb-2">
+                      Female Members Staying
+                    </h4>
                     {formData.femaleDetails.map((m, i) => (
                       <div key={i} className="text-sm">
                         {i + 1}. {m.name} ({m.phone || "—"})
@@ -340,7 +343,9 @@ export default function Preview() {
                 )}
               </>
             ) : (
-              <p className="col-span-2 text-muted-foreground">No accommodation needed.</p>
+              <p className="col-span-2 text-muted-foreground">
+                No accommodation needed.
+              </p>
             )}
           </CardContent>
         </Card>
