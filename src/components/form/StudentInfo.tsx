@@ -196,6 +196,14 @@ export default function StudentInfo() {
 
   return (
     <div className="mb-5 bg-white rounded-lg shadow-sm p-6">
+      {formData.showErrors &&
+        !formData.nextSectionEnable[formData.sectionNumber] && (
+          <div className="text-red-600 text-sm mb-1">
+            Please fill in all the required fields with their correct values.
+            You can only proceed to the next section when all required fields
+            are filled correctly
+          </div>
+        )}
       <FieldGroup>
         <FieldSet>
           <FieldLegend>Student Information</FieldLegend>

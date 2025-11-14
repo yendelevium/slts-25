@@ -62,7 +62,11 @@ export default function LogisticsInfo() {
 
     const newArr = [...data.nextSectionEnable];
     newArr[data.sectionNumber] = isSection3Valid;
-    updateForm({ nextSectionEnable: newArr });
+    if (isSection3Valid) {
+      updateForm({ nextSectionEnable: newArr, showErrors: false });
+    } else {
+      updateForm({ nextSectionEnable: newArr });
+    }
   };
 
   // Debouncing for the input fields
@@ -82,6 +86,14 @@ export default function LogisticsInfo() {
 
   return (
     <div className="mb-5 bg-white rounded-lg shadow-sm p-6">
+      {formData.showErrors &&
+        !formData.nextSectionEnable[formData.sectionNumber] && (
+          <div className="text-red-600 text-sm mb-1">
+            Please fill in all the required fields with their correct values.
+            You can only proceed to the next section when all required fields
+            are filled correctly
+          </div>
+        )}
       <FieldGroup>
         <FieldSet>
           <FieldLegend>Logistics</FieldLegend>
@@ -93,6 +105,14 @@ export default function LogisticsInfo() {
             <div className="flex flex-col md:flex-row gap-3">
               {/* Arrival Date Field */}
               <Field>
+                {formData.showErrors &&
+                  !LogisticsSchema.shape.arrivalDate.safeParse(
+                    formData.arrivalDate,
+                  ).success && (
+                    <div className="text-red-600 text-sm">
+                      Arrival Date is required
+                    </div>
+                  )}
                 <FieldLabel htmlFor="arrival-date">Arrival Date *</FieldLabel>
                 <Popover
                   open={openArrivalDate}
@@ -135,6 +155,14 @@ export default function LogisticsInfo() {
 
               {/* Arrival Time Field */}
               <Field>
+                {formData.showErrors &&
+                  !LogisticsSchema.shape.arrivalTime.safeParse(
+                    formData.arrivalTime,
+                  ).success && (
+                    <div className="text-red-600 text-sm">
+                      Arrival Time is required
+                    </div>
+                  )}
                 <FieldLabel htmlFor="arrival-time">Arrival Time *</FieldLabel>
                 <Input
                   type="time"
@@ -150,6 +178,13 @@ export default function LogisticsInfo() {
 
             {/* Checking if student need pickup facility (if yes we ask for mode of travel and pickup point) */}
             <Field>
+              {formData.showErrors &&
+                !LogisticsSchema.shape.needPickup.safeParse(formData.needPickup)
+                  .success && (
+                  <div className="text-red-600 text-sm">
+                    This field is required
+                  </div>
+                )}
               <FieldLabel>Does the student need pickup facility? *</FieldLabel>
 
               <RadioGroup
@@ -195,6 +230,13 @@ export default function LogisticsInfo() {
               <>
                 {/* Arrival Mode of Travel */}
                 <Field>
+                  {formData.showErrors &&
+                    formData.needPickup == "yes" &&
+                    formData.arrivalMode == "" && (
+                      <div className="text-red-600 text-sm">
+                        Mode of Arrival is required
+                      </div>
+                    )}
                   <FieldLabel htmlFor="arrival-mode">
                     Mode of Travel (Arrival) *
                   </FieldLabel>
@@ -211,6 +253,13 @@ export default function LogisticsInfo() {
 
                 {/* Pickup Point Landmark field */}
                 <Field>
+                  {formData.showErrors &&
+                    formData.needPickup == "yes" &&
+                    formData.pickupPoint == "" && (
+                      <div className="text-red-600 text-sm">
+                        Pickup Point is required
+                      </div>
+                    )}
                   <FieldLabel htmlFor="pickup-point">Pickup Point *</FieldLabel>
                   <Input
                     type="text"
@@ -228,6 +277,14 @@ export default function LogisticsInfo() {
             <div className="flex flex-col md:flex-row gap-3">
               {/* Departure Date Field */}
               <Field>
+                {formData.showErrors &&
+                  !LogisticsSchema.shape.departureDate.safeParse(
+                    formData.departureDate,
+                  ).success && (
+                    <div className="text-red-600 text-sm">
+                      Departure Date is required
+                    </div>
+                  )}
                 <FieldLabel htmlFor="departure-date">
                   Departure Date *
                 </FieldLabel>
@@ -272,6 +329,14 @@ export default function LogisticsInfo() {
 
               {/* Departure Time Field */}
               <Field>
+                {formData.showErrors &&
+                  !LogisticsSchema.shape.departureTime.safeParse(
+                    formData.departureTime,
+                  ).success && (
+                    <div className="text-red-600 text-sm">
+                      Departure Time is required
+                    </div>
+                  )}
                 <FieldLabel htmlFor="departure-time">
                   Departure Time *
                 </FieldLabel>
@@ -289,6 +354,13 @@ export default function LogisticsInfo() {
 
             {/* Checking if student needs drop facility (if yes we ask for mode of travel and dropoff point) */}
             <Field>
+              {formData.showErrors &&
+                !LogisticsSchema.shape.needDrop.safeParse(formData.needDrop)
+                  .success && (
+                  <div className="text-red-600 text-sm">
+                    This field is required
+                  </div>
+                )}
               <FieldLabel>Does the student need drop facility? *</FieldLabel>
 
               <RadioGroup
@@ -334,6 +406,13 @@ export default function LogisticsInfo() {
               <>
                 {/* Departure Mode of Travel */}
                 <Field>
+                  {formData.showErrors &&
+                    formData.needDrop == "yes" &&
+                    formData.departureMode == "" && (
+                      <div className="text-red-600 text-sm">
+                        Mode of Departure is required
+                      </div>
+                    )}
                   <FieldLabel htmlFor="departure-mode">
                     Mode of Travel (Departure) *
                   </FieldLabel>
@@ -350,6 +429,13 @@ export default function LogisticsInfo() {
 
                 {/* Departure Point Landmark field */}
                 <Field>
+                  {formData.showErrors &&
+                    formData.needDrop == "yes" &&
+                    formData.dropPoint == "" && (
+                      <div className="text-red-600 text-sm">
+                        Drop off Point is required
+                      </div>
+                    )}
                   <FieldLabel htmlFor="drop-point">Drop off Point *</FieldLabel>
                   <Input
                     type="text"
