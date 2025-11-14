@@ -147,9 +147,27 @@ export default function StudentInfo() {
             updated.hasGivenGroup2Exam = "";
           }
 
+          if (formData.group != group) {
+            if (group == "1") {
+              updated.participateInQuizDrawing = "";
+              updated.participateInGroupEvent = "";
+            } else if (group == "2" || group == "3") {
+              updated.devotionalSinging = "";
+            } else {
+              updated.devotionalSinging = "";
+              updated.participateInQuizDrawing = "";
+            }
+
+            updated.nextSectionEnable[1] = false;
+          }
+
           updateForm({
             group: group,
             hasGivenGroup2Exam: updated.hasGivenGroup2Exam,
+            devotionalSinging: updated.devotionalSinging,
+            participateInQuizDrawing: updated.participateInQuizDrawing,
+            participateInGroupEvent: updated.participateInGroupEvent,
+            nextSectionEnable: updated.nextSectionEnable,
           });
           checkRequired(updated); // pass updated state
         }}

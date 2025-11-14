@@ -60,11 +60,60 @@ function App() {
 
           <Progress value={progress} />
         </div>
+
+        {/* Prev Next TOP*/}
+        {formData.sectionNumber != 5 && (
+          <div className="flex items-center justify-between mb-4">
+            <Button
+              variant="outline"
+              onClick={() =>
+                updateForm({ sectionNumber: formData.sectionNumber - 1 })
+              }
+              disabled={formData.sectionNumber === 0}
+              className="cursor-pointer"
+            >
+              <ArrowLeft />
+              Previous
+            </Button>
+
+            {formData.sectionNumber != 5 && (
+              <Button
+                onClick={() => {
+                  if (
+                    formData.nextSectionEnable[formData.sectionNumber] == false
+                  ) {
+                    updateForm({ showErrors: true });
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  } else {
+                    updateForm({ sectionNumber: formData.sectionNumber + 1 });
+                  }
+                }}
+                className="cursor-pointer"
+              >
+                Next
+                <ArrowRight />
+              </Button>
+            )}
+            {formData.sectionNumber == 5 && (
+              <Button
+                onClick={() =>
+                  // submit sm shi
+                  // idk
+                  console.log("Submitted", formData)
+                }
+                className="cursor-pointer"
+              >
+                SUBMIT FORM
+              </Button>
+            )}
+          </div>
+        )}
+
         {/* Form content  */}
         {/* This will be rendered dynamically based on form progress */}
         {Sections[formData.sectionNumber]}
 
-        {/* Prev Next */}
+        {/* Prev Next BOTTOM*/}
         <div className="flex items-center justify-between mt-4">
           <Button
             variant="outline"

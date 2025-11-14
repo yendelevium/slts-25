@@ -227,7 +227,8 @@ export default function Accompany() {
                         formData.pocAge,
                       ).success) && (
                       <div className="text-red-600 text-sm">
-                        All POC details are required
+                        All POC details are required (check phone-number length
+                        as well)
                       </div>
                     )}
                   <div className="flex gap-4">
@@ -249,7 +250,9 @@ export default function Accompany() {
 
                     <div className="flex-1">
                       <Field>
-                        <FieldLabel htmlFor="poc-phone">Phone *</FieldLabel>
+                        <FieldLabel htmlFor="poc-phone">
+                          Phone (no leading zero)*
+                        </FieldLabel>
                         <Input
                           type="text"
                           placeholder="1234567890"
