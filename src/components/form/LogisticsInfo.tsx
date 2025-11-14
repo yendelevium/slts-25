@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/field";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -55,6 +55,21 @@ export const LogisticsSchema = z
 export default function LogisticsInfo() {
   const { formData, updateForm } = useFormStore();
 
+  // Setting the default time as the value as soon as component loads
+  useEffect(() => {
+    const updates: Partial<FormData> = {};
+
+    if (!formData.arrivalTime || formData.arrivalTime === "") {
+      updates.arrivalTime = "10:00";
+    }
+    if (!formData.departureTime || formData.departureTime === "") {
+      updates.departureTime = "18:00";
+    }
+    if (Object.keys(updates).length > 0) {
+      updateForm(updates);
+    }
+  }, []);
+
   const checkRequired = (data: FormData) => {
     const parsed = LogisticsSchema.safeParse(data);
 
@@ -83,6 +98,12 @@ export default function LogisticsInfo() {
   // Arrival & Departure Date open state
   const [openArrivalDate, setOpenArrivalDate] = useState(false);
   const [openDepartureDate, setOpenDepartureDate] = useState(false);
+
+  // Arrival & Departure month states so we can open the calendar back up at saved month
+  const [arrivalMonth, setArrivalMonth] = useState<Date | undefined>(undefined);
+  const [departureMonth, setDepartureMonth] = useState<Date | undefined>(
+    undefined,
+  );
 
   return (
     <div className="mb-5 bg-white rounded-lg shadow-sm p-6">
@@ -116,7 +137,17 @@ export default function LogisticsInfo() {
                 <FieldLabel htmlFor="arrival-date">Arrival Date *</FieldLabel>
                 <Popover
                   open={openArrivalDate}
-                  onOpenChange={setOpenArrivalDate}
+                  onOpenChange={(isOpenArrival) => {
+                    setOpenArrivalDate(isOpenArrival);
+
+                    if (isOpenArrival) {
+                      if (formData.arrivalDate) {
+                        setArrivalMonth(formData.arrivalDate);
+                      } else {
+                        setArrivalMonth(undefined);
+                      }
+                    }
+                  }}
                 >
                   <PopoverTrigger asChild>
                     <Button
@@ -137,6 +168,8 @@ export default function LogisticsInfo() {
                     <Calendar
                       mode="single"
                       selected={formData.arrivalDate}
+                      month={arrivalMonth}
+                      onMonthChange={setArrivalMonth}
                       captionLayout="dropdown"
                       disabled={{ before: new Date() }}
                       onSelect={(date) => {
@@ -167,7 +200,7 @@ export default function LogisticsInfo() {
                 <Input
                   type="time"
                   id="arrival-time"
-                  defaultValue={formData.arrivalTime.toString() || "00:00"}
+                  defaultValue={formData.arrivalTime.toString() || "10:00"}
                   onChange={(e) =>
                     debouncedFormUpdate("arrivalTime", e.target.value)
                   }
@@ -290,7 +323,17 @@ export default function LogisticsInfo() {
                 </FieldLabel>
                 <Popover
                   open={openDepartureDate}
-                  onOpenChange={setOpenDepartureDate}
+                  onOpenChange={(isOpenDeparture) => {
+                    setOpenDepartureDate(isOpenDeparture);
+
+                    if (isOpenDeparture) {
+                      if (formData.departureDate) {
+                        setDepartureMonth(formData.departureDate);
+                      } else {
+                        setDepartureMonth(undefined);
+                      }
+                    }
+                  }}
                 >
                   <PopoverTrigger asChild>
                     <Button
@@ -311,6 +354,8 @@ export default function LogisticsInfo() {
                     <Calendar
                       mode="single"
                       selected={formData.departureDate}
+                      month={departureMonth}
+                      onMonthChange={setDepartureMonth}
                       captionLayout="dropdown"
                       disabled={{ before: formData.arrivalDate || new Date() }}
                       onSelect={(date) => {
@@ -343,7 +388,7 @@ export default function LogisticsInfo() {
                 <Input
                   type="time"
                   id="departure-time"
-                  defaultValue={formData.departureTime.toString() || "00:00"}
+                  defaultValue={formData.departureTime.toString() || "18:00"}
                   onChange={(e) =>
                     debouncedFormUpdate("departureTime", e.target.value)
                   }
