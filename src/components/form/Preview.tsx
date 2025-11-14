@@ -283,57 +283,67 @@ export default function Preview() {
           </Card>
         )}
 
-        {showAccom && (
-          <Card>
-            <CardHeader>
-              <CardTitle>Accommodation</CardTitle>
-            </CardHeader>
+        <Card>
+          <CardHeader>
+            <CardTitle>Accommodation</CardTitle>
+          </CardHeader>
 
-            <CardContent className="grid grid-cols-2 gap-y-3">
-              <Info
-                label="Check-In"
-                value={`${fmt(formData.checkInDate)} ${formData.checkInTime || ""}`}
-              />
-              <Info
-                label="Check-Out"
-                value={`${fmt(formData.checkOutDate)} ${formData.checkOutTime || ""}`}
-              />
+          <CardContent className="grid grid-cols-2 gap-y-3">
+            {showAccom ? (
+              <>
+                <Info
+                  label="Check-In"
+                  value={`${fmt(formData.checkInDate)} ${formData.checkInTime || ""}`}
+                />
+                <Info
+                  label="Check-Out"
+                  value={`${fmt(formData.checkOutDate)} ${formData.checkOutTime || ""}`}
+                />
 
-              <Info
-                label="Male Members Staying"
-                value={formData.accomMaleMembers.toString()}
-              />
-              <Info
-                label="Female Members Staying"
-                value={formData.accomFemaleMembers.toString()}
-              />
+                <Info
+                  label="Male Members Staying"
+                  value={formData.accomMaleMembers.toString()}
+                />
+                <Info
+                  label="Female Members Staying"
+                  value={formData.accomFemaleMembers.toString()}
+                />
 
-              {/* Male staying */}
-              {formData.accomMaleMembers > 0 && (
-                <div>
-                  <h4 className="font-semibold mb-2">Male Members Staying</h4>
-                  {formData.maleDetails.map((m, i) => (
-                    <div key={i} className="text-sm">
-                      {i + 1}. {m.name} ({m.phone || "—"})
-                    </div>
-                  ))}
-                </div>
-              )}
+                {formData.accomMaleMembers === 0 && formData.accomFemaleMembers === 0 && (
+                  <p className="col-span-2 text-sm text-muted-foreground">
+                    Accommodation chosen for student only.
+                  </p>
+                )}
 
-              {/* Female staying */}
-              {formData.accomFemaleMembers > 0 && (
-                <div>
-                  <h4 className="font-semibold mb-2">Female Members Staying</h4>
-                  {formData.femaleDetails.map((m, i) => (
-                    <div key={i} className="text-sm">
-                      {i + 1}. {m.name} ({m.phone || "—"})
-                    </div>
-                  ))}
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        )}
+                {/* Male staying */}
+                {formData.accomMaleMembers > 0 && (
+                  <div>
+                    <h4 className="font-semibold mb-2">Male Members Staying</h4>
+                    {formData.maleDetails.map((m, i) => (
+                      <div key={i} className="text-sm">
+                        {i + 1}. {m.name} ({m.phone || "—"})
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Female staying */}
+                {formData.accomFemaleMembers > 0 && (
+                  <div>
+                    <h4 className="font-semibold mb-2">Female Members Staying</h4>
+                    {formData.femaleDetails.map((m, i) => (
+                      <div key={i} className="text-sm">
+                        {i + 1}. {m.name} ({m.phone || "—"})
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
+            ) : (
+              <p className="col-span-2 text-muted-foreground">No accommodation needed.</p>
+            )}
+          </CardContent>
+        </Card>
       </div>
     </>
   );
