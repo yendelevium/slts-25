@@ -15,7 +15,7 @@ export interface FormData {
   gender: String;
   district: String;
   samithi: String;
-  yearOfJoining: String;
+  yearOfJoining: number;
   dateOfJoining: Date | undefined;
   foodAllergies: String;
 
@@ -85,7 +85,7 @@ const useFormStore = create<FormStore>()(
         gender: "",
         district: "",
         samithi: "",
-        yearOfJoining: "",
+        yearOfJoining: 0,
         dateOfJoining: undefined,
         foodAllergies: "",
 
@@ -146,7 +146,7 @@ const useFormStore = create<FormStore>()(
             gender: "",
             district: "",
             samithi: "",
-            yearOfJoining: "",
+            yearOfJoining: 0,
             dateOfJoining: undefined,
             foodAllergies: "",
 
@@ -212,6 +212,7 @@ const useFormStore = create<FormStore>()(
 
           // Same fr numbers also
           const numbers = [
+            "yearOfJoining",
             "numMaleMembers",
             "numFemaleMembers",
             "accomMaleMembers",
