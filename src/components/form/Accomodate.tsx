@@ -19,7 +19,7 @@ import {
 import { Button } from "../ui/button";
 
 import { Slider } from "@/components/ui/slider";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { type FormData, useFormStore } from "@/store/formStore";
 import debouncedUpdate from "@/utils/debounce";
 import { z } from "zod";
@@ -108,6 +108,21 @@ const AccommodationSchema = z.union([
 
 export default function Accomodate() {
   const { formData, updateForm } = useFormStore();
+
+  // Setting the default time as the value as soon as component loads
+  useEffect(() => {
+    const updates: Partial<FormData> = {};
+    
+    if (!formData.checkInTime || formData.checkInTime === "") {
+      updates.checkInTime = "10:00";
+    }
+    if (!formData.checkOutTime || formData.checkOutTime === "") {
+      updates.checkOutTime = "18:00";
+    }
+    if (Object.keys(updates).length > 0) {
+      updateForm(updates);
+    }
+  }, []);
 
   const checkRequired = (data: FormData) => {
     const parsed = AccommodationSchema.safeParse(data);
@@ -456,7 +471,7 @@ export default function Accomodate() {
                     <Input
                       type="time"
                       id="checkin-time"
-                      defaultValue={formData.checkInTime.toString() || "00:00"}
+                      defaultValue={formData.checkInTime.toString() || "10:00"}
                       onChange={(e) =>
                         debouncedFormUpdate("checkInTime", e.target.value)
                       }
@@ -549,7 +564,7 @@ export default function Accomodate() {
                     <Input
                       type="time"
                       id="checkout-time"
-                      defaultValue={formData.checkOutTime.toString() || "00:00"}
+                      defaultValue={formData.checkOutTime.toString() || "18:00"}
                       onChange={(e) =>
                         debouncedFormUpdate("checkOutTime", e.target.value)
                       }

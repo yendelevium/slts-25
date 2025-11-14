@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/field";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -54,6 +54,21 @@ export const LogisticsSchema = z
 
 export default function LogisticsInfo() {
   const { formData, updateForm } = useFormStore();
+
+  // Setting the default time as the value as soon as component loads
+  useEffect(() => {
+    const updates: Partial<FormData> = {};
+    
+    if (!formData.arrivalTime || formData.arrivalTime === "") {
+      updates.arrivalTime = "10:00";
+    }
+    if (!formData.departureTime || formData.departureTime === "") {
+      updates.departureTime = "18:00";
+    }
+    if (Object.keys(updates).length > 0) {
+      updateForm(updates);
+    }
+  }, []);
 
   const checkRequired = (data: FormData) => {
     const parsed = LogisticsSchema.safeParse(data);
@@ -185,7 +200,7 @@ export default function LogisticsInfo() {
                 <Input
                   type="time"
                   id="arrival-time"
-                  defaultValue={formData.arrivalTime.toString() || "00:00"}
+                  defaultValue={formData.arrivalTime.toString() || "10:00"}
                   onChange={(e) =>
                     debouncedFormUpdate("arrivalTime", e.target.value)
                   }
@@ -373,7 +388,7 @@ export default function LogisticsInfo() {
                 <Input
                   type="time"
                   id="departure-time"
-                  defaultValue={formData.departureTime.toString() || "00:00"}
+                  defaultValue={formData.departureTime.toString() || "18:00"}
                   onChange={(e) =>
                     debouncedFormUpdate("departureTime", e.target.value)
                   }
