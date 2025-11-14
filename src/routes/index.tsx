@@ -103,7 +103,7 @@ function App() {
                 }
                 className="cursor-pointer"
               >
-                SUBMIT FORM
+                REGISTER
               </Button>
             )}
           </div>
@@ -154,7 +154,7 @@ function App() {
               }
               className="cursor-pointer"
             >
-              SUBMIT FORM
+              REGISTER
             </Button>
           )}
         </div>

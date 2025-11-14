@@ -313,7 +313,7 @@ export default function StudentInfo() {
                     className="w-[var(--radix-popover-trigger-width)] justify-between font-normal"
                   >
                     {formData.dob
-                      ? formData.dob.toLocaleDateString()
+                      ? formData.dob.toLocaleDateString("en-IN")
                       : "Select date"}
                     <CalendarIcon />
                   </Button>
@@ -438,7 +438,7 @@ export default function StudentInfo() {
                     className="w-[var(--radix-popover-trigger-width)] justify-between font-normal"
                   >
                     {formData.dateOfJoining
-                      ? formData.dateOfJoining.toLocaleDateString()
+                      ? formData.dateOfJoining.toLocaleDateString("en-IN")
                       : "Select date"}
                     <CalendarIcon />
                   </Button>

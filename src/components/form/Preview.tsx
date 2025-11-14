@@ -27,7 +27,7 @@ export default function Preview() {
 
   return (
     <>
-      <div className="space-y-8">
+      <div className="space-y-4">
         <Card>
           <CardHeader>
             <CardTitle>Student Information</CardTitle>
@@ -52,7 +52,7 @@ export default function Preview() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Contestant Information</CardTitle>
+            <CardTitle>Event Participation</CardTitle>
           </CardHeader>
 
           <CardContent className="grid grid-cols-2 gap-y-3">
@@ -223,7 +223,7 @@ export default function Preview() {
               </>
             )}
 
-            <div className="col-span-2 my-1" />
+            <div className="col-span-2 border-t-1 border-gray-300/70 my-1" />
 
             <Info label="Departure Date" value={fmt(formData.departureDate)} />
             <Info

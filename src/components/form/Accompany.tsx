@@ -238,7 +238,7 @@ export default function Accompany() {
                         <FieldLabel htmlFor="poc-name">Name *</FieldLabel>
                         <Input
                           type="text"
-                          placeholder="Yash"
+                          placeholder="POC Name"
                           id="poc-name"
                           defaultValue={formData.pocName.toString()}
                           onChange={(e) =>

@@ -304,7 +304,7 @@ export default function Accomodate() {
                         </div>
                       )}
                     <FieldLabel htmlFor="male-acoompany">
-                      Number of male members: {formData.accomMaleMembers}
+                      Number of male members needing accomodation: {formData.accomMaleMembers}
                     </FieldLabel>
                     <Slider
                       defaultValue={[formData.accomMaleMembers]}
@@ -338,7 +338,7 @@ export default function Accomodate() {
                         </div>
                       )}
                     <FieldLabel htmlFor="female-acoompany">
-                      Number of female members: {formData.accomFemaleMembers}
+                      Number of female members needing accommodation: {formData.accomFemaleMembers}
                     </FieldLabel>
                     <Slider
                       defaultValue={[formData.accomFemaleMembers]}
