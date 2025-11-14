@@ -12,6 +12,22 @@ export default function Preview() {
 
   const fmt = (date?: Date) => (date ? date.toLocaleDateString("en-IN") : "—");
 
+  const fmtYesNo = (value?: string) => {
+    if (!value) return "—";
+    if (value === "yes") return "Yes";
+    if (value === "no") return "No";
+    return value;
+  };
+
+  // formatting the event names to show (removing hyphens and capitalising)
+  const fmtEventName = (value?: string) => {
+    if (!value || value === "none") return "—";
+    return value
+      .split("-")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
+
   const showAccompany = formData.adultsAccompanying === "yes";
   const showAccom = formData.needAccommodation === "yes";
 
@@ -27,7 +43,7 @@ export default function Preview() {
 
   return (
     <>
-      <div className="space-y-8">
+      <div className="space-y-4">
         <Card>
           <CardHeader>
             <CardTitle>Student Information</CardTitle>
@@ -52,7 +68,7 @@ export default function Preview() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Contestant Information</CardTitle>
+            <CardTitle>Event Participation</CardTitle>
           </CardHeader>
 
           <CardContent className="grid grid-cols-2 gap-y-3">
@@ -64,7 +80,7 @@ export default function Preview() {
                   !individualChoice2 && (
                     <Info
                       label="Devotional Singing"
-                      value={devotionalSinging.toString()}
+                      value={fmtYesNo(devotionalSinging.toString())}
                     />
                   )}
 
@@ -75,11 +91,11 @@ export default function Preview() {
                     <>
                       <Info
                         label="Devotional Singing"
-                        value={devotionalSinging.toString()}
+                        value={fmtYesNo(devotionalSinging.toString())}
                       />
                       <Info
                         label="Individual Event 1"
-                        value={individualChoice1.toString()}
+                        value={fmtEventName(individualChoice1.toString())}
                       />
                     </>
                   )}
@@ -90,7 +106,7 @@ export default function Preview() {
                   !individualChoice2 && (
                     <Info
                       label="Individual Event 1"
-                      value={individualChoice1.toString()}
+                      value={fmtEventName(individualChoice1.toString())}
                     />
                   )}
 
@@ -101,11 +117,11 @@ export default function Preview() {
                     <>
                       <Info
                         label="Individual Event 1"
-                        value={individualChoice1.toString()}
+                        value={fmtEventName(individualChoice1.toString())}
                       />
                       <Info
                         label="Individual Event 2"
-                        value={individualChoice2.toString()}
+                        value={fmtEventName(individualChoice2.toString())}
                       />
                     </>
                   )}
@@ -122,14 +138,14 @@ export default function Preview() {
                     {/* EVENT 1 → ALWAYS quiz */}
                     <Info
                       label="Individual Event 1"
-                      value={participateInQuizDrawing.toString()}
+                      value={fmtEventName(participateInQuizDrawing.toString())}
                     />
 
                     {/* If they ALSO picked an individualChoice1, show as Event 2 */}
                     {individualChoice1 && individualChoice1 !== "none" && (
                       <Info
                         label="Individual Event 2"
-                        value={individualChoice1.toString()}
+                        value={fmtEventName(individualChoice1.toString())}
                       />
                     )}
                   </>
@@ -143,14 +159,18 @@ export default function Preview() {
                         <>
                           <Info
                             label="Group Event"
-                            value={participateInGroupEvent.toString()}
+                            value={fmtEventName(
+                              participateInGroupEvent.toString(),
+                            )}
                           />
 
                           {individualChoice1 &&
                             individualChoice1 !== "none" && (
                               <Info
                                 label="Individual Event 1"
-                                value={individualChoice1.toString()}
+                                value={fmtEventName(
+                                  individualChoice1.toString(),
+                                )}
                               />
                             )}
                         </>
@@ -162,14 +182,14 @@ export default function Preview() {
                         {individualChoice1 && individualChoice1 !== "none" && (
                           <Info
                             label="Individual Event 1"
-                            value={individualChoice1.toString()}
+                            value={fmtEventName(individualChoice1.toString())}
                           />
                         )}
 
                         {individualChoice2 && individualChoice2 !== "none" && (
                           <Info
                             label="Individual Event 2"
-                            value={individualChoice2.toString()}
+                            value={fmtEventName(individualChoice2.toString())}
                           />
                         )}
                       </>
@@ -184,7 +204,7 @@ export default function Preview() {
                 {/* If quiz = YES */}
                 {(participateInQuizDrawing === "yes" ||
                   participateInQuizDrawing === "quiz") && (
-                  <Info label="Individual Event 1" value="quiz" />
+                  <Info label="Individual Event 1" value="Quiz" />
                 )}
 
                 {/* If quiz = NO → show nothing */}
@@ -208,7 +228,10 @@ export default function Preview() {
               label="Arrival Time"
               value={formData.arrivalTime.toString() || "—"}
             />
-            <Info label="Need Pickup" value={formData.needPickup.toString()} />
+            <Info
+              label="Need Pickup"
+              value={fmtYesNo(formData.needPickup.toString())}
+            />
 
             {formData.needPickup === "yes" && (
               <>
@@ -223,14 +246,17 @@ export default function Preview() {
               </>
             )}
 
-            <div className="col-span-2 my-1" />
+            <div className="col-span-2 border-t-1 border-gray-300/70 my-1" />
 
             <Info label="Departure Date" value={fmt(formData.departureDate)} />
             <Info
               label="Departure Time"
               value={formData.departureTime.toString() || "—"}
             />
-            <Info label="Need Drop" value={formData.needDrop.toString()} />
+            <Info
+              label="Need Drop"
+              value={fmtYesNo(formData.needDrop.toString())}
+            />
 
             {formData.needDrop === "yes" && (
               <>
@@ -283,57 +309,72 @@ export default function Preview() {
           </Card>
         )}
 
-        {showAccom && (
-          <Card>
-            <CardHeader>
-              <CardTitle>Accommodation</CardTitle>
-            </CardHeader>
+        <Card>
+          <CardHeader>
+            <CardTitle>Accommodation</CardTitle>
+          </CardHeader>
 
-            <CardContent className="grid grid-cols-2 gap-y-3">
-              <Info
-                label="Check-In"
-                value={`${fmt(formData.checkInDate)} ${formData.checkInTime || ""}`}
-              />
-              <Info
-                label="Check-Out"
-                value={`${fmt(formData.checkOutDate)} ${formData.checkOutTime || ""}`}
-              />
+          <CardContent className="grid grid-cols-2 gap-y-3">
+            {showAccom ? (
+              <>
+                <Info
+                  label="Check-In"
+                  value={`${fmt(formData.checkInDate)} ${formData.checkInTime || ""}`}
+                />
+                <Info
+                  label="Check-Out"
+                  value={`${fmt(formData.checkOutDate)} ${formData.checkOutTime || ""}`}
+                />
 
-              <Info
-                label="Male Members Staying"
-                value={formData.accomMaleMembers.toString()}
-              />
-              <Info
-                label="Female Members Staying"
-                value={formData.accomFemaleMembers.toString()}
-              />
+                <Info
+                  label="Male Members Staying"
+                  value={formData.accomMaleMembers.toString()}
+                />
+                <Info
+                  label="Female Members Staying"
+                  value={formData.accomFemaleMembers.toString()}
+                />
 
-              {/* Male staying */}
-              {formData.accomMaleMembers > 0 && (
-                <div>
-                  <h4 className="font-semibold mb-2">Male Members Staying</h4>
-                  {formData.maleDetails.map((m, i) => (
-                    <div key={i} className="text-sm">
-                      {i + 1}. {m.name} ({m.phone || "—"})
-                    </div>
-                  ))}
-                </div>
-              )}
+                {formData.accomMaleMembers === 0 &&
+                  formData.accomFemaleMembers === 0 && (
+                    <p className="col-span-2 text-sm text-muted-foreground">
+                      Accommodation chosen for student only.
+                    </p>
+                  )}
 
-              {/* Female staying */}
-              {formData.accomFemaleMembers > 0 && (
-                <div>
-                  <h4 className="font-semibold mb-2">Female Members Staying</h4>
-                  {formData.femaleDetails.map((m, i) => (
-                    <div key={i} className="text-sm">
-                      {i + 1}. {m.name} ({m.phone || "—"})
-                    </div>
-                  ))}
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        )}
+                {/* Male staying */}
+                {formData.accomMaleMembers > 0 && (
+                  <div>
+                    <h4 className="font-semibold mb-2">Male Members Staying</h4>
+                    {formData.maleDetails.map((m, i) => (
+                      <div key={i} className="text-sm">
+                        {i + 1}. {m.name} ({m.phone || "—"})
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Female staying */}
+                {formData.accomFemaleMembers > 0 && (
+                  <div>
+                    <h4 className="font-semibold mb-2">
+                      Female Members Staying
+                    </h4>
+                    {formData.femaleDetails.map((m, i) => (
+                      <div key={i} className="text-sm">
+                        {i + 1}. {m.name} ({m.phone || "—"})
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
+            ) : (
+              <p className="col-span-2 text-muted-foreground">
+                No accommodation needed.
+              </p>
+            )}
+          </CardContent>
+        </Card>
       </div>
     </>
   );

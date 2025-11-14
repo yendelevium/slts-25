@@ -156,6 +156,8 @@ export default function StudentInfo() {
             } else {
               updated.devotionalSinging = "";
               updated.participateInQuizDrawing = "";
+              updated.individualChoice1 = "";
+              updated.individualChoice2 = "";
             }
 
             updated.nextSectionEnable[1] = false;
@@ -167,6 +169,8 @@ export default function StudentInfo() {
             devotionalSinging: updated.devotionalSinging,
             participateInQuizDrawing: updated.participateInQuizDrawing,
             participateInGroupEvent: updated.participateInGroupEvent,
+            individualChoice1: updated.individualChoice1,
+            individualChoice2: updated.individualChoice2,
             nextSectionEnable: updated.nextSectionEnable,
           });
           checkRequired(updated); // pass updated state
@@ -313,7 +317,7 @@ export default function StudentInfo() {
                     className="w-[var(--radix-popover-trigger-width)] justify-between font-normal"
                   >
                     {formData.dob
-                      ? formData.dob.toLocaleDateString()
+                      ? formData.dob.toLocaleDateString("en-IN")
                       : "Select date"}
                     <CalendarIcon />
                   </Button>
@@ -438,7 +442,7 @@ export default function StudentInfo() {
                     className="w-[var(--radix-popover-trigger-width)] justify-between font-normal"
                   >
                     {formData.dateOfJoining
-                      ? formData.dateOfJoining.toLocaleDateString()
+                      ? formData.dateOfJoining.toLocaleDateString("en-IN")
                       : "Select date"}
                     <CalendarIcon />
                   </Button>
