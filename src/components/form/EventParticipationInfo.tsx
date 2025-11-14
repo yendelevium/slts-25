@@ -42,7 +42,7 @@ export const EventsSchema = z
       if (data.participateInQuizDrawing === "none") {
         if (data.participateInGroupEvent.length === 0) return false;
         if (
-          data.participateInGroupEvent !== "none" &&
+          data.participateInGroupEvent === "none" &&
           data.individualChoice1.length === 0
         ) {
           return false;
@@ -462,6 +462,13 @@ export default function EventParticipationInfo() {
               <>
                 {/* Quiz or Drawing Participation Field */}
                 <Field>
+                  {formData.showErrors &&
+                    formData.participateInQuizDrawing == "" && (
+                      <div className="text-red-600 text-sm">
+                        Please indicate whether you want to participate in Quiz
+                        or Drawing
+                      </div>
+                    )}
                   <FieldLabel>
                     Do you want to participate in Quiz or Drawing? *
                   </FieldLabel>
@@ -518,6 +525,14 @@ export default function EventParticipationInfo() {
                 {/* Group Event Field (shown only if participant doesn't participate in quiz/drawing as grp events not allowed with quiz/drawing)*/}
                 {formData.participateInQuizDrawing === "none" && (
                   <Field>
+                    {formData.showErrors &&
+                      formData.participateInQuizDrawing == "none" &&
+                      formData.participateInGroupEvent == "" && (
+                        <div className="text-red-600 text-sm">
+                          Please indicate whether you want to participate in a
+                          Group Event
+                        </div>
+                      )}
                     <FieldLabel>
                       Please select the Group Event you would like to
                       participate in: *
@@ -592,6 +607,14 @@ export default function EventParticipationInfo() {
                   formData.participateInQuizDrawing !== "none") ||
                   formData.participateInGroupEvent !== "") && (
                   <Field>
+                    {formData.showErrors &&
+                      formData.participateInGroupEvent == "none" &&
+                      formData.participateInQuizDrawing == "none" &&
+                      formData.individualChoice1 == "" && (
+                        <div className="text-red-600 text-sm">
+                          You have to choose atleast 1 indiviual event
+                        </div>
+                      )}
                     <FieldLabel>
                       Please select the Individual Event you would like to
                       participate in:{" "}
@@ -905,6 +928,13 @@ export default function EventParticipationInfo() {
               <>
                 {/* Quiz Participation Field*/}
                 <Field>
+                  {formData.showErrors &&
+                    formData.participateInQuizDrawing == "" && (
+                      <div className="text-red-600 text-sm">
+                        Please indicate whether you want to participate in Quiz
+                        or Drawing
+                      </div>
+                    )}
                   <FieldLabel>Do you want to participate in Quiz? *</FieldLabel>
 
                   <RadioGroup
