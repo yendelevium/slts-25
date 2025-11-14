@@ -85,6 +85,7 @@ function App() {
                   formData.nextSectionEnable[formData.sectionNumber] == false
                 ) {
                   updateForm({ showErrors: true });
+                  window.scrollTo({ top: 0, behavior: "smooth" });
                 } else {
                   updateForm({ sectionNumber: formData.sectionNumber + 1 });
                 }
