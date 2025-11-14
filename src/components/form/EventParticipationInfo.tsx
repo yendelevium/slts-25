@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 import { z } from "zod";
+import { Button } from "../ui/button";
 
 export const EventsSchema = z
   .object({
@@ -26,7 +27,11 @@ export const EventsSchema = z
     // Group 1 validation
     if (data.group === "1") {
       return (
-        data.devotionalSinging.length > 0 && data.individualChoice1.length > 0
+        (data.devotionalSinging == "yes" &&
+          data.individualChoice1.length > 0) ||
+        data.devotionalSinging == "yes" ||
+        data.individualChoice1.length > 0 ||
+        (data.individualChoice1.length > 0 && data.individualChoice2.length > 0)
       );
     }
 
@@ -43,10 +48,13 @@ export const EventsSchema = z
           return false;
         }
       }
+
+      // Participating in more than 2 events
       if (
         (data.participateInQuizDrawing === "quiz" ||
           data.participateInQuizDrawing === "drawing") &&
-        data.individualChoice1.length === 0
+        data.individualChoice1.length === 1 &&
+        data.individualChoice2.length === 1
       ) {
         return false;
       }
@@ -142,125 +150,149 @@ export default function EventParticipationInfo() {
                 </Field>
 
                 {/* Individual Event Choice 1 Field*/}
-                <Field>
-                  <FieldLabel>
-                    Please select the Individual Event you would like to
-                    participate in: *
-                  </FieldLabel>
-
-                  <RadioGroup
-                    value={formData.individualChoice1.toString()}
-                    onValueChange={(val) => {
-                      if (
-                        (val === "bhajans" || val === "tamizh-chants") &&
-                        formData.devotionalSinging === "no"
-                      ) {
-                        toast.error(
-                          "Bhajans and Tamizh Chants can't be chosen together. The other option has been cleared automatically.",
-                          {
-                            action: {
-                              label: "Close",
-                              onClick: () => {},
+                {formData.devotionalSinging && (
+                  <Field>
+                    <FieldLabel>
+                      Please select the Individual Event you would like to
+                      participate in:{" "}
+                      {formData.devotionalSinging === "no" ? "*" : "(Optional)"}
+                    </FieldLabel>
+                    <RadioGroup
+                      value={formData.individualChoice1.toString()}
+                      onValueChange={(val) => {
+                        if (
+                          (val === "bhajans" || val === "tamizh-chants") &&
+                          formData.devotionalSinging === "no"
+                        ) {
+                          toast.error(
+                            "Bhajans and Tamizh Chants can't be chosen together. The other option has been cleared automatically.",
+                            {
+                              action: {
+                                label: "Close",
+                                onClick: () => {},
+                              },
                             },
-                          },
-                        );
-                      }
-                      console.log(val);
-                      if (
-                        (val === "bhajans" &&
-                          formData.individualChoice2 === "tamizh-chants") ||
-                        (val === "tamizh-chants" &&
-                          formData.individualChoice2 === "bhajans")
-                      ) {
-                        const updated = {
-                          ...formData,
-                          individualChoice1: val,
-                          individualChoice2: "",
-                        };
-                        updateForm({
-                          individualChoice1: val,
-                          individualChoice2: "",
-                        });
-                        checkRequired(updated);
-                      } else {
-                        const updated = {
-                          ...formData,
-                          individualChoice1: val,
-                        };
-                        updateForm({ individualChoice1: val });
-                        checkRequired(updated);
-                      }
-                    }}
-                  >
-                    {formData.individualChoice2 !== "tamizh-chants" &&
-                      formData.individualChoice2 !== "bhajans" && (
+                          );
+                        }
+                        console.log(val);
+                        if (
+                          (val === "bhajans" &&
+                            formData.individualChoice2 === "tamizh-chants") ||
+                          (val === "tamizh-chants" &&
+                            formData.individualChoice2 === "bhajans")
+                        ) {
+                          const updated = {
+                            ...formData,
+                            individualChoice1: val,
+                            individualChoice2: "",
+                          };
+                          updateForm({
+                            individualChoice1: val,
+                            individualChoice2: "",
+                          });
+                          checkRequired(updated);
+                        } else {
+                          const updated = {
+                            ...formData,
+                            individualChoice1: val,
+                          };
+                          updateForm({ individualChoice1: val });
+                          checkRequired(updated);
+                        }
+                      }}
+                    >
+                      {formData.individualChoice2 !== "tamizh-chants" &&
+                        formData.individualChoice2 !== "bhajans" && (
+                          <div className="flex items-center gap-3">
+                            <RadioGroupItem
+                              value="bhajans"
+                              id="bhajans-choice1"
+                            />
+                            <Label htmlFor="bhajans-choice1">Bhajans</Label>
+                          </div>
+                        )}
+                      {formData.individualChoice2 !== "slokas" && (
                         <div className="flex items-center gap-3">
-                          <RadioGroupItem
-                            value="bhajans"
-                            id="bhajans-choice1"
-                          />
-                          <Label htmlFor="bhajans-choice1">Bhajans</Label>
+                          <RadioGroupItem value="slokas" id="slokas-choice1" />
+                          <Label htmlFor="slokas-choice1">Slokas</Label>
                         </div>
                       )}
-                    {formData.individualChoice2 !== "slokas" && (
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem value="slokas" id="slokas-choice1" />
-                        <Label htmlFor="slokas-choice1">Slokas</Label>
-                      </div>
-                    )}
-                    {formData.individualChoice2 !== "vedam-chanting" && (
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem
-                          value="vedam-chanting"
-                          id="vedam-chanting-choice1"
-                        />
-                        <Label htmlFor="vedam-chanting-choice1">
-                          Vedam Chanting
-                        </Label>
-                      </div>
-                    )}
-                    {formData.individualChoice2 !== "story-telling-english" && (
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem
-                          value="story-telling-english"
-                          id="story-telling-english-choice1"
-                        />
-                        <Label htmlFor="story-telling-english-choice1">
-                          Story Telling (English)
-                        </Label>
-                      </div>
-                    )}
-                    {formData.individualChoice2 !== "story-telling-tamizh" && (
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem
-                          value="story-telling-tamizh"
-                          id="story-telling-tamizh-choice1"
-                        />
-                        <Label htmlFor="story-telling-tamizh-choice1">
-                          Story Telling (Tamizh)
-                        </Label>
-                      </div>
-                    )}
-                    {formData.individualChoice2 !== "drawing" && (
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem value="drawing" id="drawing-choice1" />
-                        <Label htmlFor="drawing-choice1">Drawing</Label>
-                      </div>
-                    )}
-                    {formData.individualChoice2 !== "bhajans" &&
-                      formData.individualChoice2 !== "tamizh-chants" && (
+                      {formData.individualChoice2 !== "vedam-chanting" && (
                         <div className="flex items-center gap-3">
                           <RadioGroupItem
-                            value="tamizh-chants"
-                            id="tamizh-chants-choice1"
+                            value="vedam-chanting"
+                            id="vedam-chanting-choice1"
                           />
-                          <Label htmlFor="tamizh-chants-choice1">
-                            Tamizh Chants
+                          <Label htmlFor="vedam-chanting-choice1">
+                            Vedam Chanting
                           </Label>
                         </div>
                       )}
-                  </RadioGroup>
-                </Field>
+                      {formData.individualChoice2 !==
+                        "story-telling-english" && (
+                        <div className="flex items-center gap-3">
+                          <RadioGroupItem
+                            value="story-telling-english"
+                            id="story-telling-english-choice1"
+                          />
+                          <Label htmlFor="story-telling-english-choice1">
+                            Story Telling (English)
+                          </Label>
+                        </div>
+                      )}
+                      {formData.individualChoice2 !==
+                        "story-telling-tamizh" && (
+                        <div className="flex items-center gap-3">
+                          <RadioGroupItem
+                            value="story-telling-tamizh"
+                            id="story-telling-tamizh-choice1"
+                          />
+                          <Label htmlFor="story-telling-tamizh-choice1">
+                            Story Telling (Tamizh)
+                          </Label>
+                        </div>
+                      )}
+                      {formData.individualChoice2 !== "drawing" && (
+                        <div className="flex items-center gap-3">
+                          <RadioGroupItem
+                            value="drawing"
+                            id="drawing-choice1"
+                          />
+                          <Label htmlFor="drawing-choice1">Drawing</Label>
+                        </div>
+                      )}
+                      {formData.individualChoice2 !== "bhajans" &&
+                        formData.individualChoice2 !== "tamizh-chants" && (
+                          <div className="flex items-center gap-3">
+                            <RadioGroupItem
+                              value="tamizh-chants"
+                              id="tamizh-chants-choice1"
+                            />
+                            <Label htmlFor="tamizh-chants-choice1">
+                              Tamizh Chants
+                            </Label>
+                          </div>
+                        )}
+                    </RadioGroup>
+                    <FieldLabel>
+                      {formData.devotionalSinging == "yes" && (
+                        <Button
+                          variant={"outline"}
+                          onClick={() => {
+                            updateForm({ individualChoice1: "" });
+                            checkRequired({
+                              ...formData,
+                              individualChoice1: "",
+                            });
+                          }}
+                          size="sm"
+                        >
+                          Clear Selection for Individual Event 1
+                        </Button>
+                      )}
+                    </FieldLabel>
+                  </Field>
+                )}
 
                 {/* Individual Event Choice 2 Field (shown only if participant doesn't participate in Devotional Singing)*/}
                 {formData.devotionalSinging === "no" && (
@@ -384,6 +416,18 @@ export default function EventParticipationInfo() {
                           </div>
                         )}
                     </RadioGroup>
+                    <FieldLabel>
+                      <Button
+                        variant={"outline"}
+                        onClick={() => {
+                          updateForm({ individualChoice2: "" });
+                          checkRequired({ ...formData, individualChoice2: "" });
+                        }}
+                        size="sm"
+                      >
+                        Clear Selection for Individual Event 2
+                      </Button>
+                    </FieldLabel>
                   </Field>
                 )}
               </>
