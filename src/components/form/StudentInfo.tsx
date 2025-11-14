@@ -135,6 +135,7 @@ export default function StudentInfo() {
   const [calendarMonth, setCalendarMonth] = useState<Date | undefined>(
     undefined,
   );
+  const [dobMonth, setDobMonth] = useState<Date | undefined>(undefined);
 
   const groupElementsJSX = ["1", "2", "3", "4"].map((group) => {
     return (
@@ -314,7 +315,20 @@ export default function StudentInfo() {
                   </div>
                 )}
               <FieldLabel htmlFor="dob">Date of Birth *</FieldLabel>
-              <Popover open={open} onOpenChange={setOpen}>
+              <Popover
+                open={open}
+                onOpenChange={(isOpen) => {
+                  setOpen(isOpen);
+
+                  if (isOpen) {
+                    if (formData.dob) {
+                      setDobMonth(formData.dob);
+                    } else {
+                      setDobMonth(undefined);
+                    }
+                  }
+                }}
+              >
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
@@ -336,6 +350,8 @@ export default function StudentInfo() {
                   <Calendar
                     mode="single"
                     selected={formData.dob}
+                    month={dobMonth}
+                    onMonthChange={setDobMonth}
                     captionLayout="dropdown"
                     disabled={{ after: new Date() }}
                     onSelect={(date) => {
