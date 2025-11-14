@@ -331,12 +331,20 @@ export default function Preview() {
             {showAccom ? (
               <>
                 <Info
-                  label="Check-In"
-                  value={`${fmt(formData.checkInDate)} ${formData.checkInTime || ""}`}
+                  label="Check-In Date"
+                  value={fmt(formData.checkInDate)}
                 />
                 <Info
-                  label="Check-Out"
-                  value={`${fmt(formData.checkOutDate)} ${formData.checkOutTime || ""}`}
+                  label="Check-In Time"
+                  value={formData.checkInTime.toString() || "—"}
+                />
+                <Info
+                  label="Check-Out Date"
+                  value={fmt(formData.checkOutDate)}
+                />
+                <Info
+                  label="Check-Out Time"
+                  value={formData.checkOutTime.toString() || "—"}
                 />
 
                 <Info
