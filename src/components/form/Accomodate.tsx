@@ -135,9 +135,13 @@ export default function Accomodate() {
     checkRequired(updated);
   });
 
-  // Arrival & Departure Date open state
+  // Checkin & Checkout Date open state
   const [openCheckinDate, setOpenCheckinDate] = useState(false);
   const [openCheckOutDate, setOpenCheckOutDate] = useState(false);
+
+  // Checkin & Checkout month states so we can open the calendar back up at saved month
+  const [checkinMonth, setCheckinMonth] = useState<Date | undefined>(undefined);
+  const [checkoutMonth, setCheckoutMonth] = useState<Date | undefined>(undefined);
 
   const maleMemberElementsJSX = Array.from({
     length: formData.accomMaleMembers,
@@ -382,7 +386,17 @@ export default function Accomodate() {
                     </FieldLabel>
                     <Popover
                       open={openCheckinDate}
-                      onOpenChange={setOpenCheckinDate}
+                      onOpenChange={(isOpenCheckin) => {
+                        setOpenCheckinDate(isOpenCheckin);
+
+                        if (isOpenCheckin) {
+                          if (formData.checkInDate) {
+                            setCheckinMonth(formData.checkInDate);
+                          } else {
+                            setCheckinMonth(undefined);
+                          }
+                        }
+                      }}
                     >
                       <PopoverTrigger asChild>
                         <Button
@@ -403,6 +417,8 @@ export default function Accomodate() {
                         <Calendar
                           mode="single"
                           selected={formData.checkInDate}
+                          month={checkinMonth}
+                          onMonthChange={setCheckinMonth}
                           captionLayout="dropdown"
                           disabled={{
                             before: formData.arrivalDate || new Date(),
@@ -459,11 +475,21 @@ export default function Accomodate() {
                         </div>
                       )}
                     <FieldLabel htmlFor="checkout-date">
-                      Departure Date *
+                      Check-out Date *
                     </FieldLabel>
                     <Popover
                       open={openCheckOutDate}
-                      onOpenChange={setOpenCheckOutDate}
+                      onOpenChange={(isOpenCheckout) => {
+                        setOpenCheckOutDate(isOpenCheckout);
+
+                        if (isOpenCheckout) {
+                          if (formData.checkOutDate) {
+                            setCheckoutMonth(formData.checkOutDate);
+                          } else {
+                            setCheckoutMonth(undefined);
+                          }
+                        }
+                      }}
                     >
                       <PopoverTrigger asChild>
                         <Button
@@ -484,6 +510,8 @@ export default function Accomodate() {
                         <Calendar
                           mode="single"
                           selected={formData.checkOutDate}
+                          month={checkoutMonth}
+                          onMonthChange={setCheckoutMonth}
                           captionLayout="dropdown"
                           disabled={{
                             before: formData.checkInDate || new Date(),
@@ -514,7 +542,7 @@ export default function Accomodate() {
                         </div>
                       )}
                     <FieldLabel htmlFor="checkout-time">
-                      Departure Time *
+                      Check-out Time *
                     </FieldLabel>
                     <Input
                       type="time"

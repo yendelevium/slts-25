@@ -21,6 +21,7 @@ import { Input } from "@/components/ui/input";
 import { type FormData, useFormStore } from "@/store/formStore";
 import debouncedUpdate from "@/utils/debounce";
 import { z } from "zod";
+import { set } from "date-fns";
 
 export const LogisticsSchema = z
   .object({
@@ -84,6 +85,10 @@ export default function LogisticsInfo() {
   const [openArrivalDate, setOpenArrivalDate] = useState(false);
   const [openDepartureDate, setOpenDepartureDate] = useState(false);
 
+  // Arrival & Departure month states so we can open the calendar back up at saved month
+  const [arrivalMonth, setArrivalMonth] = useState<Date | undefined>(undefined);
+  const [departureMonth, setDepartureMonth] = useState<Date | undefined>(undefined);
+
   return (
     <div className="mb-5 bg-white rounded-lg shadow-sm p-6">
       {formData.showErrors &&
@@ -116,7 +121,17 @@ export default function LogisticsInfo() {
                 <FieldLabel htmlFor="arrival-date">Arrival Date *</FieldLabel>
                 <Popover
                   open={openArrivalDate}
-                  onOpenChange={setOpenArrivalDate}
+                  onOpenChange={(isOpenArrival) => {
+                    setOpenArrivalDate(isOpenArrival);
+
+                    if (isOpenArrival) {
+                      if (formData.arrivalDate) { 
+                        setArrivalMonth(formData.arrivalDate);
+                      } else {
+                        setArrivalMonth(undefined);
+                      }
+                    }
+                  }}
                 >
                   <PopoverTrigger asChild>
                     <Button
@@ -137,6 +152,8 @@ export default function LogisticsInfo() {
                     <Calendar
                       mode="single"
                       selected={formData.arrivalDate}
+                      month={arrivalMonth}
+                      onMonthChange={setArrivalMonth}
                       captionLayout="dropdown"
                       disabled={{ before: new Date() }}
                       onSelect={(date) => {
@@ -290,7 +307,17 @@ export default function LogisticsInfo() {
                 </FieldLabel>
                 <Popover
                   open={openDepartureDate}
-                  onOpenChange={setOpenDepartureDate}
+                  onOpenChange={(isOpenDeparture) => {
+                    setOpenDepartureDate(isOpenDeparture);
+
+                    if (isOpenDeparture) {
+                      if (formData.departureDate) {
+                        setDepartureMonth(formData.departureDate);
+                      } else {
+                        setDepartureMonth(undefined);
+                      }
+                    }
+                  }}
                 >
                   <PopoverTrigger asChild>
                     <Button
@@ -311,6 +338,8 @@ export default function LogisticsInfo() {
                     <Calendar
                       mode="single"
                       selected={formData.departureDate}
+                      month={departureMonth}
+                      onMonthChange={setDepartureMonth}
                       captionLayout="dropdown"
                       disabled={{ before: formData.arrivalDate || new Date() }}
                       onSelect={(date) => {
