@@ -839,10 +839,7 @@ export default function EventParticipationInfo() {
                           )}
                         {formData.individualChoice1 !== "slokas" && (
                           <div className="flex items-center gap-3">
-                            <RadioGroupItem
-                              value="slokas"
-                              id="slokas-choice2"
-                            />
+                            <RadioGroupItem value="slokas" id="slokas-choice2" />
                             <Label htmlFor="slokas-choice2">Slokas</Label>
                           </div>
                         )}
@@ -881,13 +878,26 @@ export default function EventParticipationInfo() {
                             </Label>
                           </div>
                         )}
-                        {formData.individualChoice1 !== "drawing" && (
+                        {formData.individualChoice1 !== "elocution-english" && (
                           <div className="flex items-center gap-3">
                             <RadioGroupItem
-                              value="drawing"
-                              id="drawing-choice2"
+                              value="elocution-english"
+                              id="elocution-english-choice2"
                             />
-                            <Label htmlFor="drawing-choice2">Drawing</Label>
+                            <Label htmlFor="elocution-english-choice2">
+                              Elocution (English)
+                            </Label>
+                          </div>
+                        )}
+                        {formData.individualChoice1 !== "elocution-tamizh" && (
+                          <div className="flex items-center gap-3">
+                            <RadioGroupItem
+                              value="elocution-tamizh"
+                              id="elocution-tamizh-choice2"
+                            />
+                            <Label htmlFor="elocution-tamizh-choice2">
+                              Elocution (Tamizh)
+                            </Label>
                           </div>
                         )}
                         {formData.individualChoice1 !== "bhajans" &&
