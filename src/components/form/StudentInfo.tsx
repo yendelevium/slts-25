@@ -32,16 +32,18 @@ import { type FormData, useFormStore } from "@/store/formStore";
 import debouncedUpdate from "@/utils/debounce";
 
 import { z } from "zod";
+import { toast } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
 
 const Section1Schema = z
   .object({
     group: z.string().min(1),
-    name: z.string().min(1),
+    name: z.string().trim().min(1),
     dob: z.date(),
     gender: z.string().min(1),
     district: z.string().min(1),
-    samithi: z.string().min(1),
-    yearOfJoining: z.string().min(1),
+    samithi: z.string().trim().min(1),
+    yearOfJoining: z.number().min(2000).max(2025),
 
     // ADD THIS:
     hasGivenGroup2Exam: z.string().optional(),
@@ -130,6 +132,9 @@ export default function StudentInfo() {
   // DOB state
   const [open, setOpen] = useState(false);
   const [openJoin, setOpenJoin] = useState(false);
+  const [calendarMonth, setCalendarMonth] = useState<Date | undefined>(
+    undefined,
+  );
 
   const groupElementsJSX = ["1", "2", "3", "4"].map((group) => {
     return (
@@ -420,12 +425,36 @@ export default function StudentInfo() {
                 type="number"
                 placeholder="2019"
                 id="year-bv"
-                defaultValue={formData.yearOfJoining.toString()}
+                defaultValue={formData.yearOfJoining}
                 min={2000}
                 max={2025}
-                onChange={(e) =>
-                  debouncedFormUpdate("yearOfJoining", e.target.value)
-                }
+                onChange={(e) => {
+                  const year = Number(e.target.value);
+                  debouncedFormUpdate("yearOfJoining", year);
+
+                  // If old date invalid → reset it
+                  if (
+                    formData.dateOfJoining &&
+                    formData.dateOfJoining.getFullYear() !== year
+                  ) {
+                    {
+                      formData.dateOfJoining &&
+                        toast.info(
+                          "Date of Joining Balvikas reset as it was outside the selected year",
+                          {
+                            action: {
+                              label: "OK",
+                              onClick: () => {},
+                            },
+                          },
+                        );
+                    }
+                    updateForm({ dateOfJoining: undefined });
+                  }
+
+                  // Auto-scroll ONLY once on year change
+                  setCalendarMonth(new Date(year, 0, 1));
+                }}
               />
             </Field>
 
@@ -434,7 +463,21 @@ export default function StudentInfo() {
               <FieldLabel htmlFor="date-bv">
                 Date of Joining Balvikas (Optional)
               </FieldLabel>
-              <Popover open={openJoin} onOpenChange={setOpenJoin}>
+              <Popover
+                open={openJoin}
+                onOpenChange={(open) => {
+                  setOpenJoin(open);
+
+                  if (open) {
+                    if (formData.dateOfJoining) {
+                      setCalendarMonth(formData.dateOfJoining); // reopen at last date
+                    } else if (formData.yearOfJoining) {
+                      setCalendarMonth(new Date(formData.yearOfJoining, 0, 1)); // scroll to year
+                    }
+                    // else leave undefined → default behavior
+                  }
+                }}
+              >
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
@@ -456,11 +499,21 @@ export default function StudentInfo() {
                   <Calendar
                     mode="single"
                     selected={formData.dateOfJoining}
+                    month={calendarMonth}
+                    onMonthChange={setCalendarMonth}
                     captionLayout="dropdown"
                     onSelect={(date) => {
                       updateForm({ dateOfJoining: date });
                       setOpenJoin(false);
                     }}
+                    disabled={
+                      formData.yearOfJoining
+                        ? {
+                            before: new Date(formData.yearOfJoining, 0, 1),
+                            after: new Date(formData.yearOfJoining, 11, 31),
+                          }
+                        : undefined
+                    }
                   />
                 </PopoverContent>
               </Popover>
@@ -484,6 +537,7 @@ export default function StudentInfo() {
           </FieldGroup>
         </FieldSet>
       </FieldGroup>
+      <Toaster />
     </div>
   );
 }
