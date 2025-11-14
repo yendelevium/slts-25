@@ -10,13 +10,14 @@ import { useFormStore } from "@/store/formStore";
 export default function Preview() {
   const { formData } = useFormStore();
 
-  const fmtDate = (date?: Date) => (date ? date.toLocaleDateString("en-IN") : "—");
+  const fmtDate = (date?: Date) =>
+    date ? date.toLocaleDateString("en-IN") : "—";
 
   const fmtTime = (time?: string) => {
     if (!time) return "—";
-    const [hours, minutes] = time.split(':');
+    const [hours, minutes] = time.split(":");
     const hour = parseInt(hours, 10);
-    const ampm = hour >= 12 ? 'PM' : 'AM';
+    const ampm = hour >= 12 ? "PM" : "AM";
     const displayHour = hour % 12 || 12;
     return `${displayHour}:${minutes} ${ampm}`;
   };
@@ -270,7 +271,10 @@ export default function Preview() {
 
             <div className="col-span-2 border-t-1 border-gray-300/70 my-1" />
 
-            <Info label="Departure Date" value={fmtDate(formData.departureDate)} />
+            <Info
+              label="Departure Date"
+              value={fmtDate(formData.departureDate)}
+            />
             <Info
               label="Departure Time"
               value={fmtTime(formData.departureTime.toString())}

@@ -141,7 +141,9 @@ export default function Accomodate() {
 
   // Checkin & Checkout month states so we can open the calendar back up at saved month
   const [checkinMonth, setCheckinMonth] = useState<Date | undefined>(undefined);
-  const [checkoutMonth, setCheckoutMonth] = useState<Date | undefined>(undefined);
+  const [checkoutMonth, setCheckoutMonth] = useState<Date | undefined>(
+    undefined,
+  );
 
   const maleMemberElementsJSX = Array.from({
     length: formData.accomMaleMembers,

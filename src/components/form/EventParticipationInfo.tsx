@@ -839,7 +839,10 @@ export default function EventParticipationInfo() {
                           )}
                         {formData.individualChoice1 !== "slokas" && (
                           <div className="flex items-center gap-3">
-                            <RadioGroupItem value="slokas" id="slokas-choice2" />
+                            <RadioGroupItem
+                              value="slokas"
+                              id="slokas-choice2"
+                            />
                             <Label htmlFor="slokas-choice2">Slokas</Label>
                           </div>
                         )}

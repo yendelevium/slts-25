@@ -21,7 +21,6 @@ import { Input } from "@/components/ui/input";
 import { type FormData, useFormStore } from "@/store/formStore";
 import debouncedUpdate from "@/utils/debounce";
 import { z } from "zod";
-import { set } from "date-fns";
 
 export const LogisticsSchema = z
   .object({
@@ -87,7 +86,9 @@ export default function LogisticsInfo() {
 
   // Arrival & Departure month states so we can open the calendar back up at saved month
   const [arrivalMonth, setArrivalMonth] = useState<Date | undefined>(undefined);
-  const [departureMonth, setDepartureMonth] = useState<Date | undefined>(undefined);
+  const [departureMonth, setDepartureMonth] = useState<Date | undefined>(
+    undefined,
+  );
 
   return (
     <div className="mb-5 bg-white rounded-lg shadow-sm p-6">
@@ -125,7 +126,7 @@ export default function LogisticsInfo() {
                     setOpenArrivalDate(isOpenArrival);
 
                     if (isOpenArrival) {
-                      if (formData.arrivalDate) { 
+                      if (formData.arrivalDate) {
                         setArrivalMonth(formData.arrivalDate);
                       } else {
                         setArrivalMonth(undefined);
