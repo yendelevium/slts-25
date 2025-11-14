@@ -11,14 +11,14 @@ export default function Preview() {
   const { formData } = useFormStore();
 
   const fmt = (date?: Date) => (date ? date.toLocaleDateString("en-IN") : "—");
-  
+
   const fmtYesNo = (value?: string) => {
     if (!value) return "—";
     if (value === "yes") return "Yes";
     if (value === "no") return "No";
     return value;
   };
-  
+
   // formatting the event names to show (removing hyphens and capitalising)
   const fmtEventName = (value?: string) => {
     if (!value || value === "none") return "—";
@@ -159,14 +159,18 @@ export default function Preview() {
                         <>
                           <Info
                             label="Group Event"
-                            value={fmtEventName(participateInGroupEvent.toString())}
+                            value={fmtEventName(
+                              participateInGroupEvent.toString(),
+                            )}
                           />
 
                           {individualChoice1 &&
                             individualChoice1 !== "none" && (
                               <Info
                                 label="Individual Event 1"
-                                value={fmtEventName(individualChoice1.toString())}
+                                value={fmtEventName(
+                                  individualChoice1.toString(),
+                                )}
                               />
                             )}
                         </>
@@ -224,7 +228,10 @@ export default function Preview() {
               label="Arrival Time"
               value={formData.arrivalTime.toString() || "—"}
             />
-            <Info label="Need Pickup" value={fmtYesNo(formData.needPickup.toString())} />
+            <Info
+              label="Need Pickup"
+              value={fmtYesNo(formData.needPickup.toString())}
+            />
 
             {formData.needPickup === "yes" && (
               <>
@@ -246,7 +253,10 @@ export default function Preview() {
               label="Departure Time"
               value={formData.departureTime.toString() || "—"}
             />
-            <Info label="Need Drop" value={fmtYesNo(formData.needDrop.toString())} />
+            <Info
+              label="Need Drop"
+              value={fmtYesNo(formData.needDrop.toString())}
+            />
 
             {formData.needDrop === "yes" && (
               <>
