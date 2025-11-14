@@ -250,8 +250,11 @@ export default function Accompany() {
 
                     <div className="flex-1">
                       <Field>
-                        <FieldLabel htmlFor="poc-phone">
-                          Phone (no leading zero)*
+                        <FieldLabel
+                          htmlFor="poc-phone"
+                          className="tracking-tight"
+                        >
+                          Phone - no leading 0 *
                         </FieldLabel>
                         <Input
                           type="text"
