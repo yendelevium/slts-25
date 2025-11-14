@@ -148,6 +148,12 @@ export default function EventParticipationInfo() {
                       ) {
                         toast.error(
                           "Bhajans and Tamizh Chants can't be chosen together. The other option has been cleared automatically.",
+                          {
+                            action: {
+                              label: "Close",
+                              onClick: () => {},
+                            },
+                          },
                         );
                       }
                       console.log(val);
@@ -261,6 +267,12 @@ export default function EventParticipationInfo() {
                         if (val === "bhajans" || val === "tamizh-chants") {
                           toast.error(
                             "Bhajans and Tamizh Chants can't be chosen together. The other option has been cleared automatically.",
+                            {
+                              action: {
+                                label: "Close",
+                                onClick: () => {},
+                              },
+                            },
                           );
                         }
                         console.log(val);
@@ -515,6 +527,12 @@ export default function EventParticipationInfo() {
                       ) {
                         toast.error(
                           "Bhajans and Tamizh Chants can't be chosen together. The other option has been cleared automatically.",
+                          {
+                            action: {
+                              label: "Close",
+                              onClick: () => {},
+                            },
+                          },
                         );
                       }
                       if (
@@ -645,6 +663,12 @@ export default function EventParticipationInfo() {
                           if (val === "bhajans" || val === "tamizh-chants") {
                             toast.error(
                               "Bhajans and Tamizh Chants can't be chosen together. The other option has been cleared automatically.",
+                              {
+                                action: {
+                                  label: "Close",
+                                  onClick: () => {},
+                                },
+                              },
                             );
                           }
                           if (
