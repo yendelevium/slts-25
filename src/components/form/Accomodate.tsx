@@ -148,7 +148,7 @@ export default function Accomodate() {
       <div key={index} className="flex gap-4 mt-3">
         <div className="flex-1">
           <FieldLabel htmlFor={`male-name-${index}`} className="tracking-tight">
-            Member(M) {index + 1} Name *
+            M{index + 1} Name *
           </FieldLabel>
           <Input
             id={`male-name-${index}`}
@@ -165,7 +165,9 @@ export default function Accomodate() {
         </div>
 
         <div className="flex-1">
-          <FieldLabel htmlFor={`male-phone-${index}`}>Phone</FieldLabel>
+          <FieldLabel htmlFor={`male-phone-${index}`}>
+            M{index + 1} Phone
+          </FieldLabel>
           <Input
             id={`male-phone-${index}`}
             placeholder="Enter phone number"
@@ -195,7 +197,7 @@ export default function Accomodate() {
             htmlFor={`female-name-${index}`}
             className="tracking-tight"
           >
-            Member(F) {index + 1} Name *
+            F{index + 1} Name *
           </FieldLabel>
           <Input
             id={`female-name-${index}`}
@@ -212,7 +214,9 @@ export default function Accomodate() {
         </Field>
 
         <Field className="flex-1">
-          <FieldLabel htmlFor={`female-phone-${index}`}>Phone</FieldLabel>
+          <FieldLabel htmlFor={`female-phone-${index}`}>
+            F{index + 1} Phone
+          </FieldLabel>
           <Input
             id={`female-phone-${index}`}
             placeholder="Enter phone number"
