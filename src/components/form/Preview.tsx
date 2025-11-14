@@ -63,6 +63,19 @@ export default function Preview() {
               label="Year of Joining"
               value={formData.yearOfJoining.toString()}
             />
+            {formData.dateOfJoining && (
+              <Info
+                label="Date of Joining"
+                value={fmt(formData.dateOfJoining)}
+              />
+            )}
+
+            {formData.foodAllergies && (
+              <Info
+                label="Food Allergies"
+                value={formData.foodAllergies.toString()}
+              />
+            )}
           </CardContent>
         </Card>
 
