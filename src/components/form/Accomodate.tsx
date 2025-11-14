@@ -112,7 +112,7 @@ export default function Accomodate() {
   // Setting the default time as the value as soon as component loads
   useEffect(() => {
     const updates: Partial<FormData> = {};
-    
+
     if (!formData.checkInTime || formData.checkInTime === "") {
       updates.checkInTime = "10:00";
     }

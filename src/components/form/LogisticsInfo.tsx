@@ -58,7 +58,7 @@ export default function LogisticsInfo() {
   // Setting the default time as the value as soon as component loads
   useEffect(() => {
     const updates: Partial<FormData> = {};
-    
+
     if (!formData.arrivalTime || formData.arrivalTime === "") {
       updates.arrivalTime = "10:00";
     }
