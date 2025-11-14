@@ -10,7 +10,16 @@ import { useFormStore } from "@/store/formStore";
 export default function Preview() {
   const { formData } = useFormStore();
 
-  const fmt = (date?: Date) => (date ? date.toLocaleDateString("en-IN") : "—");
+  const fmtDate = (date?: Date) => (date ? date.toLocaleDateString("en-IN") : "—");
+
+  const fmtTime = (time?: string) => {
+    if (!time) return "—";
+    const [hours, minutes] = time.split(':');
+    const hour = parseInt(hours, 10);
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    const displayHour = hour % 12 || 12;
+    return `${displayHour}:${minutes} ${ampm}`;
+  };
 
   const fmtYesNo = (value?: string) => {
     if (!value) return "—";
@@ -53,7 +62,7 @@ export default function Preview() {
             <Info label="Name" value={formData.name.toString()} />
             <Info label="Group" value={formData.group.toString()} />
 
-            <Info label="Date of Birth" value={fmt(formData.dob)} />
+            <Info label="Date of Birth" value={fmtDate(formData.dob)} />
             <Info label="Gender" value={formData.gender.toString()} />
 
             <Info label="District" value={formData.district.toString()} />
@@ -66,7 +75,7 @@ export default function Preview() {
             {formData.dateOfJoining && (
               <Info
                 label="Date of Joining"
-                value={fmt(formData.dateOfJoining)}
+                value={fmtDate(formData.dateOfJoining)}
               />
             )}
 
@@ -236,10 +245,10 @@ export default function Preview() {
             <CardTitle>Logistics</CardTitle>
           </CardHeader>
           <CardContent className="grid grid-cols-2 gap-y-3">
-            <Info label="Arrival Date" value={fmt(formData.arrivalDate)} />
+            <Info label="Arrival Date" value={fmtDate(formData.arrivalDate)} />
             <Info
               label="Arrival Time"
-              value={formData.arrivalTime.toString() || "—"}
+              value={fmtTime(formData.arrivalTime.toString())}
             />
             <Info
               label="Need Pickup"
@@ -261,10 +270,10 @@ export default function Preview() {
 
             <div className="col-span-2 border-t-1 border-gray-300/70 my-1" />
 
-            <Info label="Departure Date" value={fmt(formData.departureDate)} />
+            <Info label="Departure Date" value={fmtDate(formData.departureDate)} />
             <Info
               label="Departure Time"
-              value={formData.departureTime.toString() || "—"}
+              value={fmtTime(formData.departureTime.toString())}
             />
             <Info
               label="Need Drop"
@@ -332,19 +341,19 @@ export default function Preview() {
               <>
                 <Info
                   label="Check-In Date"
-                  value={fmt(formData.checkInDate)}
+                  value={fmtDate(formData.checkInDate)}
                 />
                 <Info
                   label="Check-In Time"
-                  value={formData.checkInTime.toString() || "—"}
+                  value={fmtTime(formData.checkInTime.toString())}
                 />
                 <Info
                   label="Check-Out Date"
-                  value={fmt(formData.checkOutDate)}
+                  value={fmtDate(formData.checkOutDate)}
                 />
                 <Info
                   label="Check-Out Time"
-                  value={formData.checkOutTime.toString() || "—"}
+                  value={fmtTime(formData.checkOutTime.toString())}
                 />
 
                 <Info
