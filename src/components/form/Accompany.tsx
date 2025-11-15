@@ -134,7 +134,8 @@ export default function Accompany() {
                 htmlFor="adults-accompanying"
                 className="tracking-tight"
               >
-                Are adults/non-participating siblings accompanying? <span className="text-red-600">*</span>
+                Are adults/non-participating siblings accompanying?{" "}
+                <span className="text-red-600">*</span>
               </FieldLabel>
 
               <RadioGroup
@@ -171,6 +172,9 @@ export default function Accompany() {
                   <FieldLabel htmlFor="male-acoompany">
                     Number of male members: {formData.numMaleMembers}
                   </FieldLabel>
+                  <FieldDescription>
+                    Move the slider from left to right to increase the count
+                  </FieldDescription>
                   <Slider
                     defaultValue={[formData.numMaleMembers]}
                     max={10}
@@ -190,6 +194,9 @@ export default function Accompany() {
                   <FieldLabel htmlFor="female-acoompany">
                     Number of female members: {formData.numFemaleMembers}
                   </FieldLabel>
+                  <FieldDescription>
+                    Move the slider from left to right to increase the count
+                  </FieldDescription>
                   <Slider
                     defaultValue={[formData.numFemaleMembers]}
                     max={10}
@@ -236,7 +243,9 @@ export default function Accompany() {
                     <div className="flex-1">
                       {/* Name, Phone */}
                       <Field>
-                        <FieldLabel htmlFor="poc-name">Name <span className="text-red-600">*</span></FieldLabel>
+                        <FieldLabel htmlFor="poc-name">
+                          Name <span className="text-red-600">*</span>
+                        </FieldLabel>
                         <Input
                           type="text"
                           placeholder="POC Name"
@@ -255,7 +264,8 @@ export default function Accompany() {
                           htmlFor="poc-phone"
                           className="tracking-tight"
                         >
-                          Phone-no leading 0<span className="text-red-600">*</span>
+                          Phone (10 digits)
+                          <span className="text-red-600">*</span>
                         </FieldLabel>
                         <Input
                           type="number"
@@ -275,7 +285,9 @@ export default function Accompany() {
 
                   {/* Gender */}
                   <Field>
-                    <FieldLabel htmlFor="gender">Gender <span className="text-red-600">*</span></FieldLabel>
+                    <FieldLabel htmlFor="gender">
+                      Gender <span className="text-red-600">*</span>
+                    </FieldLabel>
                     <div className="flex flex-wrap gap-3">
                       {genderElementsJSX}
                     </div>
@@ -283,7 +295,9 @@ export default function Accompany() {
 
                   {/* Relation */}
                   <Field>
-                    <FieldLabel htmlFor="pocRelation">Relation <span className="text-red-600">*</span></FieldLabel>
+                    <FieldLabel htmlFor="pocRelation">
+                      Relation <span className="text-red-600">*</span>
+                    </FieldLabel>
 
                     <RadioGroup
                       value={formData.pocRelation.toString()}
@@ -322,7 +336,9 @@ export default function Accompany() {
 
                   {/* Age */}
                   <Field>
-                    <FieldLabel htmlFor="poc-age">Age <span className="text-red-600">*</span></FieldLabel>
+                    <FieldLabel htmlFor="poc-age">
+                      Age <span className="text-red-600">*</span>
+                    </FieldLabel>
 
                     <RadioGroup
                       value={formData.pocAge.toString()}

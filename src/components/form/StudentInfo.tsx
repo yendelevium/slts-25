@@ -43,7 +43,7 @@ const Section1Schema = z
     gender: z.string().min(1),
     district: z.string().min(1),
     samithi: z.string().trim().min(1),
-    yearOfJoining: z.number().min(2000).max(2025),
+    yearOfJoining: z.number().max(2025),
 
     // ADD THIS:
     hasGivenGroup2Exam: z.string().optional(),
@@ -55,6 +55,53 @@ const Section1Schema = z
           code: "custom",
           path: ["hasGivenGroup2Exam"],
           message: "Please indicate whether you have passed the Group 2 exam.",
+        });
+      }
+    }
+
+    // Date of joining must be at least DOB + 1 year (basically after ur born)
+    const minYear = data.dob.getFullYear() + 1;
+
+    if (data.yearOfJoining < minYear) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["yearOfJoining"],
+        message: `Year of joining must be at least ${minYear}.`,
+      });
+    }
+
+    // Map groups -> date ranges
+    let rangeMin: Date | null = null;
+    let rangeMax: Date | null = null;
+
+    switch (data.group) {
+      case "1":
+        rangeMin = new Date("2016-12-25");
+        rangeMax = new Date("2020-12-24");
+        break;
+
+      case "2":
+        rangeMin = new Date("2013-12-25");
+        rangeMax = new Date("2016-12-24");
+        break;
+
+      case "3":
+        rangeMin = new Date("2009-12-25");
+        rangeMax = new Date("2013-12-24");
+        break;
+
+      case "4":
+        rangeMin = new Date("2007-12-25");
+        rangeMax = new Date("2009-12-24");
+        break;
+    }
+
+    if (rangeMin && rangeMax) {
+      if (data.dob < rangeMin || data.dob > rangeMax) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["dob"],
+          message: `DOB must be between ${rangeMin.toDateString()} and ${rangeMax.toDateString()} for Group ${data.group}.`,
         });
       }
     }
@@ -137,6 +184,11 @@ export default function StudentInfo() {
   );
   const [dobMonth, setDobMonth] = useState<Date | undefined>(undefined);
 
+  const parsed = Section1Schema.safeParse(formData);
+  const dobError = parsed.success
+    ? null
+    : parsed.error.issues.find((e) => e.path[0] === "dob")?.message;
+
   const groupElementsJSX = ["1", "2", "3", "4"].map((group) => {
     return (
       <Button
@@ -157,7 +209,10 @@ export default function StudentInfo() {
             if (group == "1") {
               updated.participateInQuizDrawing = "";
               updated.participateInGroupEvent = "";
-            } else if (group == "2" || group == "3") {
+            } else if (group == "2") {
+              updated.devotionalSinging = "";
+              updated.participateInQuizDrawing = "";
+            } else if (group == "3") {
               updated.devotionalSinging = "";
             } else {
               updated.devotionalSinging = "";
@@ -246,7 +301,9 @@ export default function StudentInfo() {
                 <div className="text-red-600 text-sm">Group is required</div>
               )}
             <Field>
-              <FieldLabel htmlFor="student-group">Select Group <span className="text-red-600">*</span></FieldLabel>
+              <FieldLabel htmlFor="student-group">
+                Select Group <span className="text-red-600">*</span>
+              </FieldLabel>
 
               <div className="flex flex-wrap gap-3">{groupElementsJSX}</div>
             </Field>
@@ -296,7 +353,9 @@ export default function StudentInfo() {
                 !Section1Schema.shape.name.safeParse(formData.name).success && (
                   <div className="text-red-600 text-sm">Name is required</div>
                 )}
-              <FieldLabel htmlFor="name">Name <span className="text-red-600">*</span></FieldLabel>
+              <FieldLabel htmlFor="name">
+                Name <span className="text-red-600">*</span>
+              </FieldLabel>
               <Input
                 type="text"
                 placeholder="Your Name"
@@ -309,12 +368,15 @@ export default function StudentInfo() {
             {/* DOB */}
             <Field>
               {formData.showErrors &&
-                !Section1Schema.shape.dob.safeParse(formData.dob).success && (
+                (!Section1Schema.shape.dob.safeParse(formData.dob).success ||
+                  dobError) && (
                   <div className="text-red-600 text-sm">
-                    Date of Birth is required
+                    {dobError ? dobError : "Date of Birth is required"}
                   </div>
                 )}
-              <FieldLabel htmlFor="dob">Date of Birth <span className="text-red-600">*</span></FieldLabel>
+              <FieldLabel htmlFor="dob">
+                Date of Birth <span className="text-red-600">*</span>
+              </FieldLabel>
               <Popover
                 open={open}
                 onOpenChange={(isOpen) => {
@@ -375,7 +437,9 @@ export default function StudentInfo() {
                   .success && (
                   <div className="text-red-600 text-sm">Gender is required</div>
                 )}
-              <FieldLabel htmlFor="gender">Gender <span className="text-red-600">*</span></FieldLabel>
+              <FieldLabel htmlFor="gender">
+                Gender <span className="text-red-600">*</span>
+              </FieldLabel>
               <div className="flex flex-wrap gap-3">{genderElementsJSX}</div>
             </Field>
 
@@ -388,7 +452,9 @@ export default function StudentInfo() {
                     District is required
                   </div>
                 )}
-              <FieldLabel htmlFor="district">District <span className="text-red-600">*</span></FieldLabel>
+              <FieldLabel htmlFor="district">
+                District <span className="text-red-600">*</span>
+              </FieldLabel>
               <Select
                 value={formData.district.toString()}
                 onValueChange={(val) => updateForm({ district: val })}
@@ -414,7 +480,9 @@ export default function StudentInfo() {
                     Samithi is required
                   </div>
                 )}
-              <FieldLabel htmlFor="samithi">Samithi <span className="text-red-600">*</span></FieldLabel>
+              <FieldLabel htmlFor="samithi">
+                Samithi <span className="text-red-600">*</span>
+              </FieldLabel>
               <Input
                 type="text"
                 placeholder="Your Samithi"
@@ -427,24 +495,34 @@ export default function StudentInfo() {
             {/* Couldn't find a year only dropdown in SHADCN, might just make it a select button later? */}
             <Field>
               {formData.showErrors &&
-                !Section1Schema.shape.yearOfJoining.safeParse(
+                (!Section1Schema.shape.yearOfJoining.safeParse(
                   formData.yearOfJoining,
-                ).success && (
+                ).success ||
+                  (formData.dob &&
+                    formData.yearOfJoining <=
+                      formData.dob.getFullYear() + 1)) && (
                   <div className="text-red-600 text-sm">
                     {formData.yearOfJoining === 0
                       ? "Year of Joining Balvikas is required"
-                      : "Year must be between 2000 and 2025"}
+                      : `Year must be between ${formData.dob ? formData.dob.getFullYear() + 1 : 2000} and 2025`}
                   </div>
                 )}
               <FieldLabel htmlFor="year-bv">
-                Student's Year of Joining Balvikas <span className="text-red-600">*</span>
+                Student's Year of Joining Balvikas{" "}
+                <span className="text-red-600">*</span>
               </FieldLabel>
               <Input
                 type="number"
                 placeholder="2019"
                 id="year-bv"
-                defaultValue={formData.yearOfJoining}
-                min={2000}
+                defaultValue={
+                  formData.yearOfJoining === 0
+                    ? ""
+                    : formData.yearOfJoining.toString()
+                }
+                min={
+                  formData.dob ? new Date(formData.dob).getFullYear() + 1 : 2000
+                }
                 max={2025}
                 onChange={(e) => {
                   const year = Number(e.target.value);
