@@ -176,7 +176,7 @@ function App() {
                   onSuccess: () => {
                     setToastMsg("Registration successful!");
                     setToastMode("success");
-                    // resetForm();
+                    resetForm();
                   },
                   onError: (e) => {
                     console.log(e);
