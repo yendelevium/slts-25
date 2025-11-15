@@ -57,6 +57,7 @@ bun check
 2. Students participating in Quiz cannot participate in Drawing and vice versa.
 3. Students participating in Quiz or drawing cannot participate in any group event. However, they can participate in any other individual event along with Quiz or Drawing.
 4. If choosing 2 individual events, bhajans AND tamizh chants can't be taken together by a single participant
+5. If a student in group 3 HAS NOT given the group 2 exam -> then that student can ONLY take part in GROUP events
 
 ### Group 4 
 1. Can only take Quiz/No quiz (no point of registering if they aren't gonna take quiz though?)
