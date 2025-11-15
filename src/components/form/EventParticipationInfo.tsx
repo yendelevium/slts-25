@@ -182,10 +182,17 @@ export default function EventParticipationInfo() {
                           devotionalSinging: val,
                           individualChoice2: "",
                         };
+
+                        if (formData.individualChoice1 === "drawing") {
+                          updated.individualChoice1 = "";
+                        }
+
                         updateForm({
                           devotionalSinging: val,
+                          individualChoice1: updated.individualChoice1,
                           individualChoice2: "",
                         });
+
                         warnIfTaken("devotional-singing");
                         checkRequired(updated);
                       } else {
@@ -324,15 +331,16 @@ export default function EventParticipationInfo() {
                           </Label>
                         </div>
                       )}
-                      {formData.individualChoice2 !== "drawing" && (
-                        <div className="flex items-center gap-3">
-                          <RadioGroupItem
-                            value="drawing"
-                            id="drawing-choice1"
-                          />
-                          <Label htmlFor="drawing-choice1">Drawing</Label>
-                        </div>
-                      )}
+                      {formData.individualChoice2 !== "drawing" &&
+                        formData.devotionalSinging === "no" && (
+                          <div className="flex items-center gap-3">
+                            <RadioGroupItem
+                              value="drawing"
+                              id="drawing-choice1"
+                            />
+                            <Label htmlFor="drawing-choice1">Drawing</Label>
+                          </div>
+                        )}
                       {formData.individualChoice2 !== "bhajans" &&
                         formData.individualChoice2 !== "tamizh-chants" && (
                           <div className="flex items-center gap-3">
