@@ -583,73 +583,77 @@ export default function EventParticipationInfo() {
                     </RadioGroup>
                   </Field>
                 )}
-                {formData.group === "3" && (
-                  <Field>
-                    {formData.showErrors &&
-                      formData.participateInQuizDrawing == "" && (
-                        <div className="text-red-600 text-sm">
-                          Please indicate whether you want to participate in
-                          Quiz or Drawing
-                        </div>
-                      )}
-                    <FieldLabel>
-                      Do you want to participate in Quiz or Drawing?{" "}
-                      <span className="text-red-600">*</span>
-                    </FieldLabel>
 
-                    <RadioGroup
-                      value={formData.participateInQuizDrawing.toString()}
-                      onValueChange={(val) => {
-                        console.log(val);
-                        // If quiz/drawing event is chosen, then no group event can be chosen and only 1 other individual event can be chosen
-                        // So, I am resetting the state of participateInGroupEvent and individualChoice2
-                        if (val === "quiz" || val === "drawing") {
-                          const updated = {
-                            ...formData,
-                            participateInQuizDrawing: val,
-                            participateInGroupEvent: "",
-                            individualChoice2: "",
-                          };
-                          updateForm({
-                            participateInQuizDrawing: val,
-                            participateInGroupEvent: "",
-                            individualChoice2: "",
-                          });
-                          checkRequired(updated);
-                        } else {
-                          const updated = {
-                            ...formData,
-                            participateInQuizDrawing: val,
-                          };
-                          updateForm({ participateInQuizDrawing: val });
-                          checkRequired(updated);
-                        }
-                        warnIfTaken(val);
-                      }}
-                    >
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem value="quiz" id="quiz-participate" />
-                        <Label htmlFor="quiz-participate">Quiz</Label>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem
-                          value="drawing"
-                          id="drawing-participate"
-                        />
-                        <Label htmlFor="drawing-participate">Drawing</Label>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem value="none" id="none-participate" />
-                        <Label htmlFor="none-participate">
-                          I don't want to participate in Quiz or Drawing
-                        </Label>
-                      </div>
-                    </RadioGroup>
-                  </Field>
-                )}
+                {formData.group === "3" &&
+                  formData.hasGivenGroup2Exam === "yes" && (
+                    <Field>
+                      {formData.showErrors &&
+                        formData.participateInQuizDrawing == "" && (
+                          <div className="text-red-600 text-sm">
+                            Please indicate whether you want to participate in
+                            Quiz or Drawing
+                          </div>
+                        )}
+                      <FieldLabel>
+                        Do you want to participate in Quiz or Drawing?{" "}
+                        <span className="text-red-600">*</span>
+                      </FieldLabel>
+
+                      <RadioGroup
+                        value={formData.participateInQuizDrawing.toString()}
+                        onValueChange={(val) => {
+                          console.log(val);
+                          // If quiz/drawing event is chosen, then no group event can be chosen and only 1 other individual event can be chosen
+                          // So, I am resetting the state of participateInGroupEvent and individualChoice2
+                          if (val === "quiz" || val === "drawing") {
+                            const updated = {
+                              ...formData,
+                              participateInQuizDrawing: val,
+                              participateInGroupEvent: "",
+                              individualChoice2: "",
+                            };
+                            updateForm({
+                              participateInQuizDrawing: val,
+                              participateInGroupEvent: "",
+                              individualChoice2: "",
+                            });
+                            checkRequired(updated);
+                          } else {
+                            const updated = {
+                              ...formData,
+                              participateInQuizDrawing: val,
+                            };
+                            updateForm({ participateInQuizDrawing: val });
+                            checkRequired(updated);
+                          }
+                          warnIfTaken(val);
+                        }}
+                      >
+                        <div className="flex items-center gap-3">
+                          <RadioGroupItem value="quiz" id="quiz-participate" />
+                          <Label htmlFor="quiz-participate">Quiz</Label>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <RadioGroupItem
+                            value="drawing"
+                            id="drawing-participate"
+                          />
+                          <Label htmlFor="drawing-participate">Drawing</Label>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <RadioGroupItem value="none" id="none-participate" />
+                          <Label htmlFor="none-participate">
+                            I don't want to participate in Quiz or Drawing
+                          </Label>
+                        </div>
+                      </RadioGroup>
+                    </Field>
+                  )}
 
                 {/* Group Event Field (shown only if participant doesn't participate in quiz/drawing as grp events not allowed with quiz/drawing)*/}
-                {formData.participateInQuizDrawing === "none" && (
+                {(formData.participateInQuizDrawing === "none" ||
+                  (formData.group === "3" &&
+                    formData.hasGivenGroup2Exam === "no")) && (
                   <Field>
                     {formData.showErrors &&
                       formData.participateInQuizDrawing == "none" &&
@@ -732,184 +736,193 @@ export default function EventParticipationInfo() {
                 {/* Individual Event Choice 1 Field*/}
                 {((formData.participateInQuizDrawing !== "" &&
                   formData.participateInQuizDrawing !== "none") ||
-                  formData.participateInGroupEvent !== "") && (
-                  <Field>
-                    {formData.showErrors &&
-                      formData.participateInGroupEvent == "none" &&
-                      formData.participateInQuizDrawing == "none" &&
-                      formData.individualChoice1 == "" && (
-                        <div className="text-red-600 text-sm">
-                          You have to choose atleast 1 indiviual event
-                        </div>
-                      )}
-                    <FieldLabel>
-                      Please select the Individual Event you would like to
-                      participate in:{" "}
-                      {formData.participateInGroupEvent == "none" &&
-                      formData.participateInQuizDrawing == "none" ? (
-                        <span className="text-red-600">*</span>
-                      ) : (
-                        "(Optional)"
-                      )}
-                    </FieldLabel>
-
-                    <RadioGroup
-                      value={formData.individualChoice1.toString()}
-                      onValueChange={(val) => {
-                        console.log(val);
-                        if (
-                          (val === "bhajans" || val === "tamizh-chants") &&
-                          formData.participateInGroupEvent === "none"
-                        ) {
-                          toast.error(
-                            "Bhajans and Tamizh Chants can't be chosen together. The other option has been cleared automatically.",
-                            {
-                              action: {
-                                label: "Close",
-                                onClick: () => {},
-                              },
-                            },
-                          );
-                        }
-                        if (
-                          (val === "bhajans" &&
-                            formData.individualChoice2 === "tamizh-chants") ||
-                          (val === "tamizh-chants" &&
-                            formData.individualChoice2 === "bhajans")
-                        ) {
-                          const updated = {
-                            ...formData,
-                            individualChoice1: val,
-                            individualChoice2: "",
-                          };
-                          updateForm({
-                            individualChoice1: val,
-                            individualChoice2: "",
-                          });
-                          checkRequired(updated);
-                        } else {
-                          const updated = {
-                            ...formData,
-                            individualChoice1: val,
-                          };
-                          updateForm({ individualChoice1: val });
-                          checkRequired(updated);
-                        }
-                        warnIfTaken(val);
-                      }}
-                    >
-                      {formData.individualChoice2 !== "tamizh-chants" &&
-                        formData.individualChoice2 !== "bhajans" && (
-                          <div className="flex items-center gap-3">
-                            <RadioGroupItem
-                              value="bhajans"
-                              id="bhajans-choice1"
-                            />
-                            <Label htmlFor="bhajans-choice1">Bhajans</Label>
+                  formData.participateInGroupEvent !== "") &&
+                  (formData.group === "2" ||
+                    (formData.group === "3" &&
+                      formData.hasGivenGroup2Exam === "yes")) && (
+                    <Field>
+                      {formData.showErrors &&
+                        formData.participateInGroupEvent == "none" &&
+                        formData.participateInQuizDrawing == "none" &&
+                        formData.individualChoice1 == "" && (
+                          <div className="text-red-600 text-sm">
+                            You have to choose atleast 1 indiviual event
                           </div>
                         )}
-                      {formData.individualChoice2 !== "slokas" && (
-                        <div className="flex items-center gap-3">
-                          <RadioGroupItem value="slokas" id="slokas-choice1" />
-                          <Label htmlFor="slokas-choice1">Slokas</Label>
-                        </div>
-                      )}
-                      {formData.individualChoice2 !== "vedam-chanting" && (
-                        <div className="flex items-center gap-3">
-                          <RadioGroupItem
-                            value="vedam-chanting"
-                            id="vedam-chanting-choice1"
-                          />
-                          <Label htmlFor="vedam-chanting-choice1">
-                            Vedam Chanting
-                          </Label>
-                        </div>
-                      )}
-                      {formData.individualChoice2 !==
-                        "story-telling-english" && (
-                        <div className="flex items-center gap-3">
-                          <RadioGroupItem
-                            value="story-telling-english"
-                            id="story-telling-english-choice1"
-                          />
-                          <Label htmlFor="story-telling-english-choice1">
-                            Story Telling (English)
-                          </Label>
-                        </div>
-                      )}
-                      {formData.individualChoice2 !==
-                        "story-telling-tamizh" && (
-                        <div className="flex items-center gap-3">
-                          <RadioGroupItem
-                            value="story-telling-tamizh"
-                            id="story-telling-tamizh-choice1"
-                          />
-                          <Label htmlFor="story-telling-tamizh-choice1">
-                            Story Telling (Tamizh)
-                          </Label>
-                        </div>
-                      )}
-                      {formData.individualChoice2 !== "elocution-english" && (
-                        <div className="flex items-center gap-3">
-                          <RadioGroupItem
-                            value="elocution-english"
-                            id="elocution-english-choice1"
-                          />
-                          <Label htmlFor="elocution-english-choice1">
-                            Elocution (English)
-                          </Label>
-                        </div>
-                      )}
-                      {formData.individualChoice2 !== "elocution-tamizh" && (
-                        <div className="flex items-center gap-3">
-                          <RadioGroupItem
-                            value="elocution-tamizh"
-                            id="elocution-tamizh-choice1"
-                          />
-                          <Label htmlFor="elocution-tamizh-choice1">
-                            Elocution (Tamizh)
-                          </Label>
-                        </div>
-                      )}
-                      {formData.individualChoice2 !== "bhajans" &&
-                        formData.individualChoice2 !== "tamizh-chants" && (
+                      <FieldLabel>
+                        Please select the Individual Event you would like to
+                        participate in:{" "}
+                        {formData.participateInGroupEvent == "none" &&
+                        formData.participateInQuizDrawing == "none" ? (
+                          <span className="text-red-600">*</span>
+                        ) : (
+                          "(Optional)"
+                        )}
+                      </FieldLabel>
+
+                      <RadioGroup
+                        value={formData.individualChoice1.toString()}
+                        onValueChange={(val) => {
+                          console.log(val);
+                          if (
+                            (val === "bhajans" || val === "tamizh-chants") &&
+                            formData.participateInGroupEvent === "none"
+                          ) {
+                            toast.error(
+                              "Bhajans and Tamizh Chants can't be chosen together. The other option has been cleared automatically.",
+                              {
+                                action: {
+                                  label: "Close",
+                                  onClick: () => {},
+                                },
+                              },
+                            );
+                          }
+                          if (
+                            (val === "bhajans" &&
+                              formData.individualChoice2 === "tamizh-chants") ||
+                            (val === "tamizh-chants" &&
+                              formData.individualChoice2 === "bhajans")
+                          ) {
+                            const updated = {
+                              ...formData,
+                              individualChoice1: val,
+                              individualChoice2: "",
+                            };
+                            updateForm({
+                              individualChoice1: val,
+                              individualChoice2: "",
+                            });
+                            checkRequired(updated);
+                          } else {
+                            const updated = {
+                              ...formData,
+                              individualChoice1: val,
+                            };
+                            updateForm({ individualChoice1: val });
+                            checkRequired(updated);
+                          }
+                          warnIfTaken(val);
+                        }}
+                      >
+                        {formData.individualChoice2 !== "tamizh-chants" &&
+                          formData.individualChoice2 !== "bhajans" && (
+                            <div className="flex items-center gap-3">
+                              <RadioGroupItem
+                                value="bhajans"
+                                id="bhajans-choice1"
+                              />
+                              <Label htmlFor="bhajans-choice1">Bhajans</Label>
+                            </div>
+                          )}
+                        {formData.individualChoice2 !== "slokas" && (
                           <div className="flex items-center gap-3">
                             <RadioGroupItem
-                              value="tamizh-chants"
-                              id="tamizh-chants-choice1"
+                              value="slokas"
+                              id="slokas-choice1"
                             />
-                            <Label htmlFor="tamizh-chants-choice1">
-                              Tamizh Chants
+                            <Label htmlFor="slokas-choice1">Slokas</Label>
+                          </div>
+                        )}
+                        {formData.individualChoice2 !== "vedam-chanting" && (
+                          <div className="flex items-center gap-3">
+                            <RadioGroupItem
+                              value="vedam-chanting"
+                              id="vedam-chanting-choice1"
+                            />
+                            <Label htmlFor="vedam-chanting-choice1">
+                              Vedam Chanting
                             </Label>
                           </div>
                         )}
-                    </RadioGroup>
-                    <FieldLabel>
-                      {(formData.participateInQuizDrawing == "quiz" ||
-                        formData.participateInQuizDrawing == "drawing" ||
-                        formData.participateInGroupEvent != "none") && (
-                        <Button
-                          variant={"outline"}
-                          onClick={() => {
-                            updateForm({ individualChoice1: "" });
-                            checkRequired({
-                              ...formData,
-                              individualChoice1: "",
-                            });
-                          }}
-                          size="sm"
-                        >
-                          Clear Selection for Individual Event 1
-                        </Button>
-                      )}
-                    </FieldLabel>
-                  </Field>
-                )}
+                        {formData.individualChoice2 !==
+                          "story-telling-english" && (
+                          <div className="flex items-center gap-3">
+                            <RadioGroupItem
+                              value="story-telling-english"
+                              id="story-telling-english-choice1"
+                            />
+                            <Label htmlFor="story-telling-english-choice1">
+                              Story Telling (English)
+                            </Label>
+                          </div>
+                        )}
+                        {formData.individualChoice2 !==
+                          "story-telling-tamizh" && (
+                          <div className="flex items-center gap-3">
+                            <RadioGroupItem
+                              value="story-telling-tamizh"
+                              id="story-telling-tamizh-choice1"
+                            />
+                            <Label htmlFor="story-telling-tamizh-choice1">
+                              Story Telling (Tamizh)
+                            </Label>
+                          </div>
+                        )}
+                        {formData.individualChoice2 !== "elocution-english" && (
+                          <div className="flex items-center gap-3">
+                            <RadioGroupItem
+                              value="elocution-english"
+                              id="elocution-english-choice1"
+                            />
+                            <Label htmlFor="elocution-english-choice1">
+                              Elocution (English)
+                            </Label>
+                          </div>
+                        )}
+                        {formData.individualChoice2 !== "elocution-tamizh" && (
+                          <div className="flex items-center gap-3">
+                            <RadioGroupItem
+                              value="elocution-tamizh"
+                              id="elocution-tamizh-choice1"
+                            />
+                            <Label htmlFor="elocution-tamizh-choice1">
+                              Elocution (Tamizh)
+                            </Label>
+                          </div>
+                        )}
+                        {formData.individualChoice2 !== "bhajans" &&
+                          formData.individualChoice2 !== "tamizh-chants" && (
+                            <div className="flex items-center gap-3">
+                              <RadioGroupItem
+                                value="tamizh-chants"
+                                id="tamizh-chants-choice1"
+                              />
+                              <Label htmlFor="tamizh-chants-choice1">
+                                Tamizh Chants
+                              </Label>
+                            </div>
+                          )}
+                      </RadioGroup>
+                      <FieldLabel>
+                        {(formData.participateInQuizDrawing == "quiz" ||
+                          formData.participateInQuizDrawing == "drawing" ||
+                          formData.participateInGroupEvent != "none") && (
+                          <Button
+                            variant={"outline"}
+                            onClick={() => {
+                              updateForm({ individualChoice1: "" });
+                              checkRequired({
+                                ...formData,
+                                individualChoice1: "",
+                              });
+                            }}
+                            size="sm"
+                          >
+                            Clear Selection for Individual Event 1
+                          </Button>
+                        )}
+                      </FieldLabel>
+                    </Field>
+                  )}
 
                 {/* Individual Event Choice 2 Field (shown only if participant doesn't participate in Devotional Singing)*/}
                 {formData.participateInQuizDrawing === "none" &&
                   formData.participateInGroupEvent === "none" &&
-                  formData.individualChoice1 && (
+                  formData.individualChoice1 &&
+                  (formData.group === "2" ||
+                    (formData.group === "3" &&
+                      formData.hasGivenGroup2Exam === "yes")) && (
                     <Field>
                       <FieldLabel>
                         Please select the 2nd Individual Event you would like to

@@ -129,6 +129,12 @@ export function useAddRegistration() {
           fetchEventsMap(data.district.toString(), data.group.toString()),
       });
 
+      // 2nd line of defense: if group 3 and hasn't given group 2 exam, clear individual choices
+      if (data.group.toString() === "3" && data.hasGivenGroup2Exam === "no") {
+        individualChoice1 = "";
+        individualChoice2 = "";
+      }
+
       // Check for conflicts
       let validity = true;
       let conflictingEvents: string[] = [];
