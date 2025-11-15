@@ -135,7 +135,9 @@ export default function LogisticsInfo() {
                       Arrival Date is required
                     </div>
                   )}
-                <FieldLabel htmlFor="arrival-date">Arrival Date <span className="text-red-600">*</span></FieldLabel>
+                <FieldLabel htmlFor="arrival-date">
+                  Arrival Date <span className="text-red-600">*</span>
+                </FieldLabel>
                 <Popover
                   open={openArrivalDate}
                   onOpenChange={(isOpenArrival) => {
@@ -197,7 +199,9 @@ export default function LogisticsInfo() {
                       Arrival Time is required
                     </div>
                   )}
-                <FieldLabel htmlFor="arrival-time">Arrival Time <span className="text-red-600">*</span></FieldLabel>
+                <FieldLabel htmlFor="arrival-time">
+                  Arrival Time <span className="text-red-600">*</span>
+                </FieldLabel>
                 <Input
                   type="time"
                   id="arrival-time"
@@ -219,7 +223,10 @@ export default function LogisticsInfo() {
                     This field is required
                   </div>
                 )}
-              <FieldLabel>Does the student need pickup facility? <span className="text-red-600">*</span></FieldLabel>
+              <FieldLabel>
+                Does the student need pickup facility?{" "}
+                <span className="text-red-600">*</span>
+              </FieldLabel>
 
               <RadioGroup
                 value={formData.needPickup.toString()}
@@ -272,7 +279,8 @@ export default function LogisticsInfo() {
                       </div>
                     )}
                   <FieldLabel htmlFor="arrival-mode">
-                    Mode of Travel (Arrival) <span className="text-red-600">*</span>
+                    Mode of Travel (Arrival){" "}
+                    <span className="text-red-600">*</span>
                   </FieldLabel>
                   <Input
                     type="text"
@@ -294,7 +302,9 @@ export default function LogisticsInfo() {
                         Pickup Point is required
                       </div>
                     )}
-                  <FieldLabel htmlFor="pickup-point">Pickup Point <span className="text-red-600">*</span></FieldLabel>
+                  <FieldLabel htmlFor="pickup-point">
+                    Pickup Point <span className="text-red-600">*</span>
+                  </FieldLabel>
                   <Input
                     type="text"
                     placeholder="Landmark"
@@ -407,7 +417,10 @@ export default function LogisticsInfo() {
                     This field is required
                   </div>
                 )}
-              <FieldLabel>Does the student need drop facility? <span className="text-red-600">*</span></FieldLabel>
+              <FieldLabel>
+                Does the student need drop facility?{" "}
+                <span className="text-red-600">*</span>
+              </FieldLabel>
 
               <RadioGroup
                 key={formData.needDrop.toString()}
@@ -461,7 +474,8 @@ export default function LogisticsInfo() {
                       </div>
                     )}
                   <FieldLabel htmlFor="departure-mode">
-                    Mode of Travel (Departure) <span className="text-red-600">*</span>
+                    Mode of Travel (Departure){" "}
+                    <span className="text-red-600">*</span>
                   </FieldLabel>
                   <Input
                     type="text"
@@ -483,7 +497,9 @@ export default function LogisticsInfo() {
                         Drop off Point is required
                       </div>
                     )}
-                  <FieldLabel htmlFor="drop-point">Drop off Point <span className="text-red-600">*</span></FieldLabel>
+                  <FieldLabel htmlFor="drop-point">
+                    Drop off Point <span className="text-red-600">*</span>
+                  </FieldLabel>
                   <Input
                     type="text"
                     placeholder="Landmark"

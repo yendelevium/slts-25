@@ -290,7 +290,8 @@ export default function Accomodate() {
                   </div>
                 )}
               <FieldLabel htmlFor="accomodation?">
-                Does the student need accommodation? <span className="text-red-600">*</span>
+                Does the student need accommodation?{" "}
+                <span className="text-red-600">*</span>
               </FieldLabel>
 
               <RadioGroup
