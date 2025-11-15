@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { type FormData } from "@/store/formStore";
 import { db } from "./firebase";
 import { fetchEventsMap } from "./checkSameEvent";
+import { da } from "date-fns/locale";
 
 interface RegisterData {
   // Student Info
@@ -87,6 +88,35 @@ export function useAddRegistration() {
         }
         individualChoice1 = quizChoice;
       }
+
+      // Add gender suffix for individual events (except elocutions & quiz/drawing)
+      const addGenderSuffix = (
+        event: string,
+        gender: string,
+        group: string,
+      ) => {
+        if (group == "1" || group == "4") return event; // No suffix for group 1
+        if (!event) return event;
+
+        // Skip exceptions
+        if (event.includes("elocution")) return event;
+        if (event === "quiz" || event === "drawing") return event;
+
+        const suffix = gender === "Male" ? " - Boys" : " - Girls";
+        return `${event}${suffix}`;
+      };
+
+      // Apply to two individual choices
+      individualChoice1 = addGenderSuffix(
+        individualChoice1.toString(),
+        data.gender.toString(),
+        data.group.toString(),
+      );
+      individualChoice2 = addGenderSuffix(
+        individualChoice2.toString(),
+        data.gender.toString(),
+        data.group.toString(),
+      );
 
       const eventMap = await queryClient.fetchQuery({
         queryKey: ["eventMap", data.district, data.group],

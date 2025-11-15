@@ -43,7 +43,7 @@ const Section1Schema = z
     gender: z.string().min(1),
     district: z.string().min(1),
     samithi: z.string().trim().min(1),
-    yearOfJoining: z.number().min(2000).max(2025),
+    yearOfJoining: z.number().max(2025),
 
     // ADD THIS:
     hasGivenGroup2Exam: z.string().optional(),
@@ -57,6 +57,16 @@ const Section1Schema = z
           message: "Please indicate whether you have passed the Group 2 exam.",
         });
       }
+    }
+
+    const minYear = data.dob.getFullYear() + 1;
+
+    if (data.yearOfJoining < minYear) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["yearOfJoining"],
+        message: `Year of joining must be at least ${minYear}.`,
+      });
     }
   });
 
@@ -461,7 +471,9 @@ export default function StudentInfo() {
                     ? ""
                     : formData.yearOfJoining.toString()
                 }
-                min={2000}
+                min={
+                  formData.dob ? new Date(formData.dob).getFullYear() + 1 : 2000
+                }
                 max={2025}
                 onChange={(e) => {
                   const year = Number(e.target.value);
