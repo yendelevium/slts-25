@@ -8,12 +8,12 @@ interface RegisterData {
   group: String;
   hasGivenGroup2Exam: String;
   name: String;
-  dob: Date | undefined;
+  dob: Date | null;
   gender: String;
   district: String;
   samithi: String;
   yearOfJoining: number;
-  dateOfJoining: Date | undefined;
+  dateOfJoining: Date | null;
   foodAllergies: String;
 
   // Contestant Info
@@ -23,12 +23,12 @@ interface RegisterData {
   passedGroup2Exam: String;
 
   // Logistics
-  arrivalDate: Date | undefined;
+  arrivalDate: Date | null;
   arrivalTime: String;
   needPickup: String;
   arrivalMode: String;
   pickupPoint: String;
-  departureDate: Date | undefined;
+  departureDate: Date | null;
   departureTime: String;
   needDrop: String;
   departureMode: String;
@@ -50,9 +50,9 @@ interface RegisterData {
   accomFemaleMembers: number;
   maleDetails: { name: String; phone: String }[];
   femaleDetails: { name: String; phone: String }[];
-  checkInDate: Date | undefined;
+  checkInDate: Date | null;
   checkInTime: String;
-  checkOutDate: Date | undefined;
+  checkOutDate: Date | null;
   checkOutTime: String;
 }
 
@@ -87,12 +87,13 @@ export function useAddRegistration() {
         group: data.group,
         hasGivenGroup2Exam: data.hasGivenGroup2Exam,
         name: data.name,
-        dob: data.dob,
+        dob: data.dob === undefined ? null : data.dob,
         gender: data.gender,
         district: data.district,
         samithi: data.samithi,
         yearOfJoining: data.yearOfJoining,
-        dateOfJoining: data.dateOfJoining,
+        dateOfJoining:
+          data.dateOfJoining === undefined ? null : data.dateOfJoining,
         foodAllergies: data.foodAllergies,
 
         // Contestant Info
@@ -102,12 +103,13 @@ export function useAddRegistration() {
         passedGroup2Exam: data.passedGroup2Exam,
 
         // Logistics
-        arrivalDate: data.arrivalDate,
+        arrivalDate: data.arrivalDate === undefined ? null : data.arrivalDate,
         arrivalTime: data.arrivalTime,
         needPickup: data.needPickup,
         arrivalMode: data.arrivalMode,
         pickupPoint: data.pickupPoint,
-        departureDate: data.departureDate,
+        departureDate:
+          data.departureDate === undefined ? null : data.departureDate,
         departureTime: data.departureTime,
         needDrop: data.needDrop,
         departureMode: data.departureMode,
@@ -129,9 +131,10 @@ export function useAddRegistration() {
         accomFemaleMembers: data.accomFemaleMembers,
         maleDetails: data.maleDetails,
         femaleDetails: data.femaleDetails,
-        checkInDate: data.checkInDate,
+        checkInDate: data.checkInDate === undefined ? null : data.checkInDate,
         checkInTime: data.checkInTime,
-        checkOutDate: data.checkOutDate,
+        checkOutDate:
+          data.checkOutDate === undefined ? null : data.checkOutDate,
         checkOutTime: data.checkOutTime,
       };
       const docRef = await addDoc(collection(db, "register"), insertData);
