@@ -51,6 +51,7 @@ export default function Accompany() {
 
     const isSection1Valid = parsed.success;
     console.log(isSection1Valid, data);
+    console.log(parsed.error);
     const newArr = [...data.nextSectionEnable];
     newArr[data.sectionNumber] = isSection1Valid;
     if (isSection1Valid) {
@@ -257,12 +258,15 @@ export default function Accompany() {
                           Phone - no leading 0 *
                         </FieldLabel>
                         <Input
-                          type="text"
+                          type="number"
                           placeholder="1234567890"
                           id="poc-phone"
                           defaultValue={formData.pocPhone.toString()}
                           onChange={(e) =>
-                            debouncedFormUpdate("pocPhone", e.target.value)
+                            debouncedFormUpdate(
+                              "pocPhone",
+                              Number(e.target.value),
+                            )
                           }
                         />
                       </Field>

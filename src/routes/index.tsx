@@ -10,6 +10,7 @@ import Preview from "@/components/form/Preview";
 
 import { useFormStore } from "@/store/formStore";
 import { ArrowRight, ArrowLeft } from "lucide-react";
+import { useAddRegistration } from "@/utils/addReg";
 
 export const Route = createFileRoute("/")({
   component: App,
@@ -23,6 +24,7 @@ export const Route = createFileRoute("/")({
 
 function App() {
   const { formData, updateForm } = useFormStore();
+  const mutation = useAddRegistration();
   const Sections = [
     <StudentInfo />,
     <EventParticipationInfo />,
@@ -147,11 +149,12 @@ function App() {
           )}
           {formData.sectionNumber == 5 && (
             <Button
-              onClick={() =>
+              onClick={() => {
                 // submit sm shi
                 // idk
-                console.log("Submitted", formData)
-              }
+                console.log("Submitted", formData);
+                mutation.mutate(formData);
+              }}
               className="cursor-pointer"
             >
               REGISTER
