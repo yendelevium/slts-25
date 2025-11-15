@@ -180,73 +180,73 @@ export default function Preview() {
                   )}
 
                 {/* If quiz = NONE */}
-                {participateInQuizDrawing === "none" ||
+                {(participateInQuizDrawing === "none" ||
                   (formData.group === "3" &&
-                    formData.hasGivenGroup2Exam === "no" && (
-                      <>
-                        {participateInGroupEvent &&
-                          participateInGroupEvent !== "none" && (
-                            <>
+                    formData.hasGivenGroup2Exam === "no")) && (
+                  <>
+                    {participateInGroupEvent &&
+                      participateInGroupEvent !== "none" && (
+                        <>
+                          <Info
+                            label="Group Event"
+                            value={fmtEventName(
+                              participateInGroupEvent.toString(),
+                            )}
+                          />
+
+                          {individualChoice1 &&
+                            individualChoice1 !== "none" &&
+                            (formData.group === "2" ||
+                              (formData.group === "3" &&
+                                formData.hasGivenGroup2Exam === "yes")) && (
                               <Info
-                                label="Group Event"
+                                label="Individual Event 1"
                                 value={fmtEventName(
-                                  participateInGroupEvent.toString(),
+                                  individualChoice1.toString(),
                                 )}
                               />
+                            )}
+                        </>
+                      )}
 
-                              {individualChoice1 &&
-                                individualChoice1 !== "none" &&
-                                (formData.group === "2" ||
-                                  (formData.group === "3" &&
-                                    formData.hasGivenGroup2Exam === "yes")) && (
-                                  <Info
-                                    label="Individual Event 1"
-                                    value={fmtEventName(
-                                      individualChoice1.toString(),
-                                    )}
-                                  />
+                    {/* No quiz + no group → show individual events */}
+                    {participateInGroupEvent === "none" &&
+                      (formData.group === "2" ||
+                        (formData.group === "3" &&
+                          formData.hasGivenGroup2Exam === "yes")) && (
+                        <>
+                          {individualChoice1 &&
+                            individualChoice1 !== "none" && (
+                              <Info
+                                label="Individual Event 1"
+                                value={fmtEventName(
+                                  individualChoice1.toString(),
                                 )}
-                            </>
-                          )}
+                              />
+                            )}
 
-                        {/* No quiz + no group → show individual events */}
-                        {participateInGroupEvent === "none" &&
-                          (formData.group === "2" ||
-                            (formData.group === "3" &&
-                              formData.hasGivenGroup2Exam === "yes")) && (
-                            <>
-                              {individualChoice1 &&
-                                individualChoice1 !== "none" && (
-                                  <Info
-                                    label="Individual Event 1"
-                                    value={fmtEventName(
-                                      individualChoice1.toString(),
-                                    )}
-                                  />
+                          {individualChoice2 &&
+                            individualChoice2 !== "none" && (
+                              <Info
+                                label="Individual Event 2"
+                                value={fmtEventName(
+                                  individualChoice2.toString(),
                                 )}
+                              />
+                            )}
+                        </>
+                      )}
 
-                              {individualChoice2 &&
-                                individualChoice2 !== "none" && (
-                                  <Info
-                                    label="Individual Event 2"
-                                    value={fmtEventName(
-                                      individualChoice2.toString(),
-                                    )}
-                                  />
-                                )}
-                            </>
-                          )}
-
-                        {/* No event chosen fr group 3 (no exam + no group, aganin, what's the point?).. */}
-                        {participateInGroupEvent === "none" &&
-                          formData.group === "3" &&
-                          formData.hasGivenGroup2Exam === "no" && (
-                            <CardDescription className="col-span-2">
-                              Not Participating in any event...
-                            </CardDescription>
-                          )}
-                      </>
-                    ))}
+                    {/* No event chosen fr group 3 (no exam + no group, aganin, what's the point?).. */}
+                    {participateInGroupEvent === "none" &&
+                      formData.group === "3" &&
+                      formData.hasGivenGroup2Exam === "no" && (
+                        <CardDescription className="col-span-2">
+                          Not Participating in any event...
+                        </CardDescription>
+                      )}
+                  </>
+                )}
               </>
             )}
 
