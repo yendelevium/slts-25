@@ -319,75 +319,83 @@ export default function Accomodate() {
 
             {formData.needAccommodation == "yes" && (
               <>
-                {formData.numMaleMembers != 0 && (
-                  <Field>
-                    {formData.showErrors &&
-                      (formData.maleDetails ?? []).filter((m) =>
-                        m?.name?.trim(),
-                      ).length < formData.accomMaleMembers && (
-                        <div className="text-red-600 text-sm">
-                          Please fill in all male member details
-                        </div>
-                      )}
-                    <FieldLabel htmlFor="male-acoompany">
-                      Number of male members needing accomodation:{" "}
-                      {formData.accomMaleMembers}
-                    </FieldLabel>
-                    <Slider
-                      defaultValue={[formData.accomMaleMembers]}
-                      max={formData.numMaleMembers}
-                      step={1}
-                      onValueChange={([v]) => {
-                        const updated = {
-                          ...formData,
-                          accomMaleMembers: v,
-                          maleDetails: formData.maleDetails?.slice(0, v),
-                        };
-                        updateForm({
-                          accomMaleMembers: v,
-                          maleDetails: formData.maleDetails?.slice(0, v),
-                        });
-                        checkRequired(updated);
-                      }}
-                    />
-                    {maleMemberElementsJSX}
-                  </Field>
-                )}
+                {formData.numMaleMembers != 0 &&
+                  formData.adultsAccompanying == "yes" && (
+                    <Field>
+                      {formData.showErrors &&
+                        (formData.maleDetails ?? []).filter((m) =>
+                          m?.name?.trim(),
+                        ).length < formData.accomMaleMembers && (
+                          <div className="text-red-600 text-sm">
+                            Please fill in all male member details
+                          </div>
+                        )}
+                      <FieldLabel htmlFor="male-acoompany">
+                        Number of male members needing accomodation:{" "}
+                        {formData.accomMaleMembers}
+                      </FieldLabel>
+                      <FieldDescription>
+                        Move the slider from left to right to increase the count
+                      </FieldDescription>
+                      <Slider
+                        defaultValue={[formData.accomMaleMembers]}
+                        max={formData.numMaleMembers}
+                        step={1}
+                        onValueChange={([v]) => {
+                          const updated = {
+                            ...formData,
+                            accomMaleMembers: v,
+                            maleDetails: formData.maleDetails?.slice(0, v),
+                          };
+                          updateForm({
+                            accomMaleMembers: v,
+                            maleDetails: formData.maleDetails?.slice(0, v),
+                          });
+                          checkRequired(updated);
+                        }}
+                      />
+                      {maleMemberElementsJSX}
+                    </Field>
+                  )}
 
-                {formData.numFemaleMembers != 0 && (
-                  <Field>
-                    {formData.showErrors &&
-                      (formData.femaleDetails ?? []).filter((f) =>
-                        f?.name?.trim(),
-                      ).length < formData.accomFemaleMembers && (
-                        <div className="text-red-600 text-sm">
-                          Please fill in all female member details
-                        </div>
-                      )}
-                    <FieldLabel htmlFor="female-acoompany">
-                      Number of female members needing accommodation:{" "}
-                      {formData.accomFemaleMembers}
-                    </FieldLabel>
-                    <Slider
-                      defaultValue={[formData.accomFemaleMembers]}
-                      max={formData.numFemaleMembers}
-                      step={1}
-                      onValueChange={([v]) => {
-                        const updated = {
-                          ...formData,
-                          accomFemaleMembers: v,
-                          femaleDetails: formData.femaleDetails?.slice(0, v),
-                        };
-                        updateForm({
-                          accomFemaleMembers: v,
-                          femaleDetails: formData.femaleDetails?.slice(0, v),
-                        });
-                        checkRequired(updated);
-                      }}
-                    />
-                    {femaleMemberElementsJSX}
-                  </Field>
-                )}
+                {formData.numFemaleMembers != 0 &&
+                  formData.adultsAccompanying == "yes" && (
+                    <Field>
+                      {formData.showErrors &&
+                        (formData.femaleDetails ?? []).filter((f) =>
+                          f?.name?.trim(),
+                        ).length < formData.accomFemaleMembers && (
+                          <div className="text-red-600 text-sm">
+                            Please fill in all female member details
+                          </div>
+                        )}
+                      <FieldLabel htmlFor="female-acoompany">
+                        Number of female members needing accommodation:{" "}
+                        {formData.accomFemaleMembers}
+                      </FieldLabel>
+                      <FieldDescription>
+                        Move the slider from left to right to increase the count
+                      </FieldDescription>
+                      <Slider
+                        defaultValue={[formData.accomFemaleMembers]}
+                        max={formData.numFemaleMembers}
+                        step={1}
+                        onValueChange={([v]) => {
+                          const updated = {
+                            ...formData,
+                            accomFemaleMembers: v,
+                            femaleDetails: formData.femaleDetails?.slice(0, v),
+                          };
+                          updateForm({
+                            accomFemaleMembers: v,
+                            femaleDetails: formData.femaleDetails?.slice(0, v),
+                          });
+                          checkRequired(updated);
+                        }}
+                      />
+                      {femaleMemberElementsJSX}
+                    </Field>
+                  )}
                 <div className="flex flex-col md:flex-row gap-3">
                   {/* Check-in Date Field */}
                   <Field>

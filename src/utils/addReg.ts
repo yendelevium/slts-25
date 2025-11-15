@@ -3,7 +3,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { type FormData } from "@/store/formStore";
 import { db } from "./firebase";
 import { fetchEventsMap } from "./checkSameEvent";
-import { da } from "date-fns/locale";
 
 interface RegisterData {
   // Student Info
@@ -141,9 +140,18 @@ export function useAddRegistration() {
         validity = false;
         conflictingEvents.push(individualChoice2.toString());
       }
-      if (groupEvent !== "" && eventMap[groupEvent.toString()]) {
-        validity = false;
-        conflictingEvents.push(groupEvent.toString());
+      if (groupEvent !== "") {
+        const ev = groupEvent.toString();
+        const count = eventMap[ev] || 0;
+
+        if (
+          (ev.includes("devotional-singing") && count > 5) ||
+          (ev.includes("altar-decoration") && count > 4) ||
+          (ev.includes("rudram-namakam-chanting") && count > 4)
+        ) {
+          validity = false;
+          conflictingEvents.push(ev);
+        }
       }
 
       console.log(validity, conflictingEvents);
@@ -182,26 +190,37 @@ export function useAddRegistration() {
         dropPoint: data.dropPoint,
 
         // Accompanying
+        // Validating here for better UX (in case the user accidentally clicks no after filling details)
         adultsAccompanying: data.adultsAccompanying,
-        numMaleMembers: data.numMaleMembers,
-        numFemaleMembers: data.numFemaleMembers,
-        pocName: data.pocName,
-        pocGender: data.pocGender,
-        pocRelation: data.pocRelation,
-        pocPhone: data.pocPhone,
-        pocAge: data.pocAge,
+        numMaleMembers:
+          data.adultsAccompanying === "yes" ? data.numMaleMembers : 0,
+        numFemaleMembers:
+          data.adultsAccompanying === "yes" ? data.numFemaleMembers : 0,
+        pocName: data.adultsAccompanying === "yes" ? data.pocName : "",
+        pocGender: data.adultsAccompanying === "yes" ? data.pocGender : "",
+        pocRelation: data.adultsAccompanying === "yes" ? data.pocRelation : "",
+        pocPhone: data.adultsAccompanying === "yes" ? data.pocPhone : "",
+        pocAge: data.adultsAccompanying === "yes" ? data.pocAge : "",
 
         // Accommodation
         needAccommodation: data.needAccommodation,
-        accomMaleMembers: data.accomMaleMembers,
-        accomFemaleMembers: data.accomFemaleMembers,
-        maleDetails: data.maleDetails,
-        femaleDetails: data.femaleDetails,
-        checkInDate: data.checkInDate === undefined ? null : data.checkInDate,
-        checkInTime: data.checkInTime,
+        accomMaleMembers:
+          data.needAccommodation === "yes" ? data.accomMaleMembers : 0,
+        accomFemaleMembers:
+          data.needAccommodation === "yes" ? data.accomFemaleMembers : 0,
+        maleDetails: data.needAccommodation === "yes" ? data.maleDetails : [],
+        femaleDetails:
+          data.needAccommodation === "yes" ? data.femaleDetails : [],
+        checkInDate:
+          data.needAccommodation === "yes" && data.checkInDate !== undefined
+            ? data.checkInDate
+            : null,
+        checkInTime: data.needAccommodation === "yes" ? data.checkInTime : "",
         checkOutDate:
-          data.checkOutDate === undefined ? null : data.checkOutDate,
-        checkOutTime: data.checkOutTime,
+          data.needAccommodation === "yes" && data.checkOutDate !== undefined
+            ? data.checkOutDate
+            : null,
+        checkOutTime: data.needAccommodation === "yes" ? data.checkOutTime : "",
 
         // Registration validity
         validity,

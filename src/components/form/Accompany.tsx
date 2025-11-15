@@ -172,6 +172,9 @@ export default function Accompany() {
                   <FieldLabel htmlFor="male-acoompany">
                     Number of male members: {formData.numMaleMembers}
                   </FieldLabel>
+                  <FieldDescription>
+                    Move the slider from left to right to increase the count
+                  </FieldDescription>
                   <Slider
                     defaultValue={[formData.numMaleMembers]}
                     max={10}
@@ -191,6 +194,9 @@ export default function Accompany() {
                   <FieldLabel htmlFor="female-acoompany">
                     Number of female members: {formData.numFemaleMembers}
                   </FieldLabel>
+                  <FieldDescription>
+                    Move the slider from left to right to increase the count
+                  </FieldDescription>
                   <Slider
                     defaultValue={[formData.numFemaleMembers]}
                     max={10}
@@ -258,7 +264,7 @@ export default function Accompany() {
                           htmlFor="poc-phone"
                           className="tracking-tight"
                         >
-                          Phone-no leading 0
+                          Phone (10 digits)
                           <span className="text-red-600">*</span>
                         </FieldLabel>
                         <Input
