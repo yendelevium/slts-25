@@ -145,9 +145,9 @@ export function useAddRegistration() {
         const count = eventMap[ev] || 0;
 
         if (
-          (ev.includes("devotional-singing") && count > 5) ||
-          (ev.includes("altar-decoration") && count > 4) ||
-          (ev.includes("rudram-namakam-chanting") && count > 4)
+          (ev.includes("devotional-singing") && count >= 5) ||
+          (ev.includes("altar-decoration") && count >= 4) ||
+          (ev.includes("rudram-namakam-chanting") && count >= 4)
         ) {
           validity = false;
           conflictingEvents.push(ev);

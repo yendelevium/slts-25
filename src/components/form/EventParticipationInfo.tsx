@@ -97,17 +97,17 @@ export default function EventParticipationInfo() {
     );
     console.log("Hi", eventsMap);
     if (eventsMap && eventsMap[eventName]) {
-      // Group event validation <=5 for both boys and girls
+      // Group event validation for both boys and girls
       if (
         (eventName.includes("devotional-singing") &&
-          eventsMap[eventName] <= 5) ||
-        (eventName.includes("altar-decoration") && eventsMap[eventName] <= 4) ||
+          eventsMap[eventName] < 5) ||
+        (eventName.includes("altar-decoration") && eventsMap[eventName] < 4) ||
         (eventName.includes("rudram-namakam-chanting") &&
-          eventsMap[eventName] <= 4)
+          eventsMap[eventName] < 4)
       )
         return;
       toast.warning(
-        `Someone from your district (${formData.district}) and group (${formData.group}) is already participating in '${eventName}'. A mail will be sent to your district head to resolve the issue if you choose this event as well.`,
+        `Maximum participants for '${eventName}' from your district (${formData.district}) and group (${formData.group}) have been reached. A mail will be sent to your district head to resolve the issue if you choose this event as well.`,
         {
           duration: Infinity,
           dismissible: false,
