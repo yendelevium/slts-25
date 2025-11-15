@@ -13,6 +13,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "../ui/button";
+import { checkSameEvents } from "@/utils/checkSameEvent";
 
 export const EventsSchema = z
   .object({
@@ -70,6 +71,27 @@ export const EventsSchema = z
 
 export default function EventParticipationInfo() {
   const { formData, updateForm } = useFormStore();
+  const { data: eventsMap } = checkSameEvents(
+    formData.district.toString(),
+    formData.group.toString(),
+  );
+
+  const warnIfTaken = (eventName: string) => {
+    console.log(eventsMap);
+    if (eventsMap && eventsMap[eventName]) {
+      toast.warning(
+        `Someone from your district (${formData.district}) and group (${formData.group}) is already participating in '${eventName}'. A mail will be sent to your district head to resolve the issue if you choose this event as well.`,
+        {
+          duration: Infinity,
+          dismissible: false,
+          action: {
+            label: "OK",
+            onClick: () => toast.dismiss(),
+          },
+        },
+      );
+    }
+  };
 
   const checkRequired = (data: FormData) => {
     const parsed = EventsSchema.safeParse(data);
@@ -118,7 +140,7 @@ export default function EventParticipationInfo() {
                   )}
                   <FieldLabel>
                     Do you want to participate in Devotional Singing (Group
-                    Event)? *
+                    Event)? <span className="text-red-600">*</span>
                   </FieldLabel>
 
                   <RadioGroup
@@ -137,6 +159,7 @@ export default function EventParticipationInfo() {
                           devotionalSinging: val,
                           individualChoice2: "",
                         });
+                        warnIfTaken("devotional-singing");
                         checkRequired(updated);
                       } else {
                         const updated = {
@@ -172,7 +195,7 @@ export default function EventParticipationInfo() {
                     <FieldLabel>
                       Please select the Individual Event you would like to
                       participate in:{" "}
-                      {formData.devotionalSinging === "no" ? "*" : "(Optional)"}
+                      {formData.devotionalSinging === "no" ? <span className="text-red-600">*</span> : "(Optional)"}
                     </FieldLabel>
                     <RadioGroup
                       value={formData.individualChoice1.toString()}
@@ -216,6 +239,7 @@ export default function EventParticipationInfo() {
                           updateForm({ individualChoice1: val });
                           checkRequired(updated);
                         }
+                        warnIfTaken(val);
                       }}
                     >
                       {formData.individualChoice2 !== "tamizh-chants" &&
@@ -359,6 +383,7 @@ export default function EventParticipationInfo() {
                             updateForm({ individualChoice2: val });
                             checkRequired(updated);
                           }
+                          warnIfTaken(val);
                         }}
                       >
                         {formData.individualChoice1 !== "tamizh-chants" &&
@@ -470,7 +495,7 @@ export default function EventParticipationInfo() {
                       </div>
                     )}
                   <FieldLabel>
-                    Do you want to participate in Quiz or Drawing? *
+                    Do you want to participate in Quiz or Drawing? <span className="text-red-600">*</span>
                   </FieldLabel>
 
                   <RadioGroup
@@ -500,6 +525,7 @@ export default function EventParticipationInfo() {
                         updateForm({ participateInQuizDrawing: val });
                         checkRequired(updated);
                       }
+                      warnIfTaken(val);
                     }}
                   >
                     <div className="flex items-center gap-3">
@@ -535,7 +561,7 @@ export default function EventParticipationInfo() {
                       )}
                     <FieldLabel>
                       Please select the Group Event you would like to
-                      participate in: *
+                      participate in: <span className="text-red-600">*</span>
                     </FieldLabel>
 
                     <RadioGroup
@@ -563,6 +589,7 @@ export default function EventParticipationInfo() {
                           updateForm({ participateInGroupEvent: val });
                           checkRequired(updated);
                         }
+                        warnIfTaken(val);
                       }}
                     >
                       <div className="flex items-center gap-3">
@@ -620,7 +647,7 @@ export default function EventParticipationInfo() {
                       participate in:{" "}
                       {formData.participateInGroupEvent == "none" &&
                       formData.participateInQuizDrawing == "none"
-                        ? "*"
+                        ? <span className="text-red-600">*</span>
                         : "(Optional)"}
                     </FieldLabel>
 
@@ -666,6 +693,7 @@ export default function EventParticipationInfo() {
                           updateForm({ individualChoice1: val });
                           checkRequired(updated);
                         }
+                        warnIfTaken(val);
                       }}
                     >
                       {formData.individualChoice2 !== "tamizh-chants" &&
@@ -825,6 +853,7 @@ export default function EventParticipationInfo() {
                             updateForm({ individualChoice2: val });
                             checkRequired(updated);
                           }
+                          warnIfTaken(val);
                         }}
                       >
                         {formData.individualChoice1 !== "tamizh-chants" &&
@@ -948,7 +977,7 @@ export default function EventParticipationInfo() {
                         or Drawing
                       </div>
                     )}
-                  <FieldLabel>Do you want to participate in Quiz? *</FieldLabel>
+                  <FieldLabel>Do you want to participate in Quiz? <span className="text-red-600">*</span></FieldLabel>
 
                   <RadioGroup
                     value={formData.participateInQuizDrawing.toString()}
@@ -960,6 +989,7 @@ export default function EventParticipationInfo() {
                       };
                       updateForm({ participateInQuizDrawing: val });
                       checkRequired(updated);
+                      warnIfTaken(val);
                     }}
                   >
                     <div className="flex items-center gap-3">

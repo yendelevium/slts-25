@@ -28,8 +28,8 @@ const YesAccompanySchema = z
     numMaleMembers: z.number().int().min(0),
     numFemaleMembers: z.number().int().min(0),
 
-    pocName: z.string().min(1),
-    pocPhone: z.string().min(10).max(10),
+    pocName: z.string().trim().min(1),
+    pocPhone: z.number().min(1000000000).max(9999999999),
     pocGender: z.enum(["Male", "Female"]),
     pocRelation: z.enum(["Father", "Mother", "Guru", "Legal Guardian"]),
     pocAge: z.enum(["18-65", "65+"]),
@@ -51,6 +51,7 @@ export default function Accompany() {
 
     const isSection1Valid = parsed.success;
     console.log(isSection1Valid, data);
+    console.log(parsed.error);
     const newArr = [...data.nextSectionEnable];
     newArr[data.sectionNumber] = isSection1Valid;
     if (isSection1Valid) {
@@ -133,7 +134,7 @@ export default function Accompany() {
                 htmlFor="adults-accompanying"
                 className="tracking-tight"
               >
-                Are adults/non-participating siblings accompanying? *
+                Are adults/non-participating siblings accompanying? <span className="text-red-600">*</span>
               </FieldLabel>
 
               <RadioGroup
@@ -235,7 +236,7 @@ export default function Accompany() {
                     <div className="flex-1">
                       {/* Name, Phone */}
                       <Field>
-                        <FieldLabel htmlFor="poc-name">Name *</FieldLabel>
+                        <FieldLabel htmlFor="poc-name">Name <span className="text-red-600">*</span></FieldLabel>
                         <Input
                           type="text"
                           placeholder="POC Name"
@@ -254,15 +255,18 @@ export default function Accompany() {
                           htmlFor="poc-phone"
                           className="tracking-tight"
                         >
-                          Phone - no leading 0 *
+                          Phone-no leading 0<span className="text-red-600">*</span>
                         </FieldLabel>
                         <Input
-                          type="text"
+                          type="number"
                           placeholder="1234567890"
                           id="poc-phone"
                           defaultValue={formData.pocPhone.toString()}
                           onChange={(e) =>
-                            debouncedFormUpdate("pocPhone", e.target.value)
+                            debouncedFormUpdate(
+                              "pocPhone",
+                              Number(e.target.value),
+                            )
                           }
                         />
                       </Field>
@@ -271,7 +275,7 @@ export default function Accompany() {
 
                   {/* Gender */}
                   <Field>
-                    <FieldLabel htmlFor="gender">Gender *</FieldLabel>
+                    <FieldLabel htmlFor="gender">Gender <span className="text-red-600">*</span></FieldLabel>
                     <div className="flex flex-wrap gap-3">
                       {genderElementsJSX}
                     </div>
@@ -279,7 +283,7 @@ export default function Accompany() {
 
                   {/* Relation */}
                   <Field>
-                    <FieldLabel htmlFor="pocRelation">Relation *</FieldLabel>
+                    <FieldLabel htmlFor="pocRelation">Relation <span className="text-red-600">*</span></FieldLabel>
 
                     <RadioGroup
                       value={formData.pocRelation.toString()}
@@ -318,7 +322,7 @@ export default function Accompany() {
 
                   {/* Age */}
                   <Field>
-                    <FieldLabel htmlFor="poc-age">Age *</FieldLabel>
+                    <FieldLabel htmlFor="poc-age">Age <span className="text-red-600">*</span></FieldLabel>
 
                     <RadioGroup
                       value={formData.pocAge.toString()}

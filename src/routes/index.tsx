@@ -10,6 +10,9 @@ import Preview from "@/components/form/Preview";
 
 import { useFormStore } from "@/store/formStore";
 import { ArrowRight, ArrowLeft } from "lucide-react";
+import { useAddRegistration } from "@/utils/addReg";
+import { ModalToast } from "@/components/ui/modalToast";
+import { useState } from "react";
 
 export const Route = createFileRoute("/")({
   component: App,
@@ -22,7 +25,8 @@ export const Route = createFileRoute("/")({
 // Using the section identifier, we implement navigation next or prev
 
 function App() {
-  const { formData, updateForm } = useFormStore();
+  const { formData, updateForm, resetForm } = useFormStore();
+  const mutation = useAddRegistration();
   const Sections = [
     <StudentInfo />,
     <EventParticipationInfo />,
@@ -33,10 +37,25 @@ function App() {
   ];
 
   let progress = (Math.min(formData.sectionNumber, 5) / 5) * 100;
+  const [toastOpen, setToastOpen] = useState(false);
+  const [toastMode, setToastMode] = useState<"loading" | "success" | "error">(
+    "loading",
+  );
+  const [toastMsg, setToastMsg] = useState("");
 
   return (
     // Progress Bar
     <div className="min-h-screen bg-gradient-to-br from-blue-100/60 via-indigo-100/60 to-purple-100/60">
+      {mutation.isPending && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9990]" />
+      )}
+      <ModalToast
+        open={toastOpen}
+        mode={toastMode}
+        message={toastMsg}
+        onClose={() => setToastOpen(false)}
+      />
+
       <div className="container w-full md:w-1/2 mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
@@ -147,11 +166,25 @@ function App() {
           )}
           {formData.sectionNumber == 5 && (
             <Button
-              onClick={() =>
-                // submit sm shi
-                // idk
-                console.log("Submitted", formData)
-              }
+              onClick={() => {
+                // Start loading toast
+                setToastMsg("Submitting registration…");
+                setToastMode("loading");
+                setToastOpen(true);
+
+                mutation.mutate(formData, {
+                  onSuccess: () => {
+                    setToastMsg("Registration successful!");
+                    setToastMode("success");
+                    resetForm();
+                  },
+                  onError: (e) => {
+                    console.log(e);
+                    setToastMsg("Something went wrong!");
+                    setToastMode("error");
+                  },
+                });
+              }}
               className="cursor-pointer"
             >
               REGISTER
