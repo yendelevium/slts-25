@@ -59,6 +59,7 @@ const Section1Schema = z
       }
     }
 
+    // Date of joining must be at least DOB + 1 year (basically after ur born)
     const minYear = data.dob.getFullYear() + 1;
 
     if (data.yearOfJoining < minYear) {
@@ -67,6 +68,42 @@ const Section1Schema = z
         path: ["yearOfJoining"],
         message: `Year of joining must be at least ${minYear}.`,
       });
+    }
+
+    // Map groups -> date ranges
+    let rangeMin: Date | null = null;
+    let rangeMax: Date | null = null;
+
+    switch (data.group) {
+      case "1":
+        rangeMin = new Date("2016-12-25");
+        rangeMax = new Date("2020-12-24");
+        break;
+
+      case "2":
+        rangeMin = new Date("2013-12-25");
+        rangeMax = new Date("2016-12-24");
+        break;
+
+      case "3":
+        rangeMin = new Date("2009-12-25");
+        rangeMax = new Date("2013-12-24");
+        break;
+
+      case "4":
+        rangeMin = new Date("2007-12-25");
+        rangeMax = new Date("2009-12-24");
+        break;
+    }
+
+    if (rangeMin && rangeMax) {
+      if (data.dob < rangeMin || data.dob > rangeMax) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["dob"],
+          message: `DOB must be between ${rangeMin.toDateString()} and ${rangeMax.toDateString()} for Group ${data.group}.`,
+        });
+      }
     }
   });
 
@@ -146,6 +183,11 @@ export default function StudentInfo() {
     undefined,
   );
   const [dobMonth, setDobMonth] = useState<Date | undefined>(undefined);
+
+  const parsed = Section1Schema.safeParse(formData);
+  const dobError = parsed.success
+    ? null
+    : parsed.error.issues.find((e) => e.path[0] === "dob")?.message;
 
   const groupElementsJSX = ["1", "2", "3", "4"].map((group) => {
     return (
@@ -323,9 +365,10 @@ export default function StudentInfo() {
             {/* DOB */}
             <Field>
               {formData.showErrors &&
-                !Section1Schema.shape.dob.safeParse(formData.dob).success && (
+                (!Section1Schema.shape.dob.safeParse(formData.dob).success ||
+                  dobError) && (
                   <div className="text-red-600 text-sm">
-                    Date of Birth is required
+                    {dobError ? dobError : "Date of Birth is required"}
                   </div>
                 )}
               <FieldLabel htmlFor="dob">
@@ -449,13 +492,16 @@ export default function StudentInfo() {
             {/* Couldn't find a year only dropdown in SHADCN, might just make it a select button later? */}
             <Field>
               {formData.showErrors &&
-                !Section1Schema.shape.yearOfJoining.safeParse(
+                (!Section1Schema.shape.yearOfJoining.safeParse(
                   formData.yearOfJoining,
-                ).success && (
+                ).success ||
+                  (formData.dob &&
+                    formData.yearOfJoining <=
+                      formData.dob.getFullYear() + 1)) && (
                   <div className="text-red-600 text-sm">
                     {formData.yearOfJoining === 0
                       ? "Year of Joining Balvikas is required"
-                      : "Year must be between 2000 and 2025"}
+                      : `Year must be between ${formData.dob ? formData.dob.getFullYear() + 1 : 2000} and 2025`}
                   </div>
                 )}
               <FieldLabel htmlFor="year-bv">
