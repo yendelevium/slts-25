@@ -1,7 +1,8 @@
 import { addDoc, collection } from "firebase/firestore";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { type FormData } from "@/store/formStore";
 import { db } from "./firebase";
+import { fetchEventsMap } from "./checkSameEvent";
 
 interface RegisterData {
   // Student Info
@@ -54,9 +55,14 @@ interface RegisterData {
   checkInTime: String;
   checkOutDate: Date | null;
   checkOutTime: String;
+
+  // Registration validity
+  validity: boolean;
+  conflictingEvents: string[];
 }
 
 export function useAddRegistration() {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (data: FormData) => {
       let groupEvent: String = "";
@@ -81,6 +87,30 @@ export function useAddRegistration() {
         }
         individualChoice1 = quizChoice;
       }
+
+      const eventMap = await queryClient.fetchQuery({
+        queryKey: ["eventMap", data.district, data.group],
+        queryFn: () =>
+          fetchEventsMap(data.district.toString(), data.group.toString()),
+      });
+
+      // Check for conflicts
+      let validity = true;
+      let conflictingEvents: string[] = [];
+      if (eventMap[individualChoice1.toString()]) {
+        validity = false;
+        conflictingEvents.push(individualChoice1.toString());
+      }
+      if (individualChoice2 !== "" && eventMap[individualChoice2.toString()]) {
+        validity = false;
+        conflictingEvents.push(individualChoice2.toString());
+      }
+      if (groupEvent !== "" && eventMap[groupEvent.toString()]) {
+        validity = false;
+        conflictingEvents.push(groupEvent.toString());
+      }
+
+      console.log(validity, conflictingEvents);
 
       const insertData: RegisterData = {
         // Student Info
@@ -136,9 +166,16 @@ export function useAddRegistration() {
         checkOutDate:
           data.checkOutDate === undefined ? null : data.checkOutDate,
         checkOutTime: data.checkOutTime,
+
+        // Registration validity
+        validity,
+        conflictingEvents,
       };
+
       const docRef = await addDoc(collection(db, "register"), insertData);
       console.log("Document written with ID: ", docRef.id);
+
+      // SEND MAIL TO HEAD WITH THE FORM DETAILS AND VALIDITY (along with the inserted data ka id)?
       return docRef;
     },
   });
