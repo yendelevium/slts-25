@@ -209,7 +209,10 @@ export default function StudentInfo() {
             if (group == "1") {
               updated.participateInQuizDrawing = "";
               updated.participateInGroupEvent = "";
-            } else if (group == "2" || group == "3") {
+            } else if (group == "2") {
+              updated.devotionalSinging = "";
+              updated.participateInQuizDrawing = "";
+            } else if (group == "3") {
               updated.devotionalSinging = "";
             } else {
               updated.devotionalSinging = "";

@@ -6,28 +6,50 @@ import { useQuery } from "@tanstack/react-query";
 export async function fetchEventsMap(district: string, group: string) {
   const colRef = collection(db, "register");
 
-  const q = query(
+  // Query 1: same district + same group  -> individual event -> count
+  const q1 = query(
     colRef,
     where("district", "==", district),
     where("group", "==", group),
   );
 
-  const snap = await getDocs(q);
-  const map: Record<string, true> = {};
-  snap.forEach((doc) => {
+  const snap1 = await getDocs(q1);
+  const individualEventMap: Record<string, number> = {};
+
+  snap1.forEach((doc) => {
     const d = doc.data();
     const add = (v?: string) => {
-      if (v && v.trim() !== "") {
-        map[v] = true;
-      }
+      if (!v || v.trim() === "") return;
+      individualEventMap[v] = 1;
     };
 
-    add(d.groupEvent);
     add(d.individualChoice1);
     add(d.individualChoice2);
   });
 
-  return map;
+  // Query 2: same district + ANY group -> count ONLY group events
+  const q2 = query(colRef, where("district", "==", district));
+
+  const snap2 = await getDocs(q2);
+  const crossGroupCounts: Record<string, number> = {};
+
+  snap2.forEach((doc) => {
+    const d = doc.data();
+    const ev = d.groupEvent;
+
+    if (!ev || ev.trim() === "") return;
+    crossGroupCounts[ev] = (crossGroupCounts[ev] || 0) + 1;
+  });
+
+  console.log("Fetched event map for", district, group, {
+    ...individualEventMap,
+    ...crossGroupCounts,
+  });
+
+  return {
+    ...individualEventMap,
+    ...crossGroupCounts,
+  };
 }
 
 export function checkSameEvents(district: string, group: string) {

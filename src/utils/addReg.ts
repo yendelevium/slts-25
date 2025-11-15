@@ -95,7 +95,8 @@ export function useAddRegistration() {
         gender: string,
         group: string,
       ) => {
-        if (group == "1" || group == "4") return event; // No suffix for group 1
+        if ((group == "1" && event != "devotional-singing") || group == "4")
+          return event; // No suffix for group 1
         if (!event) return event;
 
         // Skip exceptions
@@ -114,6 +115,11 @@ export function useAddRegistration() {
       );
       individualChoice2 = addGenderSuffix(
         individualChoice2.toString(),
+        data.gender.toString(),
+        data.group.toString(),
+      );
+      groupEvent = addGenderSuffix(
+        groupEvent.toString(),
         data.gender.toString(),
         data.group.toString(),
       );

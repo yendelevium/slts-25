@@ -76,9 +76,36 @@ export default function EventParticipationInfo() {
     formData.group.toString(),
   );
 
+  const addGenderSuffix = (event: string, gender: string, group: string) => {
+    if ((group == "1" && event != "devotional-singing") || group == "4")
+      return event; // No suffix for group 1
+    if (!event) return event;
+
+    // Skip exceptions
+    if (event.includes("elocution")) return event;
+    if (event === "quiz" || event === "drawing") return event;
+
+    const suffix = gender === "Male" ? " - Boys" : " - Girls";
+    return `${event}${suffix}`;
+  };
+
   const warnIfTaken = (eventName: string) => {
-    console.log(eventsMap);
+    eventName = addGenderSuffix(
+      eventName,
+      formData.gender.toString(),
+      formData.group.toString(),
+    );
+    console.log("Hi", eventsMap);
     if (eventsMap && eventsMap[eventName]) {
+      // Group event validation <=5 for both boys and girls
+      if (
+        (eventName.includes("devotional-singing") &&
+          eventsMap[eventName] <= 5) ||
+        (eventName.includes("altar-decoration") && eventsMap[eventName] <= 4) ||
+        (eventName.includes("rudram-namakam-chanting") &&
+          eventsMap[eventName] <= 4)
+      )
+        return;
       toast.warning(
         `Someone from your district (${formData.district}) and group (${formData.group}) is already participating in '${eventName}'. A mail will be sent to your district head to resolve the issue if you choose this event as well.`,
         {
@@ -490,68 +517,128 @@ export default function EventParticipationInfo() {
             {(formData.group === "2" || formData.group === "3") && (
               <>
                 {/* Quiz or Drawing Participation Field */}
-                <Field>
-                  {formData.showErrors &&
-                    formData.participateInQuizDrawing == "" && (
-                      <div className="text-red-600 text-sm">
-                        Please indicate whether you want to participate in Quiz
-                        or Drawing
-                      </div>
-                    )}
-                  <FieldLabel>
-                    Do you want to participate in Quiz or Drawing?{" "}
-                    <span className="text-red-600">*</span>
-                  </FieldLabel>
+                {formData.group === "2" && (
+                  <Field>
+                    {formData.showErrors &&
+                      formData.participateInQuizDrawing == "" && (
+                        <div className="text-red-600 text-sm">
+                          Please indicate whether you want to participate in
+                          Drawing
+                        </div>
+                      )}
+                    <FieldLabel>
+                      Do you want to participate in Drawing?{" "}
+                      <span className="text-red-600">*</span>
+                    </FieldLabel>
 
-                  <RadioGroup
-                    value={formData.participateInQuizDrawing.toString()}
-                    onValueChange={(val) => {
-                      console.log(val);
-                      // If quiz/drawing event is chosen, then no group event can be chosen and only 1 other individual event can be chosen
-                      // So, I am resetting the state of participateInGroupEvent and individualChoice2
-                      if (val === "quiz" || val === "drawing") {
-                        const updated = {
-                          ...formData,
-                          participateInQuizDrawing: val,
-                          participateInGroupEvent: "",
-                          individualChoice2: "",
-                        };
-                        updateForm({
-                          participateInQuizDrawing: val,
-                          participateInGroupEvent: "",
-                          individualChoice2: "",
-                        });
-                        checkRequired(updated);
-                      } else {
-                        const updated = {
-                          ...formData,
-                          participateInQuizDrawing: val,
-                        };
-                        updateForm({ participateInQuizDrawing: val });
-                        checkRequired(updated);
-                      }
-                      warnIfTaken(val);
-                    }}
-                  >
-                    <div className="flex items-center gap-3">
-                      <RadioGroupItem value="quiz" id="quiz-participate" />
-                      <Label htmlFor="quiz-participate">Quiz</Label>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <RadioGroupItem
-                        value="drawing"
-                        id="drawing-participate"
-                      />
-                      <Label htmlFor="drawing-participate">Drawing</Label>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <RadioGroupItem value="none" id="none-participate" />
-                      <Label htmlFor="none-participate">
-                        I don't want to participate in Quiz or Drawing
-                      </Label>
-                    </div>
-                  </RadioGroup>
-                </Field>
+                    <RadioGroup
+                      value={formData.participateInQuizDrawing.toString()}
+                      onValueChange={(val) => {
+                        console.log(val);
+                        // If quiz/drawing event is chosen, then no group event can be chosen and only 1 other individual event can be chosen
+                        // So, I am resetting the state of participateInGroupEvent and individualChoice2
+                        if (val === "drawing") {
+                          const updated = {
+                            ...formData,
+                            participateInQuizDrawing: val,
+                            participateInGroupEvent: "",
+                            individualChoice2: "",
+                          };
+                          updateForm({
+                            participateInQuizDrawing: val,
+                            participateInGroupEvent: "",
+                            individualChoice2: "",
+                          });
+                          checkRequired(updated);
+                        } else {
+                          const updated = {
+                            ...formData,
+                            participateInQuizDrawing: val,
+                          };
+                          updateForm({ participateInQuizDrawing: val });
+                          checkRequired(updated);
+                        }
+                        warnIfTaken(val);
+                      }}
+                    >
+                      <div className="flex items-center gap-3">
+                        <RadioGroupItem
+                          value="drawing"
+                          id="drawing-participate"
+                        />
+                        <Label htmlFor="drawing-participate">Yes</Label>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <RadioGroupItem value="none" id="none-participate" />
+                        <Label htmlFor="none-participate">No</Label>
+                      </div>
+                    </RadioGroup>
+                  </Field>
+                )}
+                {formData.group === "3" && (
+                  <Field>
+                    {formData.showErrors &&
+                      formData.participateInQuizDrawing == "" && (
+                        <div className="text-red-600 text-sm">
+                          Please indicate whether you want to participate in
+                          Quiz or Drawing
+                        </div>
+                      )}
+                    <FieldLabel>
+                      Do you want to participate in Quiz or Drawing?{" "}
+                      <span className="text-red-600">*</span>
+                    </FieldLabel>
+
+                    <RadioGroup
+                      value={formData.participateInQuizDrawing.toString()}
+                      onValueChange={(val) => {
+                        console.log(val);
+                        // If quiz/drawing event is chosen, then no group event can be chosen and only 1 other individual event can be chosen
+                        // So, I am resetting the state of participateInGroupEvent and individualChoice2
+                        if (val === "quiz" || val === "drawing") {
+                          const updated = {
+                            ...formData,
+                            participateInQuizDrawing: val,
+                            participateInGroupEvent: "",
+                            individualChoice2: "",
+                          };
+                          updateForm({
+                            participateInQuizDrawing: val,
+                            participateInGroupEvent: "",
+                            individualChoice2: "",
+                          });
+                          checkRequired(updated);
+                        } else {
+                          const updated = {
+                            ...formData,
+                            participateInQuizDrawing: val,
+                          };
+                          updateForm({ participateInQuizDrawing: val });
+                          checkRequired(updated);
+                        }
+                        warnIfTaken(val);
+                      }}
+                    >
+                      <div className="flex items-center gap-3">
+                        <RadioGroupItem value="quiz" id="quiz-participate" />
+                        <Label htmlFor="quiz-participate">Quiz</Label>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <RadioGroupItem
+                          value="drawing"
+                          id="drawing-participate"
+                        />
+                        <Label htmlFor="drawing-participate">Drawing</Label>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <RadioGroupItem value="none" id="none-participate" />
+                        <Label htmlFor="none-participate">
+                          I don't want to participate in Quiz or Drawing
+                        </Label>
+                      </div>
+                    </RadioGroup>
+                  </Field>
+                )}
 
                 {/* Group Event Field (shown only if participant doesn't participate in quiz/drawing as grp events not allowed with quiz/drawing)*/}
                 {formData.participateInQuizDrawing === "none" && (
