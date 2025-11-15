@@ -140,7 +140,7 @@ export default function EventParticipationInfo() {
                   )}
                   <FieldLabel>
                     Do you want to participate in Devotional Singing (Group
-                    Event)? *
+                    Event)? <span className="text-red-600">*</span>
                   </FieldLabel>
 
                   <RadioGroup
@@ -195,7 +195,7 @@ export default function EventParticipationInfo() {
                     <FieldLabel>
                       Please select the Individual Event you would like to
                       participate in:{" "}
-                      {formData.devotionalSinging === "no" ? "*" : "(Optional)"}
+                      {formData.devotionalSinging === "no" ? <span className="text-red-600">*</span> : "(Optional)"}
                     </FieldLabel>
                     <RadioGroup
                       value={formData.individualChoice1.toString()}
@@ -495,7 +495,7 @@ export default function EventParticipationInfo() {
                       </div>
                     )}
                   <FieldLabel>
-                    Do you want to participate in Quiz or Drawing? *
+                    Do you want to participate in Quiz or Drawing? <span className="text-red-600">*</span>
                   </FieldLabel>
 
                   <RadioGroup
@@ -561,7 +561,7 @@ export default function EventParticipationInfo() {
                       )}
                     <FieldLabel>
                       Please select the Group Event you would like to
-                      participate in: *
+                      participate in: <span className="text-red-600">*</span>
                     </FieldLabel>
 
                     <RadioGroup
@@ -647,7 +647,7 @@ export default function EventParticipationInfo() {
                       participate in:{" "}
                       {formData.participateInGroupEvent == "none" &&
                       formData.participateInQuizDrawing == "none"
-                        ? "*"
+                        ? <span className="text-red-600">*</span>
                         : "(Optional)"}
                     </FieldLabel>
 
@@ -977,7 +977,7 @@ export default function EventParticipationInfo() {
                         or Drawing
                       </div>
                     )}
-                  <FieldLabel>Do you want to participate in Quiz? *</FieldLabel>
+                  <FieldLabel>Do you want to participate in Quiz? <span className="text-red-600">*</span></FieldLabel>
 
                   <RadioGroup
                     value={formData.participateInQuizDrawing.toString()}

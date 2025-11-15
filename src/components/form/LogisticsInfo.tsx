@@ -135,7 +135,7 @@ export default function LogisticsInfo() {
                       Arrival Date is required
                     </div>
                   )}
-                <FieldLabel htmlFor="arrival-date">Arrival Date *</FieldLabel>
+                <FieldLabel htmlFor="arrival-date">Arrival Date <span className="text-red-600">*</span></FieldLabel>
                 <Popover
                   open={openArrivalDate}
                   onOpenChange={(isOpenArrival) => {
@@ -197,7 +197,7 @@ export default function LogisticsInfo() {
                       Arrival Time is required
                     </div>
                   )}
-                <FieldLabel htmlFor="arrival-time">Arrival Time *</FieldLabel>
+                <FieldLabel htmlFor="arrival-time">Arrival Time <span className="text-red-600">*</span></FieldLabel>
                 <Input
                   type="time"
                   id="arrival-time"
@@ -219,7 +219,7 @@ export default function LogisticsInfo() {
                     This field is required
                   </div>
                 )}
-              <FieldLabel>Does the student need pickup facility? *</FieldLabel>
+              <FieldLabel>Does the student need pickup facility? <span className="text-red-600">*</span></FieldLabel>
 
               <RadioGroup
                 value={formData.needPickup.toString()}
@@ -272,7 +272,7 @@ export default function LogisticsInfo() {
                       </div>
                     )}
                   <FieldLabel htmlFor="arrival-mode">
-                    Mode of Travel (Arrival) *
+                    Mode of Travel (Arrival) <span className="text-red-600">*</span>
                   </FieldLabel>
                   <Input
                     type="text"
@@ -294,7 +294,7 @@ export default function LogisticsInfo() {
                         Pickup Point is required
                       </div>
                     )}
-                  <FieldLabel htmlFor="pickup-point">Pickup Point *</FieldLabel>
+                  <FieldLabel htmlFor="pickup-point">Pickup Point <span className="text-red-600">*</span></FieldLabel>
                   <Input
                     type="text"
                     placeholder="Landmark"
@@ -320,7 +320,7 @@ export default function LogisticsInfo() {
                     </div>
                   )}
                 <FieldLabel htmlFor="departure-date">
-                  Departure Date *
+                  Departure Date <span className="text-red-600">*</span>
                 </FieldLabel>
                 <Popover
                   open={openDepartureDate}
@@ -384,7 +384,7 @@ export default function LogisticsInfo() {
                     </div>
                   )}
                 <FieldLabel htmlFor="departure-time">
-                  Departure Time *
+                  Departure Time <span className="text-red-600">*</span>
                 </FieldLabel>
                 <Input
                   type="time"
@@ -407,7 +407,7 @@ export default function LogisticsInfo() {
                     This field is required
                   </div>
                 )}
-              <FieldLabel>Does the student need drop facility? *</FieldLabel>
+              <FieldLabel>Does the student need drop facility? <span className="text-red-600">*</span></FieldLabel>
 
               <RadioGroup
                 key={formData.needDrop.toString()}
@@ -461,7 +461,7 @@ export default function LogisticsInfo() {
                       </div>
                     )}
                   <FieldLabel htmlFor="departure-mode">
-                    Mode of Travel (Departure) *
+                    Mode of Travel (Departure) <span className="text-red-600">*</span>
                   </FieldLabel>
                   <Input
                     type="text"
@@ -483,7 +483,7 @@ export default function LogisticsInfo() {
                         Drop off Point is required
                       </div>
                     )}
-                  <FieldLabel htmlFor="drop-point">Drop off Point *</FieldLabel>
+                  <FieldLabel htmlFor="drop-point">Drop off Point <span className="text-red-600">*</span></FieldLabel>
                   <Input
                     type="text"
                     placeholder="Landmark"

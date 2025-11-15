@@ -246,7 +246,7 @@ export default function StudentInfo() {
                 <div className="text-red-600 text-sm">Group is required</div>
               )}
             <Field>
-              <FieldLabel htmlFor="student-group">Select Group *</FieldLabel>
+              <FieldLabel htmlFor="student-group">Select Group <span className="text-red-600">*</span></FieldLabel>
 
               <div className="flex flex-wrap gap-3">{groupElementsJSX}</div>
             </Field>
@@ -261,7 +261,7 @@ export default function StudentInfo() {
                 )}
                 <Field>
                   <FieldLabel htmlFor="passed-grp2-exam">
-                    Passed Group 2 Exam? *
+                    Passed Group 2 Exam? <span className="text-red-600">*</span>
                   </FieldLabel>
 
                   <RadioGroup
@@ -296,7 +296,7 @@ export default function StudentInfo() {
                 !Section1Schema.shape.name.safeParse(formData.name).success && (
                   <div className="text-red-600 text-sm">Name is required</div>
                 )}
-              <FieldLabel htmlFor="name">Name *</FieldLabel>
+              <FieldLabel htmlFor="name">Name <span className="text-red-600">*</span></FieldLabel>
               <Input
                 type="text"
                 placeholder="Your Name"
@@ -314,7 +314,7 @@ export default function StudentInfo() {
                     Date of Birth is required
                   </div>
                 )}
-              <FieldLabel htmlFor="dob">Date of Birth *</FieldLabel>
+              <FieldLabel htmlFor="dob">Date of Birth <span className="text-red-600">*</span></FieldLabel>
               <Popover
                 open={open}
                 onOpenChange={(isOpen) => {
@@ -375,7 +375,7 @@ export default function StudentInfo() {
                   .success && (
                   <div className="text-red-600 text-sm">Gender is required</div>
                 )}
-              <FieldLabel htmlFor="gender">Gender *</FieldLabel>
+              <FieldLabel htmlFor="gender">Gender <span className="text-red-600">*</span></FieldLabel>
               <div className="flex flex-wrap gap-3">{genderElementsJSX}</div>
             </Field>
 
@@ -388,7 +388,7 @@ export default function StudentInfo() {
                     District is required
                   </div>
                 )}
-              <FieldLabel htmlFor="district">District *</FieldLabel>
+              <FieldLabel htmlFor="district">District <span className="text-red-600">*</span></FieldLabel>
               <Select
                 value={formData.district.toString()}
                 onValueChange={(val) => updateForm({ district: val })}
@@ -414,7 +414,7 @@ export default function StudentInfo() {
                     Samithi is required
                   </div>
                 )}
-              <FieldLabel htmlFor="samithi">Samithi *</FieldLabel>
+              <FieldLabel htmlFor="samithi">Samithi <span className="text-red-600">*</span></FieldLabel>
               <Input
                 type="text"
                 placeholder="Your Samithi"
@@ -437,7 +437,7 @@ export default function StudentInfo() {
                   </div>
                 )}
               <FieldLabel htmlFor="year-bv">
-                Student's Year of Joining Balvikas *
+                Student's Year of Joining Balvikas <span className="text-red-600">*</span>
               </FieldLabel>
               <Input
                 type="number"

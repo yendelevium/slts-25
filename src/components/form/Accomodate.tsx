@@ -169,7 +169,7 @@ export default function Accomodate() {
       <div key={index} className="flex gap-4 mt-3">
         <div className="flex-1">
           <FieldLabel htmlFor={`male-name-${index}`} className="tracking-tight">
-            M{index + 1} Name *
+            M{index + 1} Name <span className="text-red-600">*</span>
           </FieldLabel>
           <Input
             id={`male-name-${index}`}
@@ -218,7 +218,7 @@ export default function Accomodate() {
             htmlFor={`female-name-${index}`}
             className="tracking-tight"
           >
-            F{index + 1} Name *
+            F{index + 1} Name <span className="text-red-600">*</span>
           </FieldLabel>
           <Input
             id={`female-name-${index}`}
@@ -290,7 +290,7 @@ export default function Accomodate() {
                   </div>
                 )}
               <FieldLabel htmlFor="accomodation?">
-                Does the student need accommodation? *
+                Does the student need accommodation? <span className="text-red-600">*</span>
               </FieldLabel>
 
               <RadioGroup
@@ -399,7 +399,7 @@ export default function Accomodate() {
                         </div>
                       )}
                     <FieldLabel htmlFor="checkin-date">
-                      Check-in Date *
+                      Check-in Date <span className="text-red-600">*</span>
                     </FieldLabel>
                     <Popover
                       open={openCheckinDate}
@@ -466,7 +466,7 @@ export default function Accomodate() {
                         </div>
                       )}
                     <FieldLabel htmlFor="checkin-time">
-                      Check in Time *
+                      Check in Time <span className="text-red-600">*</span>
                     </FieldLabel>
                     <Input
                       type="time"
@@ -492,7 +492,7 @@ export default function Accomodate() {
                         </div>
                       )}
                     <FieldLabel htmlFor="checkout-date">
-                      Check-out Date *
+                      Check-out Date <span className="text-red-600">*</span>
                     </FieldLabel>
                     <Popover
                       open={openCheckOutDate}
@@ -559,7 +559,7 @@ export default function Accomodate() {
                         </div>
                       )}
                     <FieldLabel htmlFor="checkout-time">
-                      Check-out Time *
+                      Check-out Time <span className="text-red-600">*</span>
                     </FieldLabel>
                     <Input
                       type="time"
